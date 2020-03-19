@@ -1,5 +1,5 @@
 <template>
-    <body class=" vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+    <span class=" vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
@@ -253,20 +253,31 @@
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
+            <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
             <div class="content-body">
                 <!-- Dashboard Ecommerce Starts -->
                 <section id="dashboard-ecommerce">
-                    
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex flex-column align-items-start pb-0">
+                                    <nuxt/>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
                 </section>
-                <!-- Dashboard Ecommerce ends -->
-
-            
-        </div>
+            </div>
+        </div>                        
     </div>
     <!-- END: Content-->
 
 
-</body>
+</span>
 </template>
 <script>
 export default {
