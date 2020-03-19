@@ -29,7 +29,9 @@ module.exports = {
       { rel:"stylesheet" ,href:"/app-assets/css/core/colors/palette-gradient.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/pages/dashboard-ecommerce.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/pages/card-analytics.css"},
-      { rel:"stylesheet" ,href:"/assets/css/style.css"}
+      { rel:"stylesheet" ,href:"/assets/css/style.css"},
+      {rel:"stylesheet" , href:"/app-assets/css/plugins/forms/wizard.min.css"}
+
     ],
 
   script:[
@@ -38,7 +40,14 @@ module.exports = {
     {src:"/app-assets/js/core/app-menu.js"},
     {src:"/app-assets/js/core/app.js"},
     {src:"/app-assets/js/scripts/components.js"},
-    {src:"/app-assets/js/scripts/pages/dashboard-ecommerce.js"}
+    {src:"/app-assets/js/scripts/pages/dashboard-ecommerce.js"},
+
+    // for Form
+    {src:"/app-assets/js/scripts/forms/wizard-steps.min.js"},
+   {src:"/app-assets/vendors/js/extensions/jquery.steps.min.js"},
+   {src:"/app-assets/vendors/js/forms/validation/jquery.validate.min.js"}
+
+    //for form ends
   ]
 },
 

@@ -1,5 +1,5 @@
 <template>
-    <span class=" vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+    <span >
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
@@ -8,7 +8,7 @@
                 <div class="navbar-collapse" id="navbar-mobile">
                     <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
                         <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" ><i class="ficon feather icon-menu"></i></a></li>
+                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" @click="openNav()" ><i class="ficon feather icon-menu"></i></a></li>
                         </ul>
                         <ul class="nav navbar-nav bookmark-icons">
                             <!-- li.nav-item.mobile-menu.d-xl-none.mr-auto-->
@@ -198,7 +198,7 @@
                         <div class="brand-logo"></div>
                         <h2 class="brand-text mb-0">Vuexy</h2>
                     </a></li>
-                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" @click="closeNav()" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
             </ul>
         </div>
         <div class="shadow-bottom"></div>
@@ -212,16 +212,16 @@
                 </li>
                 <li class=" navigation-header"><span>Apps</span>
                 </li>
-                <li class=" nav-item"><a><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
+                <li class=" nav-item"><a @click="send('customer')"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
+                <li class=" nav-item"><a @click="send('supplier')"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Todo</span></a>
+                <li class=" nav-item"><a @click="send('item')"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Calender</span></a>
+                <li class=" nav-item"><a ><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Not In Use</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Ecommerce</span></a>
-                    <ul class="menu-content">
+                <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>
+                    <!-- <ul class="menu-content">
                         <li><a><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">Shop</span></a>
                         </li>
                         <li><a href="javascript:;" ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Details">Details</span></a>
@@ -230,10 +230,10 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Checkout">Checkout</span></a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
-                <li class=" nav-item"><a><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">Customer</span></a>
-                    <ul class="menu-content">
+                <li class=" nav-item"><a><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">Not In Use</span></a>
+                    <!-- <ul class="menu-content">
                         <li>
                             <a href="javascript:;">
                                 <i class="feather icon-circle"></i>
@@ -242,10 +242,8 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="View">View</span></a>
                         </li>
-                    </ul>
-                </li>
-                 
-                
+                    </ul> -->
+                </li> 
             </ul>
         </div>
     </div>
@@ -255,24 +253,7 @@
     <div class="app-content content">
             <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-            </div>
-            <div class="content-body">
-                <!-- Dashboard Ecommerce Starts -->
-                <section id="dashboard-ecommerce">
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="card">
-                                <div class="card-header d-flex flex-column align-items-start pb-0">
-                                    <nuxt/>
-                                </div>    
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>                        
+            <nuxt/>                        
     </div>
     <!-- END: Content-->
 
@@ -281,12 +262,64 @@
 </template>
 <script>
 export default {
+    mounted(){
+        this.addClasses();
+        if(window.innerWidth < 767){
+            let d=document.body;
+            d.classList.remove("vertical-menu-modern");
+            d.classList.add("vertical-verlay-menu");
+        }
+        else{
+            let d=document.body;
+            d.classList.add("vertical-menu-modern");
+        }
+    },
     methods:{
-        send(){
+        send(mode){
             console.log("gg");
-            if(name=="CustomerView")
-                this.$router.push('/Dashboard/Customers/View');
+            if(mode=="customer")
+                this.$router.push('/Customers/View');
+            else if(mode=="supplier")    
+                this.$router.push('/Suppliers/View');
+            else    
+                this.$router.push('/Items/View');
+        },
+        addClasses(){
+            let d=document.body;
+            d.classList.add("vertical-layout");
+            d.classList.add("2-columns");
+            d.classList.add("navbar-floating");
+            d.classList.add("footer-static");
+            d.setAttribute("data-open","click");
+            d.setAttribute("data-menu","vertical-menu-modern");
+            d.setAttribute("data-col","2-columns");
+            console.log(document.body);
+            // vertical-layout 2-columns navbar-floating footer-static pace-done vertical-overlay-menu menu-open
+            // overflow:auto overflow:hidden
+        },
+        openNav(){
+            let d=document.body;
+            d.classList.remove("menu-hide");            
+            d.classList.add("menu-open");
+            // console.log(window.innerWidth);
+            console.log(document.body);
+
+        },
+        closeNav(){
+            let d=document.body;
+            d.classList.remove("menu-open");
+            d.classList.add("menu-hide");
+            
+
         }
     }
 }
 </script>
+<style scoped>
+@media only screen and (max-width: 767px){
+    .content{
+        margin-left: 0;
+     }
+}   
+
+</style>
