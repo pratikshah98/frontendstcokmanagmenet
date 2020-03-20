@@ -49,8 +49,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div v-if="mode!='item'" class="row">
-                                                    <div class="col-md-6">
+                                                <div class="row">
+                                                    <div v-if="mode!='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="emailAddress5">
                                                                 Email
@@ -58,33 +58,23 @@
                                                             <input type="email" class="form-control required" id="emailAddress5" name="emailAddress">
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="location">
-                                                                City
-                                                            </label>
-                                                            <input type="text" class="form-control required" name="city">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-
-                                            <fieldset>
-                                                <div  class="row">
                                                     <div v-if="mode!='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
                                                             <textarea name="shortDescription" id="shortDescription3" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div v-else class="col-md-6">
+                                                    <div v-if="mode=='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Description</label>
                                                             <textarea name="shortDescription" id="shortDescription3" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6"></div>
+                                                    <div v-if="mode=='item'" class="col-md-6"></div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div  class="row">
                                                     <div class="col-md-10 col-4"></div>
                                                     <div class="col-md-2 col-8" >
                                                         <div class="form-group">

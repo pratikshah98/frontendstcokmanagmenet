@@ -23,7 +23,12 @@
                                                             <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add/Edit Supplier</button>
                                                         </div>
                                                     </div>
-                                        </div>            
+                                        </div> 
+                                        <div class="row">
+                                            <div class="col-md-12 col-12" >
+                                                <sView mode="supplier" />
+                                            </div>
+                                        </div>           
                                     </div>    
                                 </div>
                             </div>
@@ -33,11 +38,17 @@
         </div>
 </template>
 <script>
+import sView from "@/components/csiView";
 export default {
+
     layout:"dashboard",
+    components:{
+        sView
+    },
+
     methods:{
         add(){
-            this.$router.push("/Suppliers/Add")
+            this.$router.push("/Suppliers/Add");
         }
     }
 }

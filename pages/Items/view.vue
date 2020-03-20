@@ -23,7 +23,12 @@
                                                             <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add/Edit Item</button>
                                                         </div>
                                                     </div>
-                                        </div>            
+                                        </div> 
+                                        <div class="row">
+                                            <div class="col-md-12 col-12" >
+                                                <iView mode="item" />
+                                            </div>
+                                        </div>           
                                     </div>    
                                 </div>
                             </div>
@@ -33,8 +38,13 @@
         </div>
 </template>
 <script>
+import iView from "@/components/csiView";
 export default {
+
     layout:"dashboard",
+    components:{
+        iView
+    },
     methods:{
         add(){
             this.$router.push("/Items/Add")

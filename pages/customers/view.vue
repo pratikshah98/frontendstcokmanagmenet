@@ -23,7 +23,12 @@
                                                             <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add/Edit Customer</button>
                                                         </div>
                                                     </div>
-                                        </div>            
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-12" >
+                                                <cView mode="customer" />
+                                            </div>
+                                        </div>                
                                     </div>    
                                 </div>
                             </div>
@@ -33,8 +38,13 @@
         </div>
 </template>
 <script>
+import cView from "@/components/csiView";
 export default {
+
     layout:"dashboard",
+    components:{
+        cView
+    },
     methods:{
         add(){
             this.$router.push("/Customers/Add")

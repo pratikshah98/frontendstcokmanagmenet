@@ -196,8 +196,9 @@
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto"><a class="navbar-brand" >
                         <div class="brand-logo"></div>
-                        <h2 class="brand-text mb-0">Vuexy</h2>
-                    </a></li>
+                        <h4 class="brand-text mb-0">Vardmaan</h4>
+                    </a>
+                </li>
                 <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" @click="closeNav()" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
             </ul>
         </div>
@@ -212,11 +213,11 @@
                 </li>
                 <li class=" navigation-header"><span>Apps</span>
                 </li>
-                <li class=" nav-item"><a @click="send('customer')"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
+                <li class=" nav-item"><a href="/Customers/View"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
                 </li>
-                <li class=" nav-item"><a @click="send('supplier')"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
+                <li class=" nav-item"><a href="/Suppliers/View"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
                 </li>
-                <li class=" nav-item"><a @click="send('item')"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
+                <li class=" nav-item"><a href="/Items/View"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Not In Use</span></a>
                 </li>
@@ -275,15 +276,15 @@ export default {
         }
     },
     methods:{
-        send(mode){
-            console.log("gg");
-            if(mode=="customer")
-                this.$router.push('/Customers/View');
-            else if(mode=="supplier")    
-                this.$router.push('/Suppliers/View');
-            else    
-                this.$router.push('/Items/View');
-        },
+        // send(mode){
+        //     console.log("gg");
+        //     if(mode=="customer")
+        //         this.$router.push('/Customers/View');
+        //     else if(mode=="supplier")    
+        //         this.$router.push('/Suppliers/View');
+        //     else    
+        //         this.$router.push('/Items/View');
+        // },
         addClasses(){
             let d=document.body;
             d.classList.add("vertical-layout");
