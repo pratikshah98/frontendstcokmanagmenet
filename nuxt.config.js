@@ -31,7 +31,11 @@ module.exports = {
       { rel:"stylesheet" ,href:"/app-assets/css/pages/card-analytics.css"},
       { rel:"stylesheet" ,href:"/assets/css/style.css"},
       {rel:"stylesheet" , href:"/app-assets/css/plugins/forms/wizard.min.css"},
-      { rel:"stylesheet" , href:"../../../app-assets/vendors/css/tables/datatable/datatables.min.css"}
+      { rel:"stylesheet" , href:"/app-assets/vendors/css/tables/datatable/datatables.min.css"},
+      
+      //for login and forget password:- 
+      
+      {rel:"stylesheet" , href:"/app-assets/css/pages/authentication.css"}
     ],
 
 
@@ -47,7 +51,7 @@ module.exports = {
     {src:"/app-assets/js/scripts/forms/wizard-steps.min.js"},
    {src:"/app-assets/vendors/js/extensions/jquery.steps.min.js"},
    {src:"/app-assets/vendors/js/forms/validation/jquery.validate.min.js"},
-    //for form ends
+    //--------------
 
 
     //for datatables
@@ -60,6 +64,10 @@ module.exports = {
     {src:"/app-assets/vendors/js/tables/datatable/buttons.print.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"}
+    //---------------
+
+    //for login and forgetPassword
+
   ]
 },
 

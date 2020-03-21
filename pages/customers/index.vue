@@ -22,7 +22,7 @@
                                                         <div class="form-group">
                                                             <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">
                                                                 <i class="feather icon-user-plus"></i>
-                                                                Add New Customer
+                                                                Add Customer
                                                             </button>
                                                         </div>
                                                     </div>
@@ -55,3 +55,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    button{
+        margin-bottom:10px;
+    }
+</style>

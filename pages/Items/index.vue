@@ -20,7 +20,7 @@
                                                     <div class="col-md-9"></div>
                                                     <div class="col-md-3 col-10" >
                                                         <div class="form-group">
-                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add/Edit Item</button>
+                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add Item</button>
                                                         </div>
                                                     </div>
                                         </div> 
@@ -52,3 +52,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    button{
+        margin-bottom:10px;
+    }
+</style>

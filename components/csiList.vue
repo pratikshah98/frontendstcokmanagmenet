@@ -2,19 +2,20 @@
     <span >
                                         
         <div class="table-responsive">
-            <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete Selected</button>
-            <table class="table table-striped dataex-html5-selectors">    
+
+            <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
+            <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-                    <tr>
-                        <th >Select for multiple delete</th>
-                        <th >Sr.No</th>
-                        <th v-if="mode=='customer'">Customer Name</th>
-                        <th v-if="mode=='supplier'">Supplier Name</th>
-                        <th v-if="mode=='item'">Item Name</th>
-                        <th v-if="mode!='item'">Mobile</th>
-                        <th v-if="mode!='item'">Email</th>
-                        <th v-if="mode=='item'">Price</th>
-                        <th v-if="mode=='item'">Description</th>
+                    <tr role="row"> 
+                        <th ></th>
+                        <th style="cursor:pointer;">Sr.No</th>
+                        <th style="cursor:pointer;" v-if="mode=='customer'">Customer Name</th>
+                        <th style="cursor:pointer;" v-if="mode=='supplier'">Supplier Name</th>
+                        <th style="cursor:pointer;" v-if="mode=='item'">Item Name</th>
+                        <th style="cursor:pointer;" v-if="mode!='item'">Mobile</th>
+                        <th style="cursor:pointer;" v-if="mode!='item'">Email</th>
+                        <th style="cursor:pointer;" v-if="mode=='item'">Price</th>
+                        <th style="cursor:pointer;" v-if="mode=='item'">Description</th>
                         <th >Actions</th>
                     </tr>
                 </thead>
@@ -99,3 +100,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    button{
+        margin-bottom:10px;
+    }
+</style>

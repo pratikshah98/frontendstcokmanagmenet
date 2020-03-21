@@ -207,7 +207,7 @@
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class=" nav-item">
                     <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
-                        <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge badge-warning badge-pill float-right mr-2">2</span></a>
+                        <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
                     </router-link>
                     
                 </li>
@@ -303,7 +303,7 @@ export default {
             d.classList.remove("menu-hide");            
             d.classList.add("menu-open");
             // console.log(window.innerWidth);
-            console.log(document.body);
+            // console.log(document.body);
 
         },
         closeNav(){
