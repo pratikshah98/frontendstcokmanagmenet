@@ -1,44 +1,40 @@
 <template>
     <span >
-                                        
+            <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
+
         <div class="table-responsive">
 
-            <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-<<<<<<< HEAD
-                    <tr role="row"> 
-                        <th ></th>
-                        <th style="cursor:pointer;">Sr.No</th>
-                        <th style="cursor:pointer;" v-if="mode=='customer'">Customer Name</th>
-                        <th style="cursor:pointer;" v-if="mode=='supplier'">Supplier Name</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Item Name</th>
-                        <th style="cursor:pointer;" v-if="mode!='item'">Mobile</th>
-                        <th style="cursor:pointer;" v-if="mode!='item'">Email</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Price</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Description</th>
-                        <th >Actions</th>
-=======
-                    <tr v-if="mode!='item'" >
+                    <tr v-if="mode=='customer' || mode=='supplier'" >
+                        <th></th>
                         <th>Sr.No</th>
                         <th>Name</th>
-                        <th>Phone No.</th>
+                        <th>Mobile No.</th>
                         <th>Email</th>
                         <th>GSTIN</th>
                         <th>Actions</th>
                     </tr>
-                    <tr v-else >
+                    <tr v-else-if="mode=='branch'">
+                        <th></th>
+                        <th>Sr.No</th>
+                        <th>Name</th>
+                        <th>Mobile No.</th>
+                        <th>Actions</th>
+                    </tr>            
+                    <tr v-else>
+                        <th></th>
                         <th>Sr.No</th>
                         <th>Name</th>
                         <th>Price</th>
-                        <th>Description</th>
+                        <th>Description(GSM - Size)</th>
                         <th>Actions</th>
->>>>>>> 434bed46e44675e406fc00b4f7c2628dd999ae90
                     </tr>
                 </thead>
                 <tbody v-if="mode=='customer'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.customer_emailId">  {{ index + 1 }}</td>
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.customer_emailId"></td>
+                        <td>  {{ index + 1 }}</td>
                         <td> {{ object.customer_name }} </td>
                         <td> {{ object.customer_phoneNo }}</td>
                         <td> {{ object.customer_emailId }}</td>
@@ -49,7 +45,7 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning" @click="update(object.customer_emailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
@@ -58,7 +54,8 @@
 
                 <tbody v-else-if="mode=='supplier'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.supplier_emailId">  {{ index + 1 }}</td>
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.supplier_emailId"></td>
+                        <td>{{ index + 1 }}</td>
                         <td> {{ object.supplier_name }} </td>
                         <td> {{ object.supplier_phoneNo }}</td>
                         <td> {{ object.supplier_emailId }}</td>
@@ -69,7 +66,25 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning" @click="update(object.supplier_emailId)"><i class="feather icon-edit"></i></button>
+                            <!-- delete button - red color -->
+                            <button class="btn btn-danger" @click="update(object.supplier_emailId)"><i class="feather icon-trash-2"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else-if="mode=='branch'" > 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.branchId"></td>
+                        <td>{{ index + 1 }}</td>
+                        <td> {{ object.branchName }} </td>
+                        <td> {{ object.branchPhoneNo }}</td>                                             
+                        <td>
+                            <!-- view button -->
+                            <button @click="viewSupplier( object.branchId )"  class="btn btn-primary">
+                                <i class="feather icon-list"></i>
+                            </button>
+                            <!-- edit button - yellow color -->
+                            <button class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
@@ -77,17 +92,19 @@
                 </tbody>
                 <tbody v-else> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.item_Id">  {{ index + 1 }}</td>
-                        <td> {{ object.item_name }} </td>
-                        <td> {{ object.item_price }}</td>
-                        <td> {{ object.item_description }}</td>                                                    
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.itemId"></td>
+                        <td>  {{ index + 1 }}</td>
+                        <td> {{ object.name }} </td>
+                        <td> {{ object.minimumRate }}</td>
+                        <td> {{ object.GSM }} - {{object.size}}</td>                                                    
                         <td>
                             <!-- view button -->
                             <button @click="viewItem(object.item_Id)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning" @click="update(object.item_Id)">
+                                <i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
@@ -116,26 +133,23 @@ export default {
         },
         viewItem: function(itemId){
             this.$router.push('/items/'+itemId);
+        }, 
+        update(id){
+            this.$router.push('/'+this.mode+"/edit/"+id);   
         }
+
     },
     data(){
         return{
             selectedItems:[],
-            fetchedObjects: null
+            fetchedObjects: null,
+            id:""
         }
     },  
-    mounted(){ 
-
-        let url;
-        if(this.mode=='customer')
-            url='http://localhost:4000/customer';
-        else if(this.mode=='supplier')
-            url='http://localhost:4000/supplier';
-        else
-            url='http://localhost:4000/item';
-    
-        axios.get(url).then(response => (this.fetchedObjects = response.data)) ;
-    }
+    mounted(){
+        axios.get('http://localhost:4000/'+this.mode).
+        then(response => (this.fetchedObjects = response.data));
+    },
 }
 </script>
 <style scoped>
