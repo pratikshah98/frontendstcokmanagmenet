@@ -4,7 +4,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Item Listing</h2>
+                            <h2 class="content-header-title float-left mb-0">Customers</h2>
                         </div>
                     </div>
                 </div>
@@ -20,15 +20,18 @@
                                                     <div class="col-md-9"></div>
                                                     <div class="col-md-3 col-10" >
                                                         <div class="form-group">
-                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add/Edit Item</button>
+                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">
+                                                                <i class="feather icon-user-plus"></i>
+                                                                Add New Customer
+                                                            </button>
                                                         </div>
                                                     </div>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-12 col-12" >
-                                                <iView mode="item" />
+                                                <cView mode="customer" />
                                             </div>
-                                        </div>           
+                                        </div>                
                                     </div>    
                                 </div>
                             </div>
@@ -38,16 +41,16 @@
         </div>
 </template>
 <script>
-import iView from "@/components/csiView";
+import cView from "@/components/csiList";
 export default {
 
     layout:"dashboard",
     components:{
-        iView
+        cView
     },
     methods:{
         add(){
-            this.$router.push("/Items/Add")
+            this.$router.push("/customers/add")
         }
     }
 }

@@ -213,11 +213,11 @@
                 </li>
                 <li class=" navigation-header"><span>Apps</span>
                 </li>
-                <li class=" nav-item"><a href="/Customers/View"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
+                <li class=" nav-item"><a href="/customers/"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
                 </li>
-                <li class=" nav-item"><a href="/Suppliers/View"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
+                <li class=" nav-item"><a href="/suppliers/"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
                 </li>
-                <li class=" nav-item"><a href="/Items/View"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
+                <li class=" nav-item"><a href="/items/"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Not In Use</span></a>
                 </li>
