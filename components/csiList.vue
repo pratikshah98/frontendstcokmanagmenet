@@ -5,61 +5,92 @@
             <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete Selected</button>
             <table class="table table-striped dataex-html5-selectors">    
                 <thead>
-                    <tr>
-                        <th >Select for multiple delete</th>
-                        <th >Sr.No</th>
-                        <th v-if="mode=='customer'">Customer Name</th>
-                        <th v-if="mode=='supplier'">Supplier Name</th>
-                        <th v-if="mode=='item'">Item Name</th>
-                        <th v-if="mode!='item'">Mobile</th>
-                        <th v-if="mode!='item'">Email</th>
-                        <th v-if="mode=='item'">Price</th>
-                        <th v-if="mode=='item'">Description</th>
-                        <th >Actions</th>
+                    <tr v-if="mode!='item'" >
+                        <th>Sr.No</th>
+                        <th>Name</th>
+                        <th>Phone No.</th>
+                        <th>Email</th>
+                        <th>GSTIN</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr v-else >
+                        <th>Sr.No</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="(d,index) in objects" :key="index">
-                        <td v-if="mode=='item'"> <input type="checkbox" v-model="selectedItems" :value="d.itemId"> </td>
-                        <td v-else> <input type="checkbox" v-model="selectedItems" :value="d.email"> </td>
-                        <td> {{ index + 1 }} </td>
-                        <td> {{ d.name }} </td>
-                        <td v-if="mode!='item'">{{d.mobile}}</td>
-                        <td v-if="mode!='item'">{{d.email}}</td>
-                        <td v-if="mode=='item'">{{d.price}}</td>
-                        <td v-if="mode=='item'">{{d.description}}</td>                                                        
+                <tbody v-if="mode=='customer'" > 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.customer_emailId">  {{ index + 1 }}</td>
+                        <td> {{ object.customer_name }} </td>
+                        <td> {{ object.customer_phoneNo }}</td>
+                        <td> {{ object.customer_emailId }}</td>
+                        <td> {{ object.customer_gstno }} </td>                                                     
                         <td>
                             <!-- view button -->
-                            <button v-if="mode=='customer'" @click="viewCustomer(d.email)"  class="btn btn-primary">
+                            <button @click="viewCustomer(object.customer_emailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
-                            <button v-if="mode=='supplier'" @click="viewSupplier(d.email)"  class="btn btn-primary">
-                                <i class="feather icon-list"></i>
-                            </button>
-                            <button v-if="mode=='item'" @click="viewItem(d.itemId)"  class="btn btn-primary">
-                                <i class="feather icon-list"></i>
-                            </button>
-
                             <!-- edit button - yellow color -->
                             <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
-
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
-                    
+                </tbody>
+
+                <tbody v-else-if="mode=='supplier'" > 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.supplier_emailId">  {{ index + 1 }}</td>
+                        <td> {{ object.supplier_name }} </td>
+                        <td> {{ object.supplier_phoneNo }}</td>
+                        <td> {{ object.supplier_emailId }}</td>
+                        <td> {{ object.supplier_gstno }} </td>                                                     
+                        <td>
+                            <!-- view button -->
+                            <button @click="viewSupplier( object.supplier_emailId )"  class="btn btn-primary">
+                                <i class="feather icon-list"></i>
+                            </button>
+                            <!-- edit button - yellow color -->
+                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <!-- delete button - red color -->
+                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else> 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.item_Id">  {{ index + 1 }}</td>
+                        <td> {{ object.item_name }} </td>
+                        <td> {{ object.item_price }}</td>
+                        <td> {{ object.item_description }}</td>                                                    
+                        <td>
+                            <!-- view button -->
+                            <button @click="viewItem(object.item_Id)"  class="btn btn-primary">
+                                <i class="feather icon-list"></i>
+                            </button>
+                            <!-- edit button - yellow color -->
+                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <!-- delete button - red color -->
+                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </span>            
 </template>
 <script>
+import axios from 'axios'
+
 export default {
     props:{
-            mode:{
-                type: String,
-                required: true
-            }
+        mode:{
+            type: String,
+            required: true
+        }
     },
     methods:{
         viewCustomer: function(email){
@@ -75,27 +106,20 @@ export default {
     data(){
         return{
             selectedItems:[],
-            objects:[
-                { name:"Sunil",mobile:"dd",email:"1f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"2f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"3f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"4f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"5f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"6f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"7f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"8f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"9f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"0f",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"faf",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"fbf",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"fcf",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"fff",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"fgf",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"fhf",address:"ff",description:"ff",price:"gdhs"},
-                { name:"Sunil",mobile:"dd",email:"ffj",address:"ff",description:"ff",price:"gdhs"},
-
-            ]
+            fetchedObjects: null
         }
+    },  
+    mounted(){ 
+
+        let url;
+        if(this.mode=='customer')
+            url='http://localhost:4000/customer';
+        else if(this.mode=='supplier')
+            url='http://localhost:4000/supplier';
+        else
+            url='http://localhost:4000/item';
+    
+        axios.get(url).then(response => (this.fetchedObjects = response.data)) ;
     }
 }
 </script>
