@@ -174,7 +174,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Added");
-                            this.$router.push("/customer/add");
+                            this.$router.push("/customer");
                         }
                     });
                     
@@ -190,7 +190,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Added");
-                            this.$router.push("/supplier/add");
+                            this.$router.push("/supplier");
                         }
                     });
                 }
@@ -202,7 +202,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Branch Succesfully Added");
-                            this.$router.push("/branch/add");
+                            this.$router.push("/branch");
                         }
                     });
                 }
@@ -216,7 +216,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Item Succesfully Added");
-                            this.$router.push("/item/add");
+                            this.$router.push("/item");
                         }
                     });
                 }
@@ -232,7 +232,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Updated");
-                            this.$router.push("/customer/edit/"+this.id);
+                            this.$router.push("/customer/"+this.id);
                         }
                     });
                     
@@ -247,7 +247,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Updated");
-                            this.$router.push("/supplier/edit/"+this.id);
+                            this.$router.push("/supplier/"+this.id);
                         }
                     });
                 }
@@ -262,7 +262,7 @@ export default {
                         if(response){
                             alert("Branch Succesfully Updated");
                             console.log(response);
-                            this.$router.push("/branch/edit/"+this.id);
+                            this.$router.push("/branch/"+this.id);
                         }
                     });
                 }
@@ -277,7 +277,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Item Succesfully Updated");
-                            this.$router.push("/item/edit/"+this.id);
+                            this.$router.push("/item/"+this.id);
                         }
                     });
                 }

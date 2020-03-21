@@ -20,7 +20,6 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="#" class="steps-validation wizard-circle">
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -58,7 +57,7 @@
                                             <div  class="row">
                                                 <div class="col-md-9 col-4"></div>
                                                 <div class="col-md-3 col-8" >
-                                                    <button style="float:right;" class="btn btn-primary" type="submit" @click="getDetails()">
+                                                    <button @click="gotoEdit" style="float:right;" class="btn btn-primary">
                                                         <i class="feather icon-edit-2"></i> Edit {{ mode | capitalize }}
                                                     </button>
                                                 </div>
@@ -66,7 +65,7 @@
                                         </fieldset>
 
                                         <!-- Step 3 -->
-                                    </form>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -105,6 +104,11 @@ export default {
             gstNo:"",
             price:"",
             description:""
+        }
+    },
+    methods:{
+        gotoEdit:function(){
+            this.$router.push('/' + this.$props.mode + '/edit/' +this.$props.id);
         }
     },
     mounted(){
