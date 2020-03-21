@@ -4,7 +4,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Customers</h2>
+                            <h2 class="content-header-title float-left mb-0">Branch</h2>
                         </div>
                     </div>
                 </div>
@@ -22,14 +22,14 @@
                                                         <div class="form-group">
                                                             <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">
                                                                 <i class="feather icon-user-plus"></i>
-                                                                Add Customer
+                                                                Add Branch
                                                             </button>
                                                         </div>
                                                     </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12 col-12" >
-                                                <cView mode="customer" />
+                                                <bView mode="branch" />
                                             </div>
                                         </div>                
                                     </div>    
@@ -41,16 +41,16 @@
         </div>
 </template>
 <script>
-import cView from "@/components/csiList";
+import bView from "@/components/csiList";
 export default {
 
     layout:"dashboard",
     components:{
-        cView
+        bView
     },
     methods:{
         add(){
-            this.$router.push("/customers/add")
+            this.$router.push("/Branch/add")
         }
     }
 }

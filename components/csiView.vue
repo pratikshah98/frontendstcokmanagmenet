@@ -11,7 +11,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
             <div class="content-body">
                 <!-- Form wizard with step validation section start -->
@@ -29,41 +28,45 @@
                                                          <label v-else-if="mode=='user'" >User Name : {{ name }}</label>
                                                         <label v-else-if="mode=='supplier'" >Supplier Name : {{ name }}</label>
                                                         <label v-else>Item Name : {{ name }}</label>
+
+                                                        <div v-if="mode!='item'"  class="col-md-4">
+                                                           <label> Phone Number : {{ phoneNo }}</label>
+                                                        </div>
+                                                    <div v-if="mode!='item'"  class="col-md-4">
+                                                    <label> GSTIN :  {{ gstNo }}</label>
                                                     </div>
-                                                    <div v-if="mode!='item'"  class="col-md-6">
-                                                        <label> Phone Number : {{ phoneNo }}</label>
-                                                    </div>
-                                                    <div v-else  class="col-md-6">
-                                                        <label> Price : {{ price }} </label>
+                                                        <div v-else  class="col-md-6">
+                                                            <label> Price : {{ price }} </label>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
-                                                    <div v-if="mode!='item'" class="col-md-6">
-                                                        <label >Email {{ email }}</label>
-                                                    </div>
-                                                    <div v-if="mode!='item'" class="col-md-6">
-                                                        <label >Address {{ address }}</label>
-                                                    </div>
-
-                                                    <div v-if="mode=='item'" class="col-md-6">
-                                                        <label >Description {{ description }}</label>
-                                                    </div>
-                                                    <div v-if="mode=='item'" class="col-md-6"></div>
+                                            <div class="row">
+                                                <div v-if="mode!='item'" class="col-md-6">
+                                                    <label >Email : {{ email }}</label>
                                                 </div>
+                                                <div v-if="mode!='item'" class="col-md-6">
+                                                    <label >Address : {{ address }}</label>
+                                                </div>
+
+                                                <div v-if="mode=='item'" class="col-md-6">
+                                                    <label >Description : {{ description }}</label>
+                                                </div>
+                                                <div v-if="mode=='item'" class="col-md-6"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div  class="row">
+                                                <div class="col-md-9 col-4"></div>
+                                                <div class="col-md-3 col-8" >
+                                                    <button @click="gotoEdit" style="float:right;" class="btn btn-primary">
+                                                        <i class="feather icon-edit-2"></i> Edit {{ mode | capitalize }}
+                                                    </button>
+                                                </div>
+                                            </div>
                                             </fieldset>
-                                            <fieldset>
-                                                <div  class="row">
-                                                    <div class="col-md-9 col-4"></div>
-                                                    <div class="col-md-3 col-8" >
-                                                        <button style="float:right;" class="btn btn-primary" type="submit" @click="getDetails()">
-                                                            <i class="feather icon-edit-2"></i> Edit {{ mode | capitalize }}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
 
-                                            <!-- Step 3 -->
+                                           <!-- Step 3 -->
                                         </form>
                                     </div>
                                 </div>
@@ -71,52 +74,64 @@
                         </div>
                     </div>
                 </section>
-                <!-- Form wizard with step validation section end -->
+               <!-- Form wizard with step validation section end -->
 
             </div>
-        </div>
+    </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
     props: {
-            id: {
-                type: String,
-                required: false
-            },
-            mode:{
-                type: String,
-                required: true
-            },
-            value: {
-                type: Number,
-                required: false
-            }
+        id: {
+            type: String,
+            required: true
         },
+        mode:{
+            type: String,
+            required: true
+        },
+        value: {
+            type: Number,
+            required: false
+        }
+    },
     data(){
         return{
-            name:"Nostalgic Name",
-            phoneNo:"9408078677",
-            email:"email@gmail.com",
-            address:"Vejalpur, Ahmedabad",
-            price:"3,500",
-            description:"Incredible item !"
+            name:"",
+            email:"",
+            address:"",
+            phoneNo:"",
+            gstNo:"",
+            price:"",
+            description:""
         }
     },
     methods:{
-        getDetails(){
-            if(this.mode=='customer'){
-                    console.log("All Customers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
+        gotoEdit:function(){
+            this.$router.push('/' + this.$props.mode + '/edit/' +this.$props.id);
+        }
+    },
+    mounted(){
+        axios.get('http://localhost:4000/' + this.$props.mode + '/' + this.$props.id).then(Response=>{  
+            if(this.$props.mode=='customer'){
+                this.name = Response.data[0].customer_name;
+                this.email = Response.data[0].customer_emailId;
+                this.address = Response.data[0].customer_address;
+                this.phoneNo = Response.data[0].customer_phoneNo;
+                this.gstNo = Response.data[0].customer_gstno;
             }
-            else if(this.mode=='user'){
+           else if(this.$props.mode=='user'){
                     console.log("All Users Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
-            else if(this.mode=='item'){
+            else if(this.$props.mode=='supplier'){
                     console.log("All Suppliers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
             else{
-                    console.log("All Item Details:- "+this.name+" "+this.price+" "+this.description);
+                
             }
-        }
+        });
     },
     filters: {
         capitalize: function (value) {
