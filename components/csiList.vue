@@ -6,7 +6,7 @@
 
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-                    <tr v-if="mode=='customer' || mode=='supplier'" >
+                    <tr v-if="mode!='item' && mode!='branch'" >
                         <th></th>
                         <th>Sr.No</th>
                         <th>Name</th>

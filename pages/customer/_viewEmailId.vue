@@ -1,5 +1,5 @@
 <template>
-    <viewCustomer mode="customer"></viewCustomer>
+    <viewCustomer :id="customerEmailId" mode="customer"></viewCustomer>
 </template>
 
 <script>
