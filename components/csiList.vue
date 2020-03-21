@@ -6,19 +6,6 @@
             <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-<<<<<<< HEAD
-                    <tr role="row"> 
-                        <th ></th>
-                        <th style="cursor:pointer;">Sr.No</th>
-                        <th style="cursor:pointer;" v-if="mode=='customer'">Customer Name</th>
-                        <th style="cursor:pointer;" v-if="mode=='supplier'">Supplier Name</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Item Name</th>
-                        <th style="cursor:pointer;" v-if="mode!='item'">Mobile</th>
-                        <th style="cursor:pointer;" v-if="mode!='item'">Email</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Price</th>
-                        <th style="cursor:pointer;" v-if="mode=='item'">Description</th>
-                        <th >Actions</th>
-=======
                     <tr v-if="mode!='item'" >
                         <th>Sr.No</th>
                         <th>Name</th>
@@ -33,7 +20,6 @@
                         <th>Price</th>
                         <th>Description</th>
                         <th>Actions</th>
->>>>>>> 434bed46e44675e406fc00b4f7c2628dd999ae90
                     </tr>
                 </thead>
                 <tbody v-if="mode=='customer'" > 

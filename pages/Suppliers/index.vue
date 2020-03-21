@@ -20,14 +20,7 @@
                                                     <div class="col-md-9"></div>
                                                     <div class="col-md-3 col-10" >
                                                         <div class="form-group">
-<<<<<<< HEAD
-                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">Add Supplier</button>
-=======
-                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit">
-                                                                <i class="feather icon-user-plus"></i>
-                                                                Add New Supplier
-                                                            </button>
->>>>>>> 434bed46e44675e406fc00b4f7c2628dd999ae90
+                                                            <button style="float:right;" class="btn btn-primary" @click="add()" type="submit"><i class="feather icon-user-plus"></i> Add Supplier</button>
                                                         </div>
                                                     </div>
                                         </div> 
