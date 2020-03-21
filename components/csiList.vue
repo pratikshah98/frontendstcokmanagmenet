@@ -126,13 +126,13 @@ export default {
     },
     methods:{
         viewCustomer: function(email){
-            this.$router.push('/customers/'+email);
+            this.$router.push('/customer/'+email);
         },
         viewSupplier: function(email){
-            this.$router.push('/suppliers/'+email);
+            this.$router.push('/supplier/'+email);
         },
         viewItem: function(itemId){
-            this.$router.push('/items/'+itemId);
+            this.$router.push('/item/'+itemId);
         }, 
         update(id){
             this.$router.push('/'+this.mode+"/edit/"+id);   

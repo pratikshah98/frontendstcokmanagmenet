@@ -44,7 +44,7 @@
                                                     <div v-else  class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastName3">
-                                                                price*
+                                                                Price*
                                                             </label>
                                                             <input type="number" required class="form-control " v-model="price">
                                                         </div>
@@ -55,15 +55,15 @@
                                                     <div v-if="mode!='item' && mode!='branch'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">
-                                                                Email
+                                                                Email*
                                                             </label>
                                                             <input type="email" required class="form-control " :disabled="id!=null" v-model="email" >
                                                         </div>
                                                     </div>
                                                     <div v-if="mode!='item'" class="col-md-6">
                                                         <div class="form-group">
-                                                            <label >gstn</label>
-                                                            <input type="text" required class="form-control " v-model="gst" >                                                            
+                                                            <label >GSTIN</label>
+                                                            <input type="text" class="form-control " v-model="gst" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -73,13 +73,13 @@
                                                             <label for="">
                                                                 GSM
                                                             </label>
-                                                            <input type="number" required class="form-control " v-model="gsm" >
+                                                            <input type="number"  class="form-control " v-model="gsm" >
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Size</label>
-                                                            <input type="text" required class="form-control " v-model="size" >                                                            
+                                                            <input type="text"  class="form-control " v-model="size" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -92,7 +92,7 @@
                                                     </div>
                                                     <div v-else class="col-md-6">
                                                         <div class="form-group">
-                                                            <label >Reorder Level</label>
+                                                            <label >Reorder Level*</label>
                                                             <input type="number" required class="form-control " v-model="reorder" >                                                            
                                                         </div>
                                                     </div>
@@ -224,6 +224,7 @@ export default {
             else{
                 if(this.mode=='customer'){
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        customer_emailId:this.id,
                         customer_name:this.name,
                         customer_address:this.address,
                         customer_phoneNo:this.mobNo,
@@ -238,6 +239,7 @@ export default {
                 }
                 else if(this.mode=='supplier'){
                         axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        supplier_id:this.id,
                         supplier_name:this.name,
                         supplier_address:this.address,
                         supplier_phoneNo:this.mobNo,
@@ -252,6 +254,7 @@ export default {
                 else if(this.mode=='branch'){
                     
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        branchId:this.id,
                         branchName:this.name,
                         branchAddress:this.address,
                         branchPhoneNo:this.mobNo
@@ -265,6 +268,7 @@ export default {
                 }
                 else{
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        itemId:this.id,
                         name:this.name,
                         GSM:this.gsm,
                         size:this.size,
