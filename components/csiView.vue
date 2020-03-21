@@ -5,6 +5,7 @@
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
                             <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">View Customer</h2>
+                            <h2 v-else-if="mode=='user'" class="content-header-title float-left mb-0">View user</h2>
                             <h2 v-else-if="mode=='supplier'" class="content-header-title float-left mb-0">View Supplier</h2>
                             <h2 v-else class="content-header-title float-left mb-0">View Item</h2>
                         </div>
@@ -25,6 +26,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label v-if="mode=='customer'">Customer Name : {{ name }}</label>
+                                                         <label v-else-if="mode=='user'" >User Name : {{ name }}</label>
                                                         <label v-else-if="mode=='supplier'" >Supplier Name : {{ name }}</label>
                                                         <label v-else>Item Name : {{ name }}</label>
                                                     </div>
@@ -104,6 +106,9 @@ export default {
         getDetails(){
             if(this.mode=='customer'){
                     console.log("All Customers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
+            }
+            else if(this.mode=='user'){
+                    console.log("All Users Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
             else if(this.mode=='item'){
                     console.log("All Suppliers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);

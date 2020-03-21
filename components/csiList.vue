@@ -6,7 +6,14 @@
             <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-                    <tr v-if="mode!='item'" >
+                    <tr v-if="mode=='user'" >
+                        <th>Sr.No</th>
+                        <th>Name</th>
+                        <th>Phone No.</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr v-else-if="mode!='item' && mode!='user'" >
                         <th>Sr.No</th>
                         <th>Name</th>
                         <th>Phone No.</th>
@@ -32,6 +39,24 @@
                         <td>
                             <!-- view button -->
                             <button @click="viewCustomer(object.customer_emailId)"  class="btn btn-primary">
+                                <i class="feather icon-list"></i>
+                            </button>
+                            <!-- edit button - yellow color -->
+                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <!-- delete button - red color -->
+                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+                 <tbody v-if="mode=='user'" > 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.user_emailId">  {{ index + 1 }}</td>
+                        <td> {{ object.user_name }} </td>
+                        <td> {{ object.user_phoneNo }}</td>
+                        <td> {{ object.user_emailId }}</td>                                                  
+                        <td>
+                            <!-- view button -->
+                            <button @click="viewUser(object.user_emailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
@@ -97,6 +122,9 @@ export default {
         viewCustomer: function(email){
             this.$router.push('/customers/'+email);
         },
+         viewUser: function(email){
+            this.$router.push('/users/'+email);
+        },
         viewSupplier: function(email){
             this.$router.push('/suppliers/'+email);
         },
@@ -115,6 +143,8 @@ export default {
         let url;
         if(this.mode=='customer')
             url='http://localhost:4000/customer';
+        else if(this.mode=='user')
+            url='http://localhost:4000/user';
         else if(this.mode=='supplier')
             url='http://localhost:4000/supplier';
         else

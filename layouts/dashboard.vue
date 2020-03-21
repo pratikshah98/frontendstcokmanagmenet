@@ -219,7 +219,7 @@
                 </li>
                 <li class=" nav-item"><a href="/items/"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Not In Use</span></a>
+                <li class=" nav-item"><a href="/users/"><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Users</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>
                     <!-- <ul class="menu-content">
