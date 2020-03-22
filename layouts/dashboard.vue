@@ -219,7 +219,7 @@
                 </li>
                 <li class=" nav-item"><a href="/item/"><i class="feather icon-file"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
-                <li class=" nav-item"><a href="/users/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User Management</span></a>
+                <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User Management</span></a>
                 <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch Management</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>

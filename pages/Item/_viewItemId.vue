@@ -1,5 +1,5 @@
 <template>
-    <viewItem mode="item"></viewItem>
+    <viewItem :id="itemId" mode="item"></viewItem>
 </template>
 
 <script>

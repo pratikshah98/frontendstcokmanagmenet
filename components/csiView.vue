@@ -49,10 +49,15 @@
                                             <label >Address : {{ address }}</label>
                                         </div>
 
-                                        <div v-if="mode=='item'" class="col-md-6">
-                                            <label >Description : {{ description }}</label>
+                                        <div v-if="mode=='item'" class="col-md-3">
+                                            <label > GSM : {{ gsm }}</label>
                                         </div>
-                                        <div v-if="mode=='item'" class="col-md-6"></div>
+                                        <div v-if="mode=='item'" class="col-md-3">
+                                            <label > Size : {{ size }}</label>
+                                        </div>
+                                        <div v-if="mode=='item'" class="col-md-6">
+                                            <label > Reorder-Level : {{ reorderLevel }}</label>
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -103,7 +108,7 @@ export default {
             phoneNo:"",
             gstNo:"",
             price:"",
-            description:""
+            reorderLevel:""
         }
     },
     methods:{
@@ -112,27 +117,44 @@ export default {
         }
     },
     mounted(){
-        axios.get('http://localhost:4000/' + this.mode + '/' + this.id).then(Response=>{  
-            if(this.mode=='customer'){
-                this.name = Response.data[0].customer_name;
-                this.email = Response.data[0].customer_emailId;
-                this.address = Response.data[0].customer_address;
-                this.phoneNo = Response.data[0].customer_phoneNo;
-                this.gstNo = Response.data[0].customer_gstno;
+        axios.get('http://localhost:4000/' + this.$props.mode + '/' + this.$props.id).then(Response=>{  
+            if(this.$props.mode=='customer'){
+                this.name = Response.data[0].customerName;
+                this.email = Response.data[0].customerEmailId;
+                this.address = Response.data[0].customerAddress;
+                this.phoneNo = Response.data[0].customerPhoneNo;
+                this.gstNo = Response.data[0].customerGstNo;
+            }
+            else if(this.mode=='supplier'){
+                this.name = Response.data[0].supplierName;
+                this.email = Response.data[0].supplierEmailId;
+                this.address = Response.data[0].supplierAddress;
+                this.phoneNo = Response.data[0].supplierPhoneNo;
+                this.gstNo = Response.data[0].supplierGstNo;
             }
             else if(this.mode=='branch'){
                 this.name = Response.data[0].branchName;
                 this.address = Response.data[0].branchAddress;
                 this.phoneNo = Response.data[0].branchPhoneNo;
             }
-            else if(this.mode=='user'){
-                    console.log("All Users Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
+            else if(this.mode=='item'){
+                this.name = Response.data[0].name;
+                this.price =  Response.data[0].minimumRate;
+                this.reorderLevel = Response.data[0].reorderLevel;
+                this.gsm = Response.data[0].gsm;
+                this.size = Response.data[0].size;
+            }
+            else if(this.$props.mode=='user'){
+                this.name = Response.data[0].userName;
+                this.email = Response.data[0].userEmailId;
+                this.address = Response.data[0].userAddress;
+                this.phoneNo = Response.data[0].userPhoneNo;
             }
             else if(this.mode=='supplier'){
                     console.log("All Suppliers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
             else{
-                
+               
             }
         });
     },

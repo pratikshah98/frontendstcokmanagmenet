@@ -40,19 +40,19 @@
                 </thead>
                 <tbody v-if="mode=='customer'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.customer_emailId"></td>
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.customerEmailId"></td>
                         <td>  {{ index + 1 }}</td>
-                        <td> {{ object.customer_name }} </td>
-                        <td> {{ object.customer_phoneNo }}</td>
-                        <td> {{ object.customer_emailId }}</td>
-                        <td> {{ object.customer_gstno }} </td>                                                     
+                        <td> {{ object.customerName }} </td>
+                        <td> {{ object.customerPhoneNo }}</td>
+                        <td> {{ object.customerEmailId }}</td>
+                        <td> {{ object.customerGstNo }} </td>                                                     
                         <td>
                             <!-- view button -->
-                            <button @click="viewCustomer(object.customer_emailId)"  class="btn btn-primary">
+                            <button @click="viewCustomer(object.customerEmailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.customer_emailId)"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
@@ -60,13 +60,13 @@
                 </tbody>
                  <tbody v-else-if="mode=='user'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.user_emailId">  {{ index + 1 }}</td>
-                        <td> {{ object.user_name }} </td>
-                        <td> {{ object.user_phoneNo }}</td>
-                        <td> {{ object.user_emailId }}</td>                                                  
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.userEmailId">  {{ index + 1 }}</td>
+                        <td> {{ object.userName }} </td>
+                        <td> {{ object.userPhoneNo }}</td>
+                        <td> {{ object.userEmailId }}</td>                                                  
                         <td>
                             <!-- view button -->
-                            <button @click="viewUser(object.user_emailId)"  class="btn btn-primary">
+                            <button @click="viewUser(object.userEmailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
@@ -79,21 +79,21 @@
 
                 <tbody v-else-if="mode=='supplier'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.supplier_emailId"></td>
+                        <td><input type="checkbox" v-model="selectedItems" :value="object.supplierEmailId"></td>
                         <td>{{ index + 1 }}</td>
-                        <td> {{ object.supplier_name }} </td>
-                        <td> {{ object.supplier_phoneNo }}</td>
-                        <td> {{ object.supplier_emailId }}</td>
-                        <td> {{ object.supplier_gstno }} </td>                                                     
+                        <td> {{ object.supplierName }} </td>
+                        <td> {{ object.supplierPhoneNo }}</td>
+                        <td> {{ object.supplierEmailId }}</td>
+                        <td> {{ object.supplierGstNo }} </td>                                                     
                         <td>
                             <!-- view button -->
-                            <button @click="viewSupplier( object.supplier_emailId )"  class="btn btn-primary">
+                            <button @click="viewSupplier( object.supplierEmailId )"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.supplier_emailId)"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger" @click="update(object.supplier_emailId)"><i class="feather icon-trash-2"></i></button>
+                            <button class="btn btn-danger" @click="update(object.supplierEmailId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -121,14 +121,14 @@
                         <td>  {{ index + 1 }}</td>
                         <td> {{ object.name }} </td>
                         <td> {{ object.minimumRate }}</td>
-                        <td> {{ object.GSM }} - {{object.size}}</td>                                                    
+                        <td> {{ object.gsm }} - {{object.size}}</td>                                                    
                         <td>
                             <!-- view button -->
-                            <button @click="viewItem(object.item_Id)"  class="btn btn-primary">
+                            <button @click="viewItem(object.itemId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.item_Id)">
+                            <button class="btn btn-warning" @click="update(object.itemId)">
                                 <i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
@@ -153,8 +153,8 @@ export default {
         viewCustomer: function(email){
             this.$router.push('/customer/'+email);
         },
-         viewUser: function(email){
-            this.$router.push('/users/'+email);
+        viewUser: function(email){
+            this.$router.push('/user/'+email);
         },
         viewSupplier: function(email){
             this.$router.push('/supplier/'+email);

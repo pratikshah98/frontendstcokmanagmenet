@@ -183,11 +183,11 @@ export default {
             if(this.id==null){
                 if(this.mode=='customer'){
                     axios.post('http://localhost:4000/'+this.mode+"/",{
-                        customer_emailId:this.email,
-                        customer_name:this.name,
-                        customer_address:this.address,
-                        customer_phoneNo:this.mobNo,
-                        customer_gstno:this.gst
+                        customerEmailId:this.email,
+                        customerName:this.name,
+                        customerAddress:this.address,
+                        customerPhoneNo:this.mobNo,
+                        customerGstNo:this.gst
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Added");
@@ -199,11 +199,11 @@ export default {
                 else if(this.mode=='supplier'){
                         
                         axios.post('http://localhost:4000/'+this.mode+"/",{
-                        supplier_emailId:this.email,
-                        supplier_name:this.name,
-                        supplier_address:this.address,
-                        supplier_phoneNo:this.mobNo,
-                        supplier_gstno:this.gst
+                        supplierEmailId:this.email,
+                        supplierName:this.name,
+                        supplierAddress:this.address,
+                        supplierPhoneNo:this.mobNo,
+                        supplierGstNo:this.gst
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Added");
@@ -226,7 +226,7 @@ export default {
                 else{
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         name:this.name,
-                        GSM:this.gsm,
+                        gsm:this.gsm,
                         size:this.size,
                         minimumRate:this.price,
                         reorderLevel:this.reorder
@@ -241,11 +241,11 @@ export default {
             else{
                 if(this.mode=='customer'){
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
-                        customer_emailId:this.id,
-                        customer_name:this.name,
-                        customer_address:this.address,
-                        customer_phoneNo:this.mobNo,
-                        customer_gstno:this.gst
+                        customerEmailId:this.id,
+                        customerName:this.name,
+                        customerAddress:this.address,
+                        customerPhoneNo:this.mobNo,
+                        customerGstNo:this.gst
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Updated");
@@ -256,11 +256,11 @@ export default {
                 }
                 else if(this.mode=='supplier'){
                         axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
-                        supplier_id:this.id,
-                        supplier_name:this.name,
-                        supplier_address:this.address,
-                        supplier_phoneNo:this.mobNo,
-                        supplier_gstno:this.gst
+                        supplierId:this.id,
+                        supplierName:this.name,
+                        supplierAddress:this.address,
+                        supplierPhoneNo:this.mobNo,
+                        supplierGstNo:this.gst
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Updated");
@@ -287,7 +287,7 @@ export default {
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
                         itemId:this.id,
                         name:this.name,
-                        GSM:this.gsm,
+                        gsm:this.gsm,
                         size:this.size,
                         minimumRate:this.price,
                         reorderLevel:this.reorder
@@ -305,22 +305,22 @@ export default {
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
                     let mydata=res.data[0];
-                    this.email=mydata.customer_emailId;
-                    this.name=mydata.customer_name;
-                    this.address=mydata.customer_address;
-                    this.mobNo=mydata.customer_phoneNo;
-                    this.gst=mydata.customer_gstno;
+                    this.email=mydata.customerEmailId;
+                    this.name=mydata.customerName;
+                    this.address=mydata.customerAddress;
+                    this.mobNo=mydata.customerPhoneNo;
+                    this.gst=mydata.customerGstNo;
                 });
             }
             else if(this.mode=="supplier"){
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
                     let mydata=res.data[0];
-                    this.email=mydata.supplier_emailId;
-                    this.name=mydata.supplier_name;
-                    this.address=mydata.supplier_address;
-                    this.mobNo=mydata.supplier_phoneNo;
-                    this.gst=mydata.supplier_gstno;
+                    this.email=mydata.supplierEmailId;
+                    this.name=mydata.supplierName;
+                    this.address=mydata.supplierAddress;
+                    this.mobNo=mydata.supplierPhoneNo;
+                    this.gst=mydata.supplierGstNo;
                 });
             }
             else if(this.mode="branch"){
@@ -332,13 +332,22 @@ export default {
                     this.mobNo=mydata.branchPhoneNo;
                 });   
             }
+            else if(this.mode="user"){
+                axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
+                .then(res=>{
+                    let mydata=res.data[0];
+                    this.email = userEmailId;
+                    this.name=mydata.userName;
+                    this.address=mydata.userAddress;
+                    this.mobNo=mydata.userPhoneNo;
+                });   
+            }
             else{
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
                     let mydata=res.data[0];                    
-                    this.email=mydata.supplier_emailId;
                     this.name=mydata.name;
-                    this.gsm=mydata.GSM;
+                    this.gsm=mydata.gsm;
                     this.size=mydata.size;
                     this.price=mydata.minimumRate;
                     this.reorder=mydata.reorderLevel;
