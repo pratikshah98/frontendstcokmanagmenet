@@ -224,6 +224,7 @@ export default {
             else{
                 if(this.mode=='customer'){
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        customer_emailId:this.id,
                         customer_name:this.name,
                         customer_address:this.address,
                         customer_phoneNo:this.mobNo,
@@ -238,6 +239,7 @@ export default {
                 }
                 else if(this.mode=='supplier'){
                         axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        supplier_emailId:this.email,                        
                         supplier_name:this.name,
                         supplier_address:this.address,
                         supplier_phoneNo:this.mobNo,
@@ -252,6 +254,7 @@ export default {
                 else if(this.mode=='branch'){
                     
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        branchId:this.id,
                         branchName:this.name,
                         branchAddress:this.address,
                         branchPhoneNo:this.mobNo
@@ -265,6 +268,7 @@ export default {
                 }
                 else{
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        itemId:this.id,
                         name:this.name,
                         GSM:this.gsm,
                         size:this.size,
