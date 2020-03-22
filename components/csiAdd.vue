@@ -4,11 +4,13 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">Customer Add</h2>
-                            <h2 v-if="mode=='user'" class="content-header-title float-left mb-0">User Add</h2>
+                            <h2 v-if="id==null" class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
+                            <h2 v-else class="content-header-title float-left mb-0"> Edit {{ mode | capitalize }}</h2>
+                            <!-- <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">Customer Add</h2>
+                            <h2 v-else-if="mode=='user'" class="content-header-title float-left mb-0">User Add</h2>
                             <h2 v-else-if="mode=='supplier'" class="content-header-title float-left mb-0">Supplier Add</h2>
                             <h2 v-else-if="mode=='item'" class="content-header-title float-left mb-0">Item Add</h2>
-                            <h2 v-else class="content-header-title float-left mb-0">Branch Add</h2>
+                            <h2 v-else class="content-header-title float-left mb-0">Branch Add</h2> -->
                         </div>
                     </div>
                 </div>
@@ -136,7 +138,13 @@
 <script>
 import axios from 'axios'
 export default {
-    
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+    },
     props: {
             id: {
                 type: String,

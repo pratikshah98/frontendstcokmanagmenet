@@ -58,7 +58,7 @@
                         </td>
                     </tr>
                 </tbody>
-                 <tbody v-if="mode=='user'" > 
+                 <tbody v-else-if="mode=='user'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
                         <td> <input type="checkbox" v-model="selectedItems" :value="object.user_emailId">  {{ index + 1 }}</td>
                         <td> {{ object.user_name }} </td>
@@ -105,7 +105,7 @@
                         <td> {{ object.branchPhoneNo }}</td>                                             
                         <td>
                             <!-- view button -->
-                            <button @click="viewSupplier( object.branchId )"  class="btn btn-primary">
+                            <button @click="viewBranch( object.branchId )"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
@@ -162,6 +162,9 @@ export default {
         viewItem: function(itemId){
             this.$router.push('/item/'+itemId);
         }, 
+        viewBranch: function(branchId){
+            this.$router.push('/branch/'+branchId);
+        },
         update(id){
             this.$router.push('/'+this.mode+"/edit/"+id);   
         }
