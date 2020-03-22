@@ -1,5 +1,5 @@
 <template>
-    <viewUser mode="user"></viewUser>
+    <viewUser :id="userEmailId" mode="user"></viewUser>
 </template>
 
 <script>
