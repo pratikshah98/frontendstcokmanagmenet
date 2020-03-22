@@ -18,49 +18,61 @@
                             <div class="card-content">
                                 <div class="card-body">
                                     <fieldset>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label v-if="mode=='customer'">Customer Name : {{ name }}</label>
-                                                <label v-else-if="mode=='user'" >User Name : {{ name }}</label>
-                                                <label v-else-if="mode=='supplier'" >Supplier Name : {{ name }}</label>
-                                                <label v-else-if="mode=='branch'" >Branch Name : {{ name }}</label>
-                                                <label v-else>Item Name : {{ name }}</label>
+                                        <div class="col-md-6 col-12 ">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title mb-2">Detailed Information</div>
+                                </div>
+                                <div class="card-body">
+                                    <table cellspacing="10" cellpadding="10">
+                                        <tr>
+                                            <td class="font-weight-bold" v-if="mode=='customer'">Customer Name</td>
+                                            <td class="font-weight-bold" v-else-if="mode=='supplier'">Supplier Name</td>
+                                            <td class="font-weight-bold" v-else-if="mode=='branch'">Branch Name</td>
+                                            <td class="font-weight-bold" v-else-if="mode=='user'">User Name</td>
+                                            <td class="font-weight-bold" v-else >Item Name</td>
+                                            <td>{{ name }}</td>
+                                        </tr>
+                                        <tr v-if="mode!='item'">
+                                            <td class="font-weight-bold" >Phone Number </td>
+                                            <td>{{ phoneNo }}</td>
+                                        </tr>
+                                        <tr v-if="mode=='customer' || mode=='supplier'"> 
+                                            <td class="font-weight-bold" >GSTIN</td>
+                                            <td>{{ gstNo }}</td>
+                                        </tr>
+                                        <tr v-if="mode=='item'">
+                                            <td class="font-weight-bold" >Price</td>
+                                            <td>{{ price }}
+                                            </td>
+                                        </tr>
+                                        <tr v-if="mode!='item' && mode!='branch'">
+                                            <td class="font-weight-bold">Email</td>
+                                            <td>{{ email }}</td>
+                                        </tr>
+                                        <tr v-if="mode!='item'">
+                                            <td class="font-weight-bold">Address</td>
+                                            <td>{{ address }}</td>
+                                        </tr>
+                                        <tr v-if="mode=='item'">
+                                            <td class="font-weight-bold"> GSM</td>
+                                            <td>{{ gsm }}</td>
+                                        </tr>
+                                        <tr v-if="mode=='item'">
+                                            <td class="font-weight-bold"> Size</td>
+                                            <td>{{ size }}</td>
+                                        </tr>
+                                        <tr v-if="mode=='item'">
+                                            <td class="font-weight-bold"> Reorder-Level</td>
+                                            <td>{{ reorderLevel }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
-                                                <div v-if="mode!='item'"  class="col-md-4">
-                                                    <label> Phone Number : {{ phoneNo }}</label>
-                                                </div>
-                                                <div v-if="mode=='customer' || mode=='supplier'"  class="col-md-4">
-                                                    <label> GSTIN :  {{ gstNo }}</label>
-                                                </div>
-                                                <div v-else-if="mode=='item'"  class="col-md-6">
-                                                    <label> Price : {{ price }} </label>
-                                                </div>
-                                                <div v-else class="col-md-6">
-                                                    <!-- <label>  </label> -->
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    <div class="row">
-                                        <div v-if="mode!='item' && mode!='branch'" class="col-md-6">
-                                            <label >Email : {{ email }}</label>
-                                        </div>
-                                        <div v-if="mode!='item'" class="col-md-6">
-                                            <label >Address : {{ address }}</label>
-                                        </div>
-
-                                        <div v-if="mode=='item'" class="col-md-3">
-                                            <label > GSM : {{ gsm }}</label>
-                                        </div>
-                                        <div v-if="mode=='item'" class="col-md-3">
-                                            <label > Size : {{ size }}</label>
-                                        </div>
-                                        <div v-if="mode=='item'" class="col-md-6">
-                                            <label > Reorder-Level : {{ reorderLevel }}</label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
+                                    </fieldset>
+                                   <fieldset>
                                     <div  class="row">
                                         <div class="col-md-9 col-4"></div>
                                         <div class="col-md-3 col-8" >
