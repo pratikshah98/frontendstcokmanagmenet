@@ -1,5 +1,5 @@
 {
-  "name": "StockManagement",
+  "name": "stockmanagement",
   "version": "1.0.0",
   "description": "My superior Nuxt.js project",
   "author": "Sunil",
@@ -18,5 +18,15 @@
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
-  }
+  },
+  "main": "nuxt.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KeswaniSunil/StockManagement.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KeswaniSunil/StockManagement/issues"
+  },
+  "homepage": "https://github.com/KeswaniSunil/StockManagement#readme"
 }

@@ -6,7 +6,14 @@
 
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-                    <tr v-if="mode!='item' && mode!='branch'" >
+                    <tr v-if="mode=='user'" >
+                        <th>Sr.No</th>
+                        <th>Name</th>
+                        <th>Phone No.</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr v-else-if="mode!='item' && mode!='user' && mode!='branch'" >
                         <th></th>
                         <th>Sr.No</th>
                         <th>Name</th>
@@ -51,6 +58,24 @@
                         </td>
                     </tr>
                 </tbody>
+                 <tbody v-else-if="mode=='user'" > 
+                    <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td> <input type="checkbox" v-model="selectedItems" :value="object.user_emailId">  {{ index + 1 }}</td>
+                        <td> {{ object.user_name }} </td>
+                        <td> {{ object.user_phoneNo }}</td>
+                        <td> {{ object.user_emailId }}</td>                                                  
+                        <td>
+                            <!-- view button -->
+                            <button @click="viewUser(object.user_emailId)"  class="btn btn-primary">
+                                <i class="feather icon-list"></i>
+                            </button>
+                            <!-- edit button - yellow color -->
+                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <!-- delete button - red color -->
+                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
 
                 <tbody v-else-if="mode=='supplier'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
@@ -80,7 +105,7 @@
                         <td> {{ object.branchPhoneNo }}</td>                                             
                         <td>
                             <!-- view button -->
-                            <button @click="viewSupplier( object.branchId )"  class="btn btn-primary">
+                            <button @click="viewBranch( object.branchId )"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
@@ -126,14 +151,20 @@ export default {
     },
     methods:{
         viewCustomer: function(email){
-            this.$router.push('/customers/'+email);
+            this.$router.push('/customer/'+email);
+        },
+         viewUser: function(email){
+            this.$router.push('/users/'+email);
         },
         viewSupplier: function(email){
-            this.$router.push('/suppliers/'+email);
+            this.$router.push('/supplier/'+email);
         },
         viewItem: function(itemId){
-            this.$router.push('/items/'+itemId);
+            this.$router.push('/item/'+itemId);
         }, 
+        viewBranch: function(branchId){
+            this.$router.push('/branch/'+branchId);
+        },
         update(id){
             this.$router.push('/'+this.mode+"/edit/"+id);   
         }

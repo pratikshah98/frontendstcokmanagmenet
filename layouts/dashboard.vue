@@ -213,13 +213,14 @@
                 </li>
                 <li class=" navigation-header"><span>Apps</span>
                 </li>
-                <li class=" nav-item"><a href="/customer/"><i class="feather icon-mail"></i><span class="menu-title">Customers</span></a>
+                <li class=" nav-item"><a href="/customer/"><i class="feather icon-users"></i><span class="menu-title">Customers</span></a>
                 </li>
-                <li class=" nav-item"><a href="/supplier/"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
+                <li class=" nav-item"><a href="/supplier/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
                 </li>
-                <li class=" nav-item"><a href="/item/"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
+                <li class=" nav-item"><a href="/item/"><i class="feather icon-file"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
-                <li class=" nav-item"><a href="/branch/"><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Branch</span></a>
+                <li class=" nav-item"><a href="/users/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User Management</span></a>
+                <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch Management</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>
                     <!-- <ul class="menu-content">

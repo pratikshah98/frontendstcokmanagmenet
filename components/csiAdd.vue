@@ -4,10 +4,13 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">Customer Add</h2>
+                            <h2 v-if="id==null" class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
+                            <h2 v-else class="content-header-title float-left mb-0"> Edit {{ mode | capitalize }}</h2>
+                            <!-- <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">Customer Add</h2>
+                            <h2 v-else-if="mode=='user'" class="content-header-title float-left mb-0">User Add</h2>
                             <h2 v-else-if="mode=='supplier'" class="content-header-title float-left mb-0">Supplier Add</h2>
                             <h2 v-else-if="mode=='item'" class="content-header-title float-left mb-0">Item Add</h2>
-                            <h2 v-else class="content-header-title float-left mb-0">Branch Add</h2>
+                            <h2 v-else class="content-header-title float-left mb-0">Branch Add</h2> -->
                         </div>
                     </div>
                 </div>
@@ -27,6 +30,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label v-if="mode=='customer'" for="firstName3">Customer Name*</label>
+                                                            <label v-else-if="mode=='user'" for="firstName3">Name*</label>
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             <label v-else-if="mode=='item'" for="firstName3">Item Name*</label>
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
@@ -44,7 +48,7 @@
                                                     <div v-else  class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastName3">
-                                                                price*
+                                                                Price*
                                                             </label>
                                                             <input type="number" required class="form-control " v-model="price">
                                                         </div>
@@ -55,44 +59,51 @@
                                                     <div v-if="mode!='item' && mode!='branch'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">
-                                                                Email
+                                                                Email*
                                                             </label>
                                                             <input type="email" required class="form-control " :disabled="id!=null" v-model="email" >
                                                         </div>
                                                     </div>
-                                                    <div v-if="mode!='item'" class="col-md-6">
+                                                    <div v-if="mode=='user'" class="col-md-6">
                                                         <div class="form-group">
-                                                            <label >gstn</label>
-                                                            <input type="text" required class="form-control " v-model="gst" >                                                            
+                                                            <label >Address</label>
+                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                        </div>
+                                                     </div>
+                                                    <div v-if="mode!='item' && mode!='user'" class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label >GSTIN</label>
+                                                            <input type="text" class="form-control " v-model="gst" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="row" v-if="mode=='item'">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">
                                                                 GSM
                                                             </label>
-                                                            <input type="number" required class="form-control " v-model="gsm" >
+                                                            <input type="number"  class="form-control " v-model="gsm" >
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Size</label>
-                                                            <input type="text" required class="form-control " v-model="size" >                                                            
+                                                            <input type="text"  class="form-control " v-model="size" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div v-if="mode!='item'" class="col-md-6">
+                                                    <div v-if="mode!='item' && mode!='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
                                                             <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div v-else class="col-md-6">
+                                                    <div v-if="mode=='item'" class="col-md-6">
                                                         <div class="form-group">
-                                                            <label >Reorder Level</label>
+                                                            <label >Reorder Level*</label>
                                                             <input type="number" required class="form-control " v-model="reorder" >                                                            
                                                         </div>
                                                     </div>
@@ -127,7 +138,13 @@
 <script>
 import axios from 'axios'
 export default {
-    
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+    },
     props: {
             id: {
                 type: String,
@@ -174,7 +191,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Added");
-                            this.$router.push("/customer/add");
+                            this.$router.push("/customer");
                         }
                     });
                     
@@ -190,7 +207,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Added");
-                            this.$router.push("/supplier/add");
+                            this.$router.push("/supplier");
                         }
                     });
                 }
@@ -202,7 +219,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Branch Succesfully Added");
-                            this.$router.push("/branch/add");
+                            this.$router.push("/branch");
                         }
                     });
                 }
@@ -216,7 +233,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Item Succesfully Added");
-                            this.$router.push("/item/add");
+                            this.$router.push("/item");
                         }
                     });
                 }
@@ -232,14 +249,14 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Customer Succesfully Updated");
-                            this.$router.push("/customer/edit/"+this.id);
+                            this.$router.push("/customer/"+this.id);
                         }
                     });
                     
                 }
                 else if(this.mode=='supplier'){
                         axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
-                        supplier_emailId:this.email,                        
+                        supplier_id:this.id,
                         supplier_name:this.name,
                         supplier_address:this.address,
                         supplier_phoneNo:this.mobNo,
@@ -247,7 +264,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Supplier Succesfully Updated");
-                            this.$router.push("/supplier/edit/"+this.id);
+                            this.$router.push("/supplier/"+this.id);
                         }
                     });
                 }
@@ -262,7 +279,7 @@ export default {
                         if(response){
                             alert("Branch Succesfully Updated");
                             console.log(response);
-                            this.$router.push("/branch/edit/"+this.id);
+                            this.$router.push("/branch/"+this.id);
                         }
                     });
                 }
@@ -277,7 +294,7 @@ export default {
                     }).then(response=>{
                         if(response){
                             alert("Item Succesfully Updated");
-                            this.$router.push("/item/edit/"+this.id);
+                            this.$router.push("/item/"+this.id);
                         }
                     });
                 }

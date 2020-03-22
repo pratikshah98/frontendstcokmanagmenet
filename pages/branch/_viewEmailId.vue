@@ -1,5 +1,5 @@
 <template>
-    <viewBranch mode="branch"></viewBranch>
+    <viewBranch :id="branchEmailId" mode="branch"></viewBranch>
 </template>
 
 <script>
