@@ -108,27 +108,27 @@ export default {
     },
     methods:{
         gotoEdit:function(){
-            this.$router.push( '/' + this.$props.mode + '/edit/' + this.$props.id );
+            this.$router.push( '/' + this.mode + '/edit/' + this.id );
         }
     },
     mounted(){
-        axios.get('http://localhost:4000/' + this.$props.mode + '/' + this.$props.id).then(Response=>{  
-            if(this.$props.mode=='customer'){
+        axios.get('http://localhost:4000/' + this.mode + '/' + this.id).then(Response=>{  
+            if(this.mode=='customer'){
                 this.name = Response.data[0].customer_name;
                 this.email = Response.data[0].customer_emailId;
                 this.address = Response.data[0].customer_address;
                 this.phoneNo = Response.data[0].customer_phoneNo;
                 this.gstNo = Response.data[0].customer_gstno;
             }
-            else if(this.$props.mode=='branch'){
+            else if(this.mode=='branch'){
                 this.name = Response.data[0].branchName;
                 this.address = Response.data[0].branchAddress;
                 this.phoneNo = Response.data[0].branchPhoneNo;
             }
-            else if(this.$props.mode=='user'){
+            else if(this.mode=='user'){
                     console.log("All Users Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
-            else if(this.$props.mode=='supplier'){
+            else if(this.mode=='supplier'){
                     console.log("All Suppliers Details:- "+this.name+" "+this.mobNo+" "+this.email+" "+this.city+" "+this.address);
             }
             else{
