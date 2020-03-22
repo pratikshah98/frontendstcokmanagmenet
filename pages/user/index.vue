@@ -50,7 +50,7 @@ export default {
     },
     methods:{
         add(){
-            this.$router.push("/users/add")
+            this.$router.push("/user/add")
         }
     }
 }

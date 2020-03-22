@@ -11,9 +11,11 @@
                         <th>Name</th>
                         <th>Phone No.</th>
                         <th>Email</th>
+                        <th>Branch</th>
+                        <th>Role</th>
                         <th>Actions</th>
                     </tr>
-                    <tr v-else-if="mode!='item' && mode!='user' && mode!='branch'" >
+                    <tr v-else-if="mode=='customer' || mode=='supplier'" >
                         <th></th>
                         <th>Sr.No</th>
                         <th>Name</th>
@@ -63,14 +65,16 @@
                         <td> <input type="checkbox" v-model="selectedItems" :value="object.userEmailId">  {{ index + 1 }}</td>
                         <td> {{ object.userName }} </td>
                         <td> {{ object.userPhoneNo }}</td>
-                        <td> {{ object.userEmailId }}</td>                                                  
+                        <td> {{ object.userEmailId }}</td>
+                        <td> {{ object.branchName }}</td>                                                  
+                        <td> {{ object.roleName }}</td>                                                  
                         <td>
                             <!-- view button -->
                             <button @click="viewUser(object.userEmailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning"><i class="feather icon-edit"></i></button>
+                            <button class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
@@ -93,7 +97,7 @@
                             <!-- edit button - yellow color -->
                             <button class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger" @click="update(object.supplierEmailId)"><i class="feather icon-trash-2"></i></button>
+                            <button class="btn btn-danger" ><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -178,8 +182,15 @@ export default {
         }
     },  
     mounted(){
-        axios.get('http://localhost:4000/'+this.mode).
-        then(response => (this.fetchedObjects = response.data));
+        let name=this.mode;
+        if(this.mode=="user"){
+            name+="branchrole"
+        }
+        axios.get('http://localhost:4000/'+name)
+        .then(response => {
+            this.fetchedObjects = response.data;
+        });
+
     },
 }
 </script>

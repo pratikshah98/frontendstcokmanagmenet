@@ -4,8 +4,8 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 v-if="id==null" class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
-                            <h2 v-else class="content-header-title float-left mb-0"> Edit {{ mode | capitalize }}</h2>
+                            <!-- <h2 v-if="id==null" class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
+                            <h2 v-else class="content-header-title float-left mb-0"> Edit {{ mode | capitalize }}</h2> -->
                             <!-- <h2 v-if="mode=='customer'" class="content-header-title float-left mb-0">Customer Add</h2>
                             <h2 v-else-if="mode=='user'" class="content-header-title float-left mb-0">User Add</h2>
                             <h2 v-else-if="mode=='supplier'" class="content-header-title float-left mb-0">Supplier Add</h2>
@@ -30,7 +30,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label v-if="mode=='customer'" for="firstName3">Customer Name*</label>
-                                                            <label v-else-if="mode=='user'" for="firstName3">Name*</label>
+                                                            <label v-else-if="mode=='user'" for="firstName3">User Name*</label>
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             <label v-else-if="mode=='item'" for="firstName3">Item Name*</label>
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
@@ -56,7 +56,7 @@
                                                 </div>
 
                                                 <div class="row" v-if="mode!='item' && mode!='branch'">
-                                                    <div v-if="mode!='item' && mode!='branch'" class="col-md-6">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">
                                                                 Email*
@@ -66,11 +66,11 @@
                                                     </div>
                                                     <div v-if="mode=='user'" class="col-md-6">
                                                         <div class="form-group">
-                                                            <label >Address</label>
-                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                            <label >Password</label>
+                                                            <input type="text" required class="form-control " v-model="password" >
                                                         </div>
                                                      </div>
-                                                    <div v-if="mode!='item' && mode!='user'" class="col-md-6">
+                                                    <div v-else class="col-md-6">
                                                         <div class="form-group">
                                                             <label >GSTIN</label>
                                                             <input type="text" class="form-control " v-model="gst" >                                                            
@@ -94,14 +94,32 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="row" v-if="mode=='user'">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label >Branch*</label>
+                                                            <select class="custom-select form-control" required v-model="branch">
+                                                                <option  v-for="(a,index) in allBranch" :key="index" :value="a.branchId">{{a.branchName}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label >Role*</label>
+                                                            <select class="custom-select form-control" required v-model="role">
+                                                                <option  v-for="(a,index) in allRole" :key="index" :value="a.roleId">{{a.roleName}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>    
                                                 <div class="row">
-                                                    <div v-if="mode!='item' && mode!='user'" class="col-md-6">
+                                                    <div v-if="mode!='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
                                                             <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div v-if="mode=='item'" class="col-md-6">
+                                                    <div v-else class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Reorder Level*</label>
                                                             <input type="number" required class="form-control " v-model="reorder" >                                                            
@@ -121,8 +139,6 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-
-                                            <!-- Step 3 -->
                                         </form>
                                     </div>
                                 </div>
@@ -138,13 +154,13 @@
 <script>
 import axios from 'axios'
 export default {
-    filters: {
-        capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
-        }
-    },
+    // filters: {
+    //     capitalize: function (value) {
+    //         if (!value) return ''
+    //         value = value.toString()
+    //         return value.charAt(0).toUpperCase() + value.slice(1)
+    //     }
+    // },
     props: {
             id: {
                 type: String,
@@ -170,15 +186,33 @@ export default {
             price:"",
             gsm:0,
             size:"",
-            reorder:0
+            reorder:0,
+            branch:"",
+            password:"",
+            allBranch:[],
+            role:"",
+            allRole:[]
         }
     },
     created(){
+        if(this.mode=='user'){
+            this.getUserDtl();
+        }
         if(this.id!=null){
             this.getDetails()
         }
     },
     methods:{
+        getUserDtl(){
+            axios.get('http://localhost:4000/branch/')
+            .then(res=>{
+                axios.get('http://localhost:4000/role/')
+                .then(res1=>{
+                this.allBranch=res.data
+                this.allRole=res1.data;
+                });
+            });
+        },
         details(){
             if(this.id==null){
                 if(this.mode=='customer'){
@@ -220,6 +254,22 @@ export default {
                         if(response){
                             alert("Branch Succesfully Added");
                             this.$router.push("/branch");
+                        }
+                    });
+                }
+                else if(this.mode=='user'){
+                    axios.post('http://localhost:4000/'+this.mode+"/",{
+                        userEmailId:this.email,
+                        userName:this.name,
+                        userPassword:this.password,
+                        userAddress:this.address,
+                        userPhoneNo:this.mobNo,
+                        fkRoleId:this.role,
+                        fkBranchId:this.branch,
+                    }).then(response=>{
+                        if(response){
+                            alert("User Succesfully Added");
+                            this.$router.push("/user");
                         }
                     });
                 }
@@ -283,6 +333,22 @@ export default {
                         }
                     });
                 }
+                else if(this.mode=='user'){
+                    axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
+                        userEmailId:this.email,
+                        userName:this.name,
+                        userPassword:this.password,
+                        userAddress:this.address,
+                        userPhoneNo:this.mobNo,
+                        fkRoleId:this.role,
+                        fkBranchId:this.branch,
+                    }).then(response=>{
+                        if(response){
+                            alert("User Succesfully Updated");
+                            this.$router.push("/user");
+                        }
+                    });
+                }
                 else{
                     axios.put('http://localhost:4000/'+this.mode+"/"+this.id,{
                         itemId:this.id,
@@ -301,6 +367,7 @@ export default {
             }
         },
         getDetails(){
+            console.log(this.mode);
             if(this.mode=='customer'){
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
@@ -323,7 +390,7 @@ export default {
                     this.gst=mydata.supplierGstNo;
                 });
             }
-            else if(this.mode="branch"){
+            else if(this.mode=="branch"){
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
                     let mydata=res.data[0];
@@ -332,14 +399,17 @@ export default {
                     this.mobNo=mydata.branchPhoneNo;
                 });   
             }
-            else if(this.mode="user"){
+            else if(this.mode=="user"){
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
                     let mydata=res.data[0];
-                    this.email = userEmailId;
+                    this.email = mydata.userEmailId;
                     this.name=mydata.userName;
                     this.address=mydata.userAddress;
                     this.mobNo=mydata.userPhoneNo;
+                    this.branch=mydata.fkBranchId;
+                    this.role=mydata.fkRoleId;
+                    this.password=mydata.userPassword;
                 });   
             }
             else{
