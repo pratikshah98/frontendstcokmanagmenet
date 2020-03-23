@@ -1,5 +1,5 @@
 <template>
-    <viewSupplier mode="supplier"></viewSupplier>
+    <viewSupplier :id="supplierEmailId" mode="supplier"></viewSupplier>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
     },
     data(){
         return{
-            SupplierEmailId: this.$route.params.viewEmailId
+            supplierEmailId: this.$route.params.viewEmailId
         }
     }    
 }

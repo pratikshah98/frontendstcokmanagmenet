@@ -97,29 +97,27 @@
                                                 <div class="row" v-if="mode=='user'">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
+                                                            <label >Address</label>
+                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
                                                             <label >Branch*</label>
                                                             <select class="custom-select form-control" required v-model="branch">
                                                                 <option  v-for="(a,index) in allBranch" :key="index" :value="a.branchId">{{a.branchName}}</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label >Role*</label>
-                                                            <select class="custom-select form-control" required v-model="role">
-                                                                <option  v-for="(a,index) in allRole" :key="index" :value="a.roleId">{{a.roleName}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
                                                 </div>    
                                                 <div class="row">
-                                                    <div v-if="mode!='item'" class="col-md-6">
+                                                    <div v-if="mode!='item' && mode!='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
                                                             <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div v-else class="col-md-6">
+                                                    <div v-if="mode=='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Reorder Level*</label>
                                                             <input type="number" required class="form-control " v-model="reorder" >                                                            
