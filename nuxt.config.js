@@ -37,11 +37,21 @@ module.exports = {
       {rel:"stylesheet" , href:"/app-assets/css/pages/invoice.css"},
       //for login and forget password:- 
       
+      //for select2 - auto suggest
+      {rel:"stylesheet" , href:"/assets/css/select2.min.css"},
+      
+
       {rel:"stylesheet" , href:"/app-assets/css/pages/authentication.css"}
     ],
 
 
   script:[
+
+    {
+      src: "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+      type: "text/javascript"
+    },
+    
     {src:"/app-assets/vendors/js/vendors.min.js"},
     {src:"/app-assets/vendors/js/charts/apexcharts.min.js"},
     {src:"/app-assets/js/core/app-menu.js"},
@@ -68,8 +78,13 @@ module.exports = {
     {src:"/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"},
     //---------------
 
-    //for login and forgetPassword
-    {src:"/app-assets/js/scripts/pages/invoice.js"}
+    //for invoice
+    {src:"/app-assets/js/scripts/pages/invoice.js"},
+
+    //for select2 - auto suggest
+    {src:"/assets/css/select2.min.css"}
+    
+
   ]
 },
 
@@ -88,6 +103,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/vue-datepicker', ssr: false },    // ssr=false will stop server-side-rendering of datepicker
   ],
 
   /*
