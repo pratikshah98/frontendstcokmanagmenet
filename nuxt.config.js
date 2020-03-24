@@ -80,9 +80,9 @@ module.exports = {
 
     //for invoice
     {src:"/app-assets/js/scripts/pages/invoice.js"},
-
-    //for select2 - auto suggest
-    {src:"/assets/css/select2.min.css"}
+    
+    { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
+    { src: '/assets/js/select2.min.js'}
     
 
   ]

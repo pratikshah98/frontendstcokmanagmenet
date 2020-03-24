@@ -25,7 +25,11 @@
                                                         <div class="form-group">
                                                             <label v-if="mode=='purchase'"> Supplier*</label>                                                            
                                                             <label v-else> Customer*</label>
-                                                            <select id="mySelect2" class="col-md-12"></select>
+                                                            <select2 
+                                                                :options="customerOrSupplierList" 
+                                                                v-model="selectedCustomerOrSupplier"
+                                                                classes="form-control col-md-12"
+                                                            ></select2>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -49,18 +53,22 @@
                                                     <div v-else class="col-md-2">
                                                         <div class="form-group">
                                                             <label> Sale Type*</label>
-                                                            <select class="custom-select form-control" required v-model="selectedSaleType">
-                                                                <option v-for="(a,index) in saleTypeList" :key="index" :value="a.saleTypeId">{{a.saleType}}</option>
-                                                            </select>
+                                                            <select2
+                                                                :options="saleTypeList"
+                                                                v-model="selectedSaleType"
+                                                                classes="form-control col-md-12"
+                                                            ></select2>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label> Branch*</label>
-                                                            <select class="custom-select form-control" required v-model="selectedBranch">
-                                                                <option  v-for="(a,index) in branchList" :key="index" :value="a.branchId">{{a.branchName}}</option>
-                                                            </select>
+                                                            <select2
+                                                                :options="branchList"
+                                                                v-model="selectedBranch"
+                                                                classes="form-control col-md-12"
+                                                            ></select2>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -69,9 +77,11 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Item*</label>
-                                                            <select class="custom-select form-control" required v-model="insertItemObjects[item-1].fkItemId">
-                                                                <option  v-for="(a,index) in itemList" :key="index" :value="a.itemId">{{a.name}}</option>
-                                                            </select>
+                                                            <select2 
+                                                                :options="itemList"
+                                                                v-model="insertItemObjects[item-1].fkItemId"
+                                                                classes="form-control col-md-12"
+                                                            ></select2>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -126,18 +136,11 @@
 </template>
 <script>
 import axios from 'axios'
+import select2 from '../components/select2Component'
 
 export default {
-    head(){
-        return {
-            script: [
-                { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
-                { src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js'}
-            ],
-            link:[
-                { href: "https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" }
-            ]
-        }
+    components:{
+        select2
     },
     props: {
         id: {
@@ -155,28 +158,29 @@ export default {
     },
     data(){
         return{
-            branchList:[],
-            saleTypeList:[],
             itemList:[],
+            branchList:[],
             customerOrSupplierList:[],
+            saleTypeList:[],
+
+            selectedCustomerOrSupplier:0,
+            selectedBranch:0,
+            selectedSaleType:0,
 
             totalItems:1,
-
-            selectedBranch:[],
             selectedDate: new Date(),
-            selectedSaleType:[],
             
             insertItemObjects:[{
-                fkItemId:"",
-                saleQuantity:0
+                fkItemId:[],
+                saleQuantity:1
             }]
         }
     },
-    mounted(){
+    beforeMount(){
         if(this.$props.mode=='purchase')
         {
             axios.get('http://localhost:4000/supplier').then(response=>{
-                const options=[];
+                const options=[{'id':0 , 'text': 'Select Supplier'}];
                 for(let index in response.data){
                     options.push({
                         "id": response.data[index].supplierEmailId,
@@ -184,16 +188,12 @@ export default {
                     });
                 }
                 this.customerOrSupplierList = options;
-                console.log(this.customerOrSupplierList);
-                $("#mySelect2").select2({
-                    data: this.customerOrSupplierList
-                });
             });
         }
         else
         {
             axios.get('http://localhost:4000/customer').then(response=>{
-                const options=[];
+                const options=[{'id':0 , 'text': 'Select Customer'}];                
                 for(let index in response.data){
                     options.push({
                         "id": response.data[index].customerEmailId,
@@ -201,30 +201,51 @@ export default {
                     });
                 }
                 this.customerOrSupplierList = options;
-                console.log(this.customerOrSupplierList);
-                $("#mySelect2").select2({
-                    data: this.customerOrSupplierList
-                });
             });
             axios.get('http://localhost:4000/saleType').then(response=>{
-                this.saleTypeList = response.data;
+                const options=[{'id':0 , 'text': 'Select Sale Type'}];
+                for(let index in response.data){
+                    options.push({
+                        "id": response.data[index].saleTypeId,
+                        "text": response.data[index].saleType
+                    });
+                }
+                this.saleTypeList = options;
             });
         }
 
         axios.get('http://localhost:4000/branch').then(response=>{
-            this.branchList = response.data;
+            const options=[{'id':0 , 'text': 'Select Branch'}];
+            for(let index in response.data){
+                options.push({
+                    "id": response.data[index].branchId,
+                    "text": response.data[index].branchName
+                });
+            }
+            this.branchList = options;
         });
         
         axios.get('http://localhost:4000/item').then(response=>{
-            this.itemList = response.data;
+            const options=[{'id':0 , 'text': 'Select Item'}];
+            for(let index in response.data){
+                const itemGSM = response.data[index].gsm;
+                const itemSize = response.data[index].size;
+                let itemName = response.data[index].name;
+                if(itemGSM!=null){
+                    itemName = itemName + '  (GSM-' + itemGSM + ')';
+                }
+                if(itemSize!=null){
+                    itemName = itemName + '  (Size-' + itemSize + ')';
+                }
+                options.push({
+                    "id": response.data[index].itemId,
+                    "text": itemName
+                });
+            }
+            this.itemList = options;
         });
 
         
-    },
-    computed:{
-        selectedCustomerOrSupplier:function(){
-            return $('#mySelect2').select2('data')[0].id
-        }
     },
     methods:{
         submitDetails: function(){
@@ -243,14 +264,11 @@ export default {
             // });
             alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
         },
-        update: function(){
-            
-        },
         addItem:function(){
             this.totalItems++; 
-            this.insertItemObjects.push({
+            this.insertItemObjects.push({   
                 fkItemId:"",
-                saleQuantity:0
+                saleQuantity:1
             });
         },
         removeItem: function(itemIndex){

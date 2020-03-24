@@ -26,17 +26,22 @@
                                     <div class="card-body">
                                         <form action="#" class="steps-validation wizard-circle">
                                             <fieldset>
-                                                <div class="row">
-                                                    <div class="col-md-6">
+                                                <div class="row form-group">
+                                                    <div v-if="mode!='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label v-if="mode=='customer'" for="firstName3">Customer Name*</label>
                                                             <label v-else-if="mode=='user'" for="firstName3">User Name*</label>
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
-                                                            <label v-else-if="mode=='item'" for="firstName3">Item Name*</label>
+                                                            
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
                                                             <input type="text" required class="form-control " v-model="name">
                                                         </div>
                                                     </div>
+                                                    <div v-else class="col-md-4">
+                                                        <label for="firstName3">Item Name*</label>
+                                                        <input type="text" required class="form-control " v-model="name">
+                                                    </div>
+
                                                     <div v-if="mode!='item'"  class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastName3">
@@ -45,12 +50,20 @@
                                                             <input type="text" required class="form-control " v-model="mobNo" >
                                                         </div>
                                                     </div>
-                                                    <div v-else  class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="lastName3">
+                                                    <div v-else class="row col-md-8">
+                                                        <div class="col-md-4">
+                                                            <label>
                                                                 Price*
                                                             </label>
                                                             <input type="number" required class="form-control " v-model="price">
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <label>Default Supplier*</label>
+                                                            <select2 
+                                                                :options="supplierList"
+                                                                v-model="selectedDefaultSupplier"
+                                                                classes="form-control col-md-12"
+                                                            ></select2>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -81,7 +94,7 @@
                                                 <div class="row" v-if="mode=='item'">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="">
+                                                            <label >
                                                                 GSM
                                                             </label>
                                                             <input type="number"  class="form-control " v-model="gsm" >
@@ -151,7 +164,12 @@
 </template>
 <script>
 import axios from 'axios'
+import select2 from '../components/select2Component'
+
 export default {
+    components:{
+        select2
+    },
     filters: {
         capitalize: function (value) {
             if (!value) return ''
@@ -175,6 +193,9 @@ export default {
         },
     data(){
         return{
+            supplierList:[],
+            selectedDefaultSupplier:"",
+
             name:"",
             mobNo:"",
             email:"",
@@ -192,7 +213,25 @@ export default {
             allRole:[]
         }
     },
+    mounted(){
+        if(this.mode=='item')
+        {
+            const vueInstance = this;
+            axios.get("http://localhost:4000/supplier")
+            .then(function(response){
+                const options=[{'id':0, 'text':'Select Default Supplier'}];
+                for(let index in response.data){
+                    options.push({
+                        'id': response.data[index].supplierEmailId,
+                        'text': response.data[index].supplierName
+                    });
+                }
+                vueInstance.supplierList = options;
+            });
+        }
+    },
     created(){
+        
         if(this.mode=='user'){
             this.getUserDtl();
         }
@@ -277,10 +316,12 @@ export default {
                         gsm:this.gsm,
                         size:this.size,
                         minimumRate:this.price,
-                        reorderLevel:this.reorder
+                        reorderLevel:this.reorder,
+                        fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                            alert("Item Succesfully Added");
+                            alert("Item Succesfully Added + "+this.selectedDefaultSupplier);
+                            console.log(response);  
                             this.$router.push("/item");
                         }
                     });
@@ -354,7 +395,8 @@ export default {
                         gsm:this.gsm,
                         size:this.size,
                         minimumRate:this.price,
-                        reorderLevel:this.reorder
+                        reorderLevel:this.reorder,
+                        fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
                             alert("Item Succesfully Updated");
