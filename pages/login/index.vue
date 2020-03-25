@@ -23,17 +23,17 @@
                                         <p class="px-2">Welcome back, please login to your account.</p>
                                         <div class="card-content">
                                             <div class="card-body pt-1">
-                                                <form action="index.html">
+                                                <form>
                                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                                        <input type="text" class="form-control" id="user-name" placeholder="Username" required>
+                                                        <input type="text" class="form-control" v-model="email"  placeholder="Username" required>
                                                         <div class="form-control-position">
                                                             <i class="feather icon-user"></i>
                                                         </div>
-                                                        <label for="user-name">Username</label>
+                                                        <label for="user-name">Email</label>
                                                     </fieldset>
 
                                                     <fieldset class="form-label-group position-relative has-icon-left">
-                                                        <input type="password" class="form-control" id="user-password" placeholder="Password" required>
+                                                        <input type="password" class="form-control" v-model="password" placeholder="Password" required>
                                                         <div class="form-control-position">
                                                             <i class="feather icon-lock"></i>
                                                         </div>
@@ -56,7 +56,7 @@
                                                         <div class="text-right"><a @click="forget()" class="card-link">Forgot Password?</a></div>
                                                     </div>
                                                     
-                                                    <button type="submit" class="btn btn-primary float-right btn-inline">Login</button>
+                                                    <button type="button" class="btn btn-primary float-right btn-inline" @click="login()">Login</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -76,9 +76,17 @@
     <!-- END: Content-->   
 </template>
 <script>
-
+import axios from 'axios';
+const crypto= require('crypto');
 export default {
     //layout:"dashboard",
+    middleware: "authentication2",
+    data(){
+        return{
+            email:"",
+            password:""
+        }
+    },
     beforeMount(){
         this.addClass();
     },        
@@ -96,7 +104,32 @@ export default {
                  d.classList.add("menu-expanded");
         },
         forget(){
-            this.$router.push("/login/forgetPass");
+            this.$router.push("/forgetPassword/");
+        },
+        login(){
+            axios.post("http://localhost:4000/login/",{
+                userEmailId:this.email,
+                userPassword:this.password
+            }).then(res=>{
+                if(res){
+                    let cookieVal={
+                        userEmail:res.data[0].userEmailId,
+                        userPass:res.data[0].userPassword
+                    };
+                    let mykey = crypto.createCipher('aes-128-ecb','123');
+                    let cookieValue=mykey.update(JSON.stringify(cookieVal),'utf8','hex');
+                    cookieValue+=mykey.final('hex');
+                    this.$cookies.set('_sessionId',cookieValue,{
+                    path:'/',
+                    maxAge:60*60*24*7
+                    });
+                }
+            }).then(res1=>{
+                window.location='/dashboard'
+            })
+            .catch(err=>{
+                alert("Invalid Login Credentials"+err);
+            });
         }
     }
 }

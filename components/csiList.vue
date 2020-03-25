@@ -2,9 +2,19 @@
     <span >
             <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
 
-        <div class="table-responsive">
-
-            <table class="table table-striped dataex-html5-selectors dataTable">    
+        <div class="table-responsive" v-if="showTable==true" id="mytable">
+            <div id="DataTables_Table_4_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="dt-buttons btn-group">      
+                <button class="btn btn-secondary buttons-copy buttons-html5" ><span>Copy</span></button> 
+                <button class="btn btn-secondary buttons-pdf buttons-html5" ><span>PDF</span></button>
+                <button class="btn btn-secondary" ><span>JSON</span></button> 
+                <button class="btn btn-secondary buttons-print" >    <span>Print</span></button>
+             </div>
+             <div id="DataTables_Table_4_filter" class="dataTables_filter">
+                <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="DataTables_Table_4">
+                </label>
+             </div>
+            <table class="table table-striped dataex-html5-selectors dataTable" id="DataTables_Table_4" role="grid" aria-describedby="DataTables_Table_4_info">     
                 <thead>
                     <tr v-if="mode=='user'" >
                         <th>Sr.No</th>
@@ -140,6 +150,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </span>            
 </template>
@@ -178,20 +189,54 @@ export default {
         return{
             selectedItems:[],
             fetchedObjects: null,
-            id:""
+            id:"",
+            showTable:false
         }
     },  
+    created(){
+        this.getDetails();
+    },
     mounted(){
-        let name=this.mode;
-        if(this.mode=="user"){
-            name+="branchrole"
-        }
-        axios.get('http://localhost:4000/'+name)
-        .then(response => {
-            this.fetchedObjects = response.data;
-        });
+        
 
     },
+    methods:{
+        async getDetails(){
+            let name=this.mode;
+        // if(this.mode=="user"){
+        //     name+="branchrole"
+        // }
+        console.log("called 1");
+        await axios.get('http://localhost:4000/'+name)
+        .then(response => {
+            this.fetchedObjects = response.data;
+        console.log("called 2");
+        })
+        .then(res1=>{
+        console.log("called 3");
+
+            this.showTable=true;
+        })
+        .then(res2=>{
+        console.log("called 4");
+
+            let d=document.getElementById("mytable");
+            // let d1=document.createElement("DIV");
+            // d1.classList.add("dataTables_wrapper");
+            // d1.classList.add("dt-bootstrap4");
+            // d1.setAttribute("id","DataTables_Table_4_wrapper");
+            // // let d2=document.createElement("DIV");
+            // // d2.classList.add()
+            // let t=document.getElementsByTagName("table");
+            // t.setAttribute("aria-describedby","DataTables_Table_4_info");
+            // t.setAttribute("id","DataTables_Table_4");
+            // d1.appendChild(t); 
+            d.classList.add("table-responsive");
+            // d.appendChild(d1);
+        });
+        console.log("Called 5");
+        }
+    }
 }
 </script>
 <style scoped>

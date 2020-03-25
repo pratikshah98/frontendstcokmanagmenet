@@ -99,10 +99,14 @@
                             </ul>
                         </li>
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">John Doe</span><span class="user-status">Available</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
+                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" ><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" ><i class="feather icon-mail"></i> My Inbox</a><a class="dropdown-item" ><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item"><i class="feather icon-message-square"></i> Chats</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" ><i class="feather icon-power"></i> Logout</a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" ><i class="feather icon-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter"><i class="feather icon-mail"></i> Change Password</a>
+                                <a class="dropdown-item" ><i class="feather icon-check-square"></i> Task</a>
+                                <a class="dropdown-item"><i class="feather icon-message-square"></i> Chats</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" @click="logout()" ><i class="feather icon-power"></i> Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -187,6 +191,57 @@
                 <div class="d-flex justify-content-start"><span class="mr-75 feather icon-alert-circle"></span><span>No results found.</span></div>
             </a></li>
     </ul>
+                                            <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalCenterTitle">Vertically Centered</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >Current Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="currPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >New Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="newPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >Confirm Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="conPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div  class="row">
+                                                            <div class="col-md-10 col-4"></div>
+                                                            <div class="col-md-2 col-8" >
+                                                                <div class="form-group">
+                                                                    <button style="float:right;" class="btn btn-primary" type="button" @click="chngPass()">Change</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-light waves-effect waves-light" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  
     <!-- END: Header-->
 
 
@@ -219,8 +274,8 @@
                 </li>
                 <li class=" nav-item"><a href="/item/"><i class="feather icon-file"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
                 </li>
-                <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User Management</span></a>
-                <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch Management</span></a>
+                <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User</span></a>
+                <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch</span></a>
                 </li>
                 <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>
                     <!-- <ul class="menu-content">
@@ -263,8 +318,15 @@
 </span>
 </template>
 <script>
+const crypto = require('crypto')
+import axios from 'axios' 
+
 export default {
+    middleware: "authentication",
+
     mounted(){
+        this.getUserName();
+
         this.addClasses();
         if(window.innerWidth < 767){
             let d=document.body;
@@ -274,6 +336,14 @@ export default {
         else{
             let d=document.body;
             d.classList.add("vertical-menu-modern");
+        }
+    },
+    data(){
+        return{
+            username:"",
+            currPass:"",
+            newPass:"",
+            conPass:""
         }
     },
     methods:{
@@ -286,6 +356,50 @@ export default {
         //     else    
         //         this.$router.push('/Items/View');
         // },
+        async getUserName(){
+              await axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                  .then(res=>{
+                        this.username=res.data[0].userName;
+                        // console.log(this.username);
+                  });
+              
+        },
+        chngPass(){
+            axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                  .then(res=>{
+                        if(this.currPass==res.data[0].userPassword){
+                            if(this.newPass==this.conPass){
+                                axios.put("http://localhost:4000/changepassword/",{
+                                    userEmailId:this.$store.state.user,
+                                    userPassword:this.newPass
+                                })
+                                .then(res1=>{
+                                    console.log(res1);
+                                    alert("Password Changed Successfuly");
+                                // window.location.reload();                                    
+                                })
+
+                            }
+                            else{
+                                alert("New Password and Confirm Password should be same");
+                            }
+                        }
+                        else{
+                            alert("Current Password is not correct");
+                        }
+                  });
+        },
+        logout(){
+            try{
+		  		this.$cookies.remove("_sessionId");
+           		window.location='/login'
+               }
+               catch{
+                   this.$cookies.remove("_sessionId");
+           		window.location='/login'
+                   
+			   }
+        },
         addClasses(){
             let d=document.body;
             d.classList.add("vertical-layout");

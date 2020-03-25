@@ -94,6 +94,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    'cookie-universal-nuxt'
   ],
 
   /*
@@ -106,5 +107,9 @@ module.exports = {
     extend(config, ctx) {
       
     }
+  },
+  server:{
+    port: 3000,
+    host: '0.0.0.0'
   }
 }
