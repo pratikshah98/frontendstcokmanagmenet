@@ -1,5 +1,5 @@
 <template>
-    <addComponent mode="item" :id="this.$route.params.edit"/>
+    <addComponent mode="item" :id="$route.params.edit"/>
 </template>
 <script>
 import addComponent from "@/components/csiAdd";

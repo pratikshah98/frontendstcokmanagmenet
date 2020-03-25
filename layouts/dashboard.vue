@@ -277,7 +277,7 @@
                 <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User</span></a>
                 <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch</span></a>
                 </li>
-                <li class=" nav-item"><a ><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Ecommerce">Not In Use</span></a>
+                <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
                     <!-- <ul class="menu-content">
                         <li><a><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">Shop</span></a>
                         </li>
@@ -289,7 +289,7 @@
                         </li>
                     </ul> -->
                 </li>
-                <li class=" nav-item"><a><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">Not In Use</span></a>
+                <li class=" nav-item"><a href="/purchase/"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="User">Purchase</span></a>
                     <!-- <ul class="menu-content">
                         <li>
                             <a href="javascript:;">
