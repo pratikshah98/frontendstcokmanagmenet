@@ -206,24 +206,39 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class=" nav-item">
-                    <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
+                    <nuxt-link to="/dashboard" class="name-linking" data-i18n="Dashboard"><i class="feather icon-home"></i>Dashboard</nuxt-link>
+                    <!-- <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
                         <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
-                    </router-link>
-                    
+                    </router-link> -->
+                <li class="navigation-header">
+                    <span>Master Modules</span>
                 </li>
-                <li class=" navigation-header"><span>Apps</span>
+                <li class=" nav-item">
+                    <nuxt-link to="/customer" data-i18n="Customers"><i class="feather icon-users"></i>Customers</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/customer/"><i class="feather icon-users"></i><span class="menu-title">Customers</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/supplier" data-i18n="Suppliers"><i class="feather icon-users"></i>Suppliers</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/supplier/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/item" data-i18n="Items"><i class="feather icon-file"></i>Items</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/item/"><i class="feather icon-file"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/user" data-i18n="User Management"><i class="feather icon-users"></i>User Management</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User Management</span></a>
-                <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch Management</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/branch" data-i18n="Branch Management"><i class="feather icon-map"></i>Branch Management</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
-                    <!-- <ul class="menu-content">
+                <li class=" navigation-header">
+                    <span>Transaction Modules</span>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/sale" data-i18n="Sale"><i class="feather icon-bar-chart-2"></i>Sale</nuxt-link>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/purchase" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Purchase</nuxt-link>
+                </li>
+                <!-- <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
+                    <ul class="menu-content">
                         <li><a><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">Shop</span></a>
                         </li>
                         <li><a href="javascript:;" ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Details">Details</span></a>
@@ -232,10 +247,10 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Checkout">Checkout</span></a>
                         </li>
-                    </ul> -->
+                    </ul>
                 </li>
                 <li class=" nav-item"><a href="/purchase/"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="User">Purchase</span></a>
-                    <!-- <ul class="menu-content">
+                    <ul class="menu-content">
                         <li>
                             <a href="javascript:;">
                                 <i class="feather icon-circle"></i>
@@ -244,8 +259,8 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="View">View</span></a>
                         </li>
-                    </ul> -->
-                </li> 
+                    </ul>
+                </li>  -->
             </ul>
         </div>
     </div>
