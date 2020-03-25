@@ -1,10 +1,13 @@
 <template>
     <div class="content-wrapper">
         <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
+            <div class="content-header-left col-md-12 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
                         <h2 class="content-header-title float-left mb-0">View {{mode|capitalize}}</h2>
+                        <button style="float:right" class="btn btn-primary" @click="gotoListView">
+                            <i class="feather icon-list"></i> List All {{ mode | capitalize }}s
+                        </button>
                     </div>
                 </div>
             </div>
@@ -126,6 +129,9 @@ export default {
     methods:{
         gotoEdit:function(){
             this.$router.push( '/' + this.mode + '/edit/' + this.id );
+        },
+        gotoListView(){
+            this.$router.push( '/' + this.mode);
         }
     },
     mounted(){

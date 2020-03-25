@@ -90,23 +90,23 @@
                                                             <input type="number" min=1 class="form-control" v-model="insertItemObjects[item-1].quantity">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label> </label>
                                                             <button v-if="totalItems!=1" style="float:right;" class="form-control btn btn-danger" type="button" @click="removeItem(item-1)">
                                                                 <i class="feather icon-minus-square"></i>
-                                                                Remove This Item
+                                                                Remove
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-5"></div>
                                                 </div>
                                                 
-                                                <div class="row col-md-4">
+                                                <div class="row col-md-2">
                                                     <div class="form-group">
                                                         <button style="float:right;" class="form-control btn btn-primary" type="button" @click="addItem">
                                                             <i class="feather icon-plus-square"></i>
-                                                            Add Another Item
+                                                            Add Item
                                                         </button>
                                                     </div>
                                                 </div>
@@ -267,6 +267,7 @@ export default {
                                     if(this.itemsInserted==this.totalItems){
                                         alert("Sales recorded !");
                                         this.itemsInserted=0;
+                                        this.$router.push('/sale/');
                                     }
                                 }else{  
                                     alert("Error in SaleDetails");
@@ -288,10 +289,9 @@ export default {
                     fkSupplierEmailId: this.selectedCustomerOrSupplier,
                     fkBranchId: this.selectedBranch
                 }).then(response=>{
-                    console.log(response);
+                    // console.log(response);
                     if(response.status==200){
                         for(let index in this.insertItemObjects){
-                            alert(index);
                             axios.post('http://localhost:4000/purchaseDetail/',{
                                 fkPurchaseId: idTimeStamp,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
@@ -299,9 +299,12 @@ export default {
                             }).then(response=>{
                                 console.log(response);
                                 if(response.status==200){
-                                    this.insertedItem++;
-                                    if(this.insertedItem == this.totalItems)
+                                    this.itemsInserted++;
+                                    if(this.itemsInserted == this.totalItems){
                                         alert("Purchase recorded !");
+                                        this.itemsInserted=0;
+                                        this.$router.push('/purchase/');
+                                    }
                                 }
                                 else{
                                     alert("Error in purchase details")
@@ -336,8 +339,9 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Sales recorded !");
+                                        alert("Sales details updated !");
                                         this.itemsInserted=0;
+                                        this.$router.push('/sale/'+this.id);
                                     }
                                 }else{  
                                     alert("Error in SaleDetails");
@@ -384,8 +388,9 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Purchase recorded !");
+                                        alert("Purchase details updated !");
                                         this.itemsInserted=0;
+                                        this.$router.push('/purchase/'+this.id);
                                     }
                                 }else{  
                                     alert("Error in PurchaseDetails");
