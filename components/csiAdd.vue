@@ -301,8 +301,8 @@ export default {
                         userPassword:this.password,
                         userAddress:this.address,
                         userPhoneNo:this.mobNo,
-                        fkRoleId:this.role,
-                        fkBranchId:this.branch,
+                        fkRoleId:"6edd2ae4-6c35-11ea-92f1-ace2d35545ec",
+                        fkBranchId:this.branch
                     }).then(response=>{
                         if(response){
                             alert("User Succesfully Added");
