@@ -4,7 +4,8 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
+                            <h2 v-if="id==null" class="content-header-title float-left mb-0"> Add {{ mode | capitalize }}</h2>
+                            <h2 v-else class="content-header-title float-left mb-0"> Edit {{ mode | capitalize }}</h2>
                         </div>
                     </div>
                 </div>
@@ -38,11 +39,10 @@
                                                             <label v-else> Sale Date*</label>
                                                             <client-only>
                                                                 <date-picker
-                                                                    
+                                                                    :use-utc=true
                                                                     input-class="form-control col-md-12"
                                                                     class="datepicker"
-                                                                    placeholder="YYYY-MM-DD"
-                                                                    format="yyyy-MM-d"
+                                                                    format="d-MM-yyyy"
                                                                     v-model="selectedDate"
                                                                 ></date-picker>
                                                             </client-only>
@@ -87,7 +87,7 @@
                                                     <div class="col-md-1">
                                                         <div class="form-group">
                                                             <label>Quantity*</label>
-                                                            <input type="number" min=1 class="form-control" v-model="insertItemObjects[item-1].saleQuantity">
+                                                            <input type="number" min=1 class="form-control" v-model="insertItemObjects[item-1].quantity">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -117,7 +117,7 @@
                                                     <div class="col-md-2 col-8" >
                                                         <div class="form-group">
                                                             <button style="float:right;" class="btn btn-primary" type="button" v-if="id==null" @click="submitDetails">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-else @click="update()">Update</button>
+                                                            <button style="float:right;" class="btn btn-primary" type="button" v-else @click="updateDetails">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -168,15 +168,271 @@ export default {
             selectedSaleType:0,
 
             totalItems:1,
+            itemsInserted:0,
             selectedDate: new Date(),
             
             insertItemObjects:[{
                 fkItemId:[],
-                saleQuantity:1
+                quantity:1
             }]
         }
     },
+    computed:{
+        getTimeStamp:function(){
+            const date=new Date();
+            return ''+date.getFullYear()+date.getMonth()+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds()+date.getMilliseconds();
+        }
+    },
+    methods:{
+        getDetails(){
+            // console.log("Get details");
+            axios.get('http://localhost:4000/'+this.mode+'/'+this.id)
+            .then(response=>{
+                // console.log(response);
+                this.selectedBranch = response.data[0].fkBranchId;
+                if(response.status==200)
+                {                    
+                    if(this.mode=='sale'){
+                        axios.get('http://localhost:4000/saledetail_item/'+this.id)
+                            .then(response=>{
+                                // console.log(response);
+                                if(response.status==200)
+                                {
+                                    const itemObjects=[];
+                                    for(let index in response.data)
+                                    {   
+                                        itemObjects.push({
+                                            'fkItemId': response.data[index].fkItemId,
+                                            'quantity': response.data[index].saleQuantity
+                                        });
+                                    }
+                                    this.insertItemObjects = itemObjects;
+                                    this.totalItems = response.data.length;
+                                }
+                            });
+                        this.selectedCustomerOrSupplier = response.data[0].fkCustomerEmailId;
+                        this.selectedSaleType = response.data[0].fkSaleTypeId;
+                        this.selectedDate = new Date(response.data[0].salesDate);
+                        this.selectedDate.setHours(this.selectedDate.getHours() + 6);
+                    }
+                    else
+                    {
+                        axios.get('http://localhost:4000/purchaseDetail_item/'+this.id)
+                        .then(response=>{
+                            if(response.status==200)
+                            {
+                                const itemObjects=[];
+                                for(let index in response.data)
+                                {   
+                                    itemObjects.push({
+                                        'fkItemId': response.data[index].fkItemId,
+                                        'quantity': response.data[index].purchaseQuantity
+                                    });
+                                }
+                                this.insertItemObjects = itemObjects;
+                                this.totalItems = response.data.length;
+                            }
+                        });
+                        this.selectedCustomerOrSupplier = response.data[0].fkSupplierEmailId;
+                        this.selectedDate = new Date(response.data[0].purchaseDate);
+                        this.selectedDate.setHours(this.selectedDate.getHours() + 6);
+                    }   
+                }
+            });            
+        },
+        submitDetails(){
+            const idTimeStamp = this.getTimeStamp;
+            if(this.mode=='sale')
+            {
+                axios.post('http://localhost:4000/Sale/',{
+                    saleId: idTimeStamp,
+                    salesDate: this.selectedDate,
+                    isInvoiceGenerated: 0,
+                    fkSaleTypeId: this.selectedSaleType,
+                    fkCustomerEmailId: this.selectedCustomerOrSupplier,
+                    fkBranchId: this.selectedBranch
+                }).then(response=>{
+                    // console.log(response);
+                    if(response.status==200){
+                        for(let index in this.insertItemObjects){
+                            axios.post('http://localhost:4000/saleDetail/',{
+                                fkSaleId: idTimeStamp,
+                                fkItemId: this.insertItemObjects[index].fkItemId,
+                                saleQuantity: this.insertItemObjects[index].quantity,
+                                creditRate:0
+                            }).then(response=>{
+                                console.log(response);
+                                if(response.status==200){
+                                    this.itemsInserted++;
+                                    if(this.itemsInserted==this.totalItems){
+                                        alert("Sales recorded !");
+                                        this.itemsInserted=0;
+                                    }
+                                }else{  
+                                    alert("Error in SaleDetails");
+                                }
+                            });
+                        }
+                        // this.$router.push("/customer");
+                    }
+                    else{
+                        alert("Error in sales !")
+                    }
+                });
+            }
+            else    // mode is purchase
+            {
+                axios.post('http://localhost:4000/Purchase/',{
+                    purchaseId: idTimeStamp,
+                    purchaseDate: this.selectedDate,
+                    fkSupplierEmailId: this.selectedCustomerOrSupplier,
+                    fkBranchId: this.selectedBranch
+                }).then(response=>{
+                    console.log(response);
+                    if(response.status==200){
+                        for(let index in this.insertItemObjects){
+                            alert(index);
+                            axios.post('http://localhost:4000/purchaseDetail/',{
+                                fkPurchaseId: idTimeStamp,
+                                fkItemId: this.insertItemObjects[index].fkItemId,
+                                purchaseQuantity: this.insertItemObjects[index].quantity
+                            }).then(response=>{
+                                console.log(response);
+                                if(response.status==200){
+                                    this.insertedItem++;
+                                    if(this.insertedItem == this.totalItems)
+                                        alert("Purchase recorded !");
+                                }
+                                else{
+                                    alert("Error in purchase details")
+                                }
+                            });
+                        }
+                    }
+                    else{
+                        alert("Error in purchase");
+                    }
+                });
+            }
+
+            // alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
+        },
+        updateDetails(){
+            if(this.mode=='sale')
+            {
+                axios.delete('http://localhost:4000/saleDetail/'+this.id)
+                .then(response=>{
+                    if(response.status==200)
+                    {
+                        this.itemsInserted=0;
+                        for(let index in this.insertItemObjects){
+                            axios.post('http://localhost:4000/saleDetail/',{
+                                fkSaleId: this.id,
+                                fkItemId: this.insertItemObjects[index].fkItemId,
+                                saleQuantity: this.insertItemObjects[index].quantity,
+                                creditRate:0
+                            }).then(response=>{
+                                // console.log(response);
+                                if(response.status==200){
+                                    this.itemsInserted++;
+                                    if(this.itemsInserted==this.totalItems){
+                                        alert("Sales recorded !");
+                                        this.itemsInserted=0;
+                                    }
+                                }else{  
+                                    alert("Error in SaleDetails");
+                                }
+                            });
+                        }
+                    }
+                    else{
+                        alert("Error in deleting saleDetails -> "+response.statusText);
+                    }
+                });
+                axios.put('http://localhost:4000/Sale/',{
+                    saleId: this.id,
+                    salesDate: this.selectedDate,
+                    isInvoiceGenerated: 0,
+                    fkSaleTypeId: this.selectedSaleType,
+                    fkCustomerEmailId: this.selectedCustomerOrSupplier,
+                    fkBranchId: this.selectedBranch
+                }).then(response=>{
+                    if(response.status==200)
+                    {
+                        alert("Sales updated");
+                    }
+                    else
+                    {
+                        alert("Error in updating sales");
+                    }
+                });
+            }
+            else
+            {
+                axios.delete('http://localhost:4000/purchaseDetail/'+this.id)
+                .then(response=>{
+                    if(response.status==200)
+                    {
+                        this.itemsInserted=0;
+                        for(let index in this.insertItemObjects){
+                            axios.post('http://localhost:4000/purchaseDetail/',{
+                                fkPurchaseId: this.id,
+                                fkItemId: this.insertItemObjects[index].fkItemId,
+                                purchaseQuantity: this.insertItemObjects[index].quantity,
+                            }).then(response=>{
+                                // console.log(response);
+                                if(response.status==200){
+                                    this.itemsInserted++;
+                                    if(this.itemsInserted==this.totalItems){
+                                        alert("Purchase recorded !");
+                                        this.itemsInserted=0;
+                                    }
+                                }else{  
+                                    alert("Error in PurchaseDetails");
+                                }
+                            });
+                        }
+                    }
+                    else{
+                        alert("Error in deleting purchasedetails -> "+response.statusText);
+                    }
+                });
+                axios.put('http://localhost:4000/Purchase/'+this.id,{
+                    purchaseId: this.id,
+                    purchaseDate: this.selectedDate,
+                    fkSupplierEmailId: this.selectedCustomerOrSupplier,
+                    fkBranchId: this.selectedBranch
+                }).then(response=>{
+                    if(response.status==200)
+                    {
+                        alert("Purchase updated");
+                    }
+                    else
+                    {
+                        alert("Error in updating Purchase");
+                    }
+                });
+            }
+        },
+        addItem(){
+            this.totalItems++; 
+            this.insertItemObjects.push({   
+                fkItemId:"",
+                quantity:1
+            });
+        },
+        removeItem(itemIndex){
+            this.totalItems--; 
+            this.insertItemObjects.splice(itemIndex,1);
+        },
+        
+    },
+    mounted(){
+        if(this.id != null) // udpate mode
+            this.getDetails();
+    },
     beforeMount(){
+        
         if(this.$props.mode=='purchase')
         {
             axios.get('http://localhost:4000/supplier').then(response=>{
@@ -246,35 +502,6 @@ export default {
         });
 
         
-    },
-    methods:{
-        submitDetails: function(){
-            // axios.post('http://localhost:4000/Sale/',{
-            //     salesDate: this.selectedDate,
-            //     isInvoiceGenerated: 0,
-            //     fkSaleTypeId: this.selectedSaleType,
-            //     fkCustomerEmailId: this.selectedCustomerOrSupplier,
-            //     fkBranchId: this.selectedBranch
-            // }).then(response=>{
-            //     if(response){
-            //         console.log(response);
-            //         // alert("Customer Succesfully Added");
-            //         // this.$router.push("/customer");
-            //     }
-            // });
-            alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
-        },
-        addItem:function(){
-            this.totalItems++; 
-            this.insertItemObjects.push({   
-                fkItemId:"",
-                saleQuantity:1
-            });
-        },
-        removeItem: function(itemIndex){
-            this.totalItems--; 
-            this.insertItemObjects.splice(itemIndex,1);
-        }
     },
     filters: {
         capitalize: function (value) {
