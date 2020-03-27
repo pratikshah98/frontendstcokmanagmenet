@@ -17,8 +17,11 @@
     "cross-env": "^7.0.2",
     "jsdom": "^16.2.1",
     "nuxt": "^2.12.0",
+    "sweetalert2": "^9.10.6",
+    "vue-observe-visibility": "^0.4.6",
     "vue-select2": "^0.2.6",
-    "vuejs-datepicker": "^1.6.2"
+    "vuejs-datepicker": "^1.6.2",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
