@@ -1,178 +1,200 @@
 <template>
-   <div class="content-body">
-                <!-- invoice functionality start -->
-                <section class="invoice-print mb-1">
-                    <div class="row">
-
-                        <fieldset class="col-12 col-md-5 mb-1 mb-md-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Email" aria-describedby="button-addon2">
-                                <div class="input-group-append" id="button-addon2">
-                                    <button class="btn btn-outline-primary" type="button">Send Invoice</button>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end">
-                            <button class="btn btn-primary btn-print mb-1 mb-md-0"> <i class="feather icon-file-text"></i> Print</button>
-                            <button class="btn btn-outline-primary  ml-0 ml-md-1"> <i class="feather icon-download"></i> Download</button>
+    <div>
+        <div v-if="viewInvoice!=true" class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-12 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0"> Generate Invoice </h2>
+                            <button style="float:right;" class="btn btn-primary" @click="gotoCustomer">
+                                <i class="feather icon-list"></i> Back To Customer View
+                            </button>
                         </div>
                     </div>
-                </section>
-                <!-- invoice functionality end -->
-                <!-- invoice page -->
-                <section class="card invoice-page">
-                    <div id="invoice-template" class="card-body">
-                        <!-- Invoice Company Details -->
-                        <div id="invoice-company-details" class="row">
-                            <div class="col-sm-6 col-12 text-left pt-1">
-                                <div class="media pt-1">
-                                    <img src="/app-assets/images/logo/log.png" alt="company logo" />
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-12 text-right">
-                                <h1>Invoice</h1>
-                                <div class="invoice-details mt-2">
-                                    <h6>INVOICE NO.</h6>
-                                    <p>001/2019</p>
-                                    <h6 class="mt-2">INVOICE DATE</h6>
-                                    <p>10 Dec 2018</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/ Invoice Company Details -->
+                </div>
+                
+            </div>
+            <div class="content-body">
+                <!-- Form wizard with step validation section start -->
+                <section id="validation">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-header">
+                                        <div class="col-md-4">
+                                            <span class="font-weight-bold">Customer Name : </span>
+                                            <span>{{customer.customerName}}</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="font-weight-bold">Customer Phone No. : </span>
+                                            <span>{{customer.customerPhoneNo}}</span>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Invoice Date*</label>
+                                            <client-only>
+                                                <date-picker
+                                                    :use-utc=true
+                                                    input-class="form-control col-md-12"
+                                                    class="datepicker"
+                                                    format="d-MM-yyyy"
+                                                    v-model="selectedDate"
+                                                ></date-picker>
+                                            </client-only>
+                                        </div>
+                                    </div>
+                                    <div v-if="items.length!=0" class="card-body">
+                                        <!-- <form action="#" class="steps-validation wizard-circle"> -->
+                                            <fieldset>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <div class="card-title mb-2">Set Credit Rate for Items</div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <table class="table-secondary table-bordered" cellspacing="10" cellpadding="10">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Sr.No</th>
+                                                                        <th>Item Name</th>
+                                                                        <th>GSM</th>
+                                                                        <th>Size</th>
+                                                                        <th>Total Quantity Sold</th>
+                                                                        <th>Credit Rate</th>
+                                                                        <th>Total Amount</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr v-for="(item,index) in items" :key="index+1">
+                                                                        <td> {{index+1}} </td>
+                                                                        <td> {{ item.name }} </td>
+                                                                        <td v-if="item.gsm==null"> - </td>
+                                                                        <td v-else> {{ item.gsm }} </td>
+                                                                        <td v-if="item.size==null"> - </td>
+                                                                        <td v-else> {{ item.size }} </td>
+                                                                        <td> {{ item.totalquantity }} </td>
+                                                                        <td> 
+                                                                            <input class="form-control col-md-3" type="number" min=0 step=0.1 v-model="creditRate[index]">
+                                                                        </td>
+                                                                        <td> <span style="float:right;">{{ amount[index] = item.totalquantity * creditRate[index] | round }} </span></td>
+                                                                    </tr>
 
-                        <!-- Invoice Recipient Details -->
-                        <div id="invoice-customer-details" class="row pt-2">
-                            <div class="col-sm-6 col-12 text-left">
-                                <h5>Recipient</h5>
-                                <div class="recipient-info my-2">
-                                    <p>Peter Stark</p>
-                                    <p>8577 West West Drive</p>
-                                    <p>Holbrook, NY</p>
-                                    <p>90001</p>
-                                </div>
-                                <div class="recipient-contact pb-2">
-                                    <p>
-                                        <i class="feather icon-mail"></i>
-                                        peter@mail.com
-                                    </p>
-                                    <p>
-                                        <i class="feather icon-phone"></i>
-                                        +91 988 888 8888
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-12 text-right">
-                                <h5>Microsion Technologies Pvt. Ltd.</h5>
-                                <div class="company-info my-2">
-                                    <p>9 N. Sherwood Court</p>
-                                    <p>Elyria, OH</p>
-                                    <p>94203</p>
-                                </div>
-                                <div class="company-contact">
-                                    <p>
-                                        <i class="feather icon-mail"></i>
-                                        hello@pixinvent.net
-                                    </p>
-                                    <p>
-                                        <i class="feather icon-phone"></i>
-                                        +91 999 999 9999
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/ Invoice Recipient Details -->
-
-                        <!-- Invoice Items Details -->
-                        <div id="invoice-items-details" class="pt-1 invoice-items-table">
-                            <div class="row">
-                                <div class="table-responsive col-12">
-                                    <table class="table table-borderless">
-                                        <thead>
-                                            <tr>
-                                                <th>TASK DESCRIPTION</th>
-                                                <th>HOURS</th>
-                                                <th>RATE</th>
-                                                <th>AMOUNT</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Website Redesign</td>
-                                                <td>60</td>
-                                                <td>15 USD</td>
-                                                <td>90000 USD</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Newsletter template design</td>
-                                                <td>20</td>
-                                                <td>12 USD</td>
-                                                <td>24000 USD</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="invoice-total-details" class="invoice-total-table">
-                            <div class="row">
-                                <div class="col-7 offset-5">
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <th>SUBTOTAL</th>
-                                                    <td>114000 USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>DISCOUNT (5%)</th>
-                                                    <td>5700 USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>TOTAL</th>
-                                                    <td>108300 USD</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td class="font-weight-bold"><span style="float:right;">Grand Total : </span></td>
+                                                                        <td class="font-weight-bold"><span style="float:right;">{{grandTotal() | round}}</span></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <button style="float:right;" class="btn btn-primary" type="button" @click="previewInvoice">Preview Invoice</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        <!-- </form> -->
+                                    </div>
+                                    <div v-else class="card-body">
+                                        No sales records found !!!
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Invoice Footer -->
-                        <div id="invoice-footer" class="text-right pt-3">
-                            <p>Transfer the amounts to the business amount below. Please include invoice number on your check.
-                                <p class="bank-details mb-0">
-                                    <span class="mr-4">BANK: <strong>FTSBUS33</strong></span>
-                                    <span>IBAN: <strong>G882-1111-2222-3333</strong></span>
-                                </p>
-                        </div>
-                        <!--/ Invoice Footer -->
-
                     </div>
                 </section>
-                <!-- invoice page end -->
+                <!-- Form wizard with step validation section end -->
 
             </div>
+        </div>
+
+        <div v-if="viewInvoice" class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">Invoice</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+
+            <invoiceView 
+                v-if="viewInvoice"
+                :customer="customer" 
+                :invoiceDate="selectedDate" 
+                :rate="creditRate"
+                :items="items"
+                :grandTotal="grandTotal()"
+            ></invoiceView>
+        </div>
+        
+    </div>
 </template>
 <script>
+import axios from 'axios'
+import invoiceView from '../components/InvoiceView'
+
 export default {
+    components:{
+        invoiceView
+    },
     props: {
-            id: {
-                type: String,
-                required: false
-            },
-        },
+        id: {
+            type: String,
+            required: true
+        }
+    },
     data(){
         return{
-           
+            viewInvoice:false,
+            selectedDate: new Date(),
+            customer:[],
+            creditRate:[],
+            items:[],
+            amount:[]
         }
     },
     methods:{
-       
+        grandTotal(){
+            let total = [];
+            Object.entries(this.amount).forEach(([key, val]) => {
+                total.push(val) 
+            });
+            return total.reduce(function(total, num){ return total + num }, 0);
+        },
+        previewInvoice(){
+            this.viewInvoice = true;
+            window.scrollTo(0,0);   // move to top of page
+        },
+        gotoCustomer(){
+            this.$router.push('/customer/'+this.id);
+        }
+    },
+    mounted(){
+        axios.get('http://localhost:4000/customer/'+this.id)
+        .then(response=>{
+            this.customer = response.data[0];
+        });
+        axios.get('http://localhost:4000/salejoinbycustomerid/'+this.id)
+        .then(response=>{
+            this.items=response.data;
+            this.creditRate = new Array(response.data.length).fill(0);
+        });
     },
     filters: {
-       
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        },
+        round:function(value){
+            return value.toFixed(2);
+        }
     }
 }
 </script>
+
+

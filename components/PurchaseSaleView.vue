@@ -158,7 +158,7 @@ export default {
         if(this.mode=='sale')
         {
             console.log(this.$props.id);
-            axios.get('http://localhost:4000/saleBranchCustomer/' + this.$props.id)
+            axios.get('http://localhost:4000/sale/' + this.$props.id)
             .then(Response=>{  
                 console.log(Response);
                 this.fetchedData = Response.data[0];
@@ -173,8 +173,8 @@ export default {
             });
         }
         else
-        {
-            axios.get('http://localhost:4000/purchaseBranchSupplier/' + this.$props.id)
+        {   
+            axios.get('http://localhost:4000/purchase/' + this.$props.id)
             .then(Response=>{  
                 console.log(Response);
                 this.fetchedData = Response.data[0];

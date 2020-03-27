@@ -39,23 +39,23 @@
 
                         <td v-if="mode=='sale'">
                             <!-- view button -->
-                            <button @click="viewSale(object.saleId)"  class="btn btn-primary">
+                            <button title="View this sale" @click="viewSale(object.saleId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="updateSale(object.saleId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this sale" class="btn btn-warning" @click="updateSale(object.saleId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this sale" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                         <td v-else>
                             <!-- view button -->
-                            <button @click="viewPurchase(object.purchaseId)"  class="btn btn-primary">
+                            <button title="View this purchase" @click="viewPurchase(object.purchaseId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="updatePurchase(object.purchaseId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this purchase" class="btn btn-warning" @click="updatePurchase(object.purchaseId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this purchase" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -95,21 +95,10 @@ export default {
         }
     },  
     mounted(){
-        if(this.mode=="sale")
-        {
-            axios.get('http://localhost:4000/saleBranchCustomer')
-            .then(response => {
-                this.fetchedObjects = response.data;
-            });
-        }
-        else
-        {
-            axios.get('http://localhost:4000/purchaseBranchSupplier')
-            .then(response => {
-                this.fetchedObjects = response.data;
-            });
-        }
-        
+        axios.get('http://localhost:4000/'+this.mode)
+        .then(response => {
+            this.fetchedObjects = response.data;
+        });
     },
     filters:{
         filterDateFormat(val){
@@ -121,7 +110,7 @@ export default {
 }
 </script>
 <style scoped>
-    button{
-        margin-bottom:10px;
-    }
+button{
+    padding: 10px 12px;
+}
 </style>
