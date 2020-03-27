@@ -50,13 +50,14 @@
                         <td> {{ object.customerGstNo }} </td>                                                     
                         <td>
                             <!-- view button -->
-                            <button @click="viewCustomer(object.customerEmailId)"  class="btn btn-primary">
+                            <button title="View this Customer" @click="viewCustomer(object.customerEmailId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this Customer"class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Customer" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -70,13 +71,13 @@
                         <td> {{ object.roleName }}</td>                                                  
                         <td>
                             <!-- view button -->
-                            <button @click="viewUser(object.userEmailId)"  class="btn btn-primary">
+                            <button title="View this User" @click="viewUser(object.userEmailId)"  class="btn btn-primary ">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this User" class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this User" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -91,13 +92,13 @@
                         <td> {{ object.supplierGstNo }} </td>                                                     
                         <td>
                             <!-- view button -->
-                            <button @click="viewSupplier( object.supplierEmailId )"  class="btn btn-primary">
+                            <button title="View this Supplier" @click="viewSupplier( object.supplierEmailId )"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this Supplier" class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger" ><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Supplier" class="btn btn-danger" ><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -109,13 +110,13 @@
                         <td> {{ object.branchPhoneNo }}</td>                                             
                         <td>
                             <!-- view button -->
-                            <button @click="viewBranch( object.branchId )"  class="btn btn-primary">
+                            <button title="View this Branch" @click="viewBranch( object.branchId )"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this Branch" class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Branch" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -128,14 +129,14 @@
                         <td> {{ object.gsm }} - {{object.size}}</td>                                                    
                         <td>
                             <!-- view button -->
-                            <button @click="viewItem(object.itemId)"  class="btn btn-primary">
+                            <button title="View this Item" @click="viewItem(object.itemId)"  class="btn btn-primary">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button class="btn btn-warning" @click="update(object.itemId)">
+                            <button title="Edit this Item" class="btn btn-warning" @click="update(object.itemId)">
                                 <i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Item" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -183,9 +184,6 @@ export default {
     },  
     mounted(){
         let name=this.mode;
-        if(this.mode=="user"){
-            name+="branchrole"
-        }
         axios.get('http://localhost:4000/'+name)
         .then(response => {
             this.fetchedObjects = response.data;
@@ -196,6 +194,6 @@ export default {
 </script>
 <style scoped>
     button{
-        margin-bottom:10px;
+        padding :10px 12px;
     }
 </style>

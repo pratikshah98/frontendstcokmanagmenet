@@ -226,7 +226,7 @@
                     <nuxt-link to="/user" data-i18n="User Management"><i class="feather icon-users"></i>User Management</nuxt-link>
                 </li>
                 <li class=" nav-item">
-                    <nuxt-link to="/branch" data-i18n="Branch Management"><i class="feather icon-map"></i>Branch Management</nuxt-link>
+                    <nuxt-link to="/branch" data-i18n="Branch Management"><i class="feather icon-map-pin"></i>Branch Management</nuxt-link>
                 </li>
                 <li class=" navigation-header">
                     <span>Transaction Modules</span>

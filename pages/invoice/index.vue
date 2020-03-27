@@ -14,7 +14,7 @@
         </div>
 </template>
 <script>
-import iInvoice from "@/components/invoice";
+import iInvoice from "@/components/InvoiceView";
 export default {
     layout:"dashboard",
     components:{

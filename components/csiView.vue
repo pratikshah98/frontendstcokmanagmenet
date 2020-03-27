@@ -21,58 +21,66 @@
                             <div class="card-content">
                                 <div class="card-body">
                                     <fieldset>
-                                        <div class="col-md-6 col-12 ">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-title mb-2">Detailed Information</div>
-                                </div>
-                                <div class="card-body">
-                                    <table cellspacing="10" cellpadding="10">
-                                        <tr>
-                                            <td class="font-weight-bold" v-if="mode=='customer'">Customer Name</td>
-                                            <td class="font-weight-bold" v-else-if="mode=='supplier'">Supplier Name</td>
-                                            <td class="font-weight-bold" v-else-if="mode=='branch'">Branch Name</td>
-                                            <td class="font-weight-bold" v-else-if="mode=='user'">User Name</td>
-                                            <td class="font-weight-bold" v-else >Item Name</td>
-                                            <td>{{ name }}</td>
-                                        </tr>
-                                        <tr v-if="mode!='item'">
-                                            <td class="font-weight-bold" >Phone Number </td>
-                                            <td>{{ phoneNo }}</td>
-                                        </tr>
-                                        <tr v-if="mode=='customer' || mode=='supplier'"> 
-                                            <td class="font-weight-bold" >GSTIN</td>
-                                            <td>{{ gstNo }}</td>
-                                        </tr>
-                                        <tr v-if="mode=='item'">
-                                            <td class="font-weight-bold" >Price</td>
-                                            <td>{{ price }}
-                                            </td>
-                                        </tr>
-                                        <tr v-if="mode!='item' && mode!='branch'">
-                                            <td class="font-weight-bold">Email</td>
-                                            <td>{{ email }}</td>
-                                        </tr>
-                                        <tr v-if="mode!='item'">
-                                            <td class="font-weight-bold">Address</td>
-                                            <td>{{ address }}</td>
-                                        </tr>
-                                        <tr v-if="mode=='item'">
-                                            <td class="font-weight-bold"> GSM</td>
-                                            <td>{{ gsm }}</td>
-                                        </tr>
-                                        <tr v-if="mode=='item'">
-                                            <td class="font-weight-bold"> Size</td>
-                                            <td>{{ size }}</td>
-                                        </tr>
-                                        <tr v-if="mode=='item'">
-                                            <td class="font-weight-bold"> Reorder-Level</td>
-                                            <td>{{ reorderLevel }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="col-md-12 col-12 ">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="card-title mb-2">Detailed Information</div>
+                                                    <div style="float:right;">
+                                                        <button v-if="mode=='customer'" @click="gotoPayment()"  class="btn btn-primary">
+                                                            <i class="feather icon-dollar-sign"></i>Add Payment
+                                                        </button>
+                                                        <button v-if="mode=='customer'" @click="gotoInvoice()"  class="btn btn-primary">
+                                                            <i class="feather icon-file"></i> Generate Invoice
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <table cellspacing="10" cellpadding="10">
+                                                        <tr>
+                                                            <td class="font-weight-bold" v-if="mode=='customer'">Customer Name</td>
+                                                            <td class="font-weight-bold" v-else-if="mode=='supplier'">Supplier Name</td>
+                                                            <td class="font-weight-bold" v-else-if="mode=='branch'">Branch Name</td>
+                                                            <td class="font-weight-bold" v-else-if="mode=='user'">User Name</td>
+                                                            <td class="font-weight-bold" v-else >Item Name</td>
+                                                            <td>{{ name }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode!='item'">
+                                                            <td class="font-weight-bold" >Phone Number </td>
+                                                            <td>{{ phoneNo }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode=='customer' || mode=='supplier'"> 
+                                                            <td class="font-weight-bold" >GSTIN</td>
+                                                            <td>{{ gstNo }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode=='item'">
+                                                            <td class="font-weight-bold" >Price</td>
+                                                            <td>{{ price }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-if="mode!='item' && mode!='branch'">
+                                                            <td class="font-weight-bold">Email</td>
+                                                            <td>{{ email }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode!='item'">
+                                                            <td class="font-weight-bold">Address</td>
+                                                            <td>{{ address }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode=='item'">
+                                                            <td class="font-weight-bold"> GSM</td>
+                                                            <td>{{ gsm }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode=='item'">
+                                                            <td class="font-weight-bold"> Size</td>
+                                                            <td>{{ size }}</td>
+                                                        </tr>
+                                                        <tr v-if="mode=='item'">
+                                                            <td class="font-weight-bold"> Reorder-Level</td>
+                                                            <td>{{ reorderLevel }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </fieldset>
                                    <fieldset>
@@ -132,6 +140,12 @@ export default {
         },
         gotoListView(){
             this.$router.push( '/' + this.mode);
+        },
+        gotoPayment(){
+            this.$router.push('/payment/'+this.id);
+        },
+        gotoInvoice(){
+            this.$router.push('/invoice/'+this.id);
         }
     },
     mounted(){

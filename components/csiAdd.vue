@@ -141,11 +141,14 @@
                                             </fieldset>
                                             <fieldset>
                                                 <div  class="row">
-                                                    <div class="col-md-10 col-4"></div>
-                                                    <div class="col-md-2 col-8" >
-                                                        <div class="form-group">
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-if="id==null" @click="details()">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-else @click="details()">Update</button>
+                                                    <div class="col-md-9 col-4"></div>
+                                                    <div class="row col-md-3 col-8" >
+                                                        <div>
+                                                            <button style="float:left;" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>
+                                                        </div>
+                                                        <div>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -463,6 +466,9 @@ export default {
                     this.reorder=mydata.reorderLevel;
                 });
             }
+        },
+        goBack(){
+            this.$router.back();
         }
     }
 }
