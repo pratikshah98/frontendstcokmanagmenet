@@ -96,7 +96,7 @@ module.exports = {
     { src: '/assets/js/select2.min.js'},
     
     //for validation
-   { src: '/node-modules/vuelidate/dist/vuelidate.min.js' }
+  //  { src: '/node-modules/vuelidate/dist/vuelidate.min.js' }
   ]
 },
 

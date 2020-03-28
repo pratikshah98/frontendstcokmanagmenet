@@ -153,7 +153,7 @@
         <section class="invoice-print mb-1">
             <div class="row">
                 <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
-                    <button v-if="!invoiceIssued" class="btn btn-primary" @click="submitDetails()"> <i class="feather icon-check"></i> Issue Invoice </button>
+                    <button v-if="!invoiceIssued" class="btn btn-primary" @click="savePDF()"> <i class="feather icon-check"></i> Issue Invoice </button>
                     <button v-if="!invoiceIssued" style="float:right;" class="btn btn-outline-primary  ml-md-1" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button> 
                 <!-- </div> -->
             </div>
@@ -167,7 +167,39 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+function roughSizeOfObject( object ) {
 
+    var objectList = [];
+    var stack = [ object ];
+    var bytes = 0;
+
+    while ( stack.length ) {
+        var value = stack.pop();
+
+        if ( typeof value === 'boolean' ) {
+            bytes += 4;
+        }
+        else if ( typeof value === 'string' ) {
+            bytes += value.length * 2;
+        }
+        else if ( typeof value === 'number' ) {
+            bytes += 8;
+        }
+        else if
+        (
+            typeof value === 'object'
+            && objectList.indexOf( value ) === -1
+        )
+        {
+            objectList.push( value );
+
+            for( var i in value ) {
+                stack.push( value[ i ] );
+            }
+        }
+    }
+    return bytes;
+}
 
 export default {
     props: {
@@ -203,14 +235,19 @@ export default {
         }
     },
     methods:{
+        
         savePDF(){
+           
             html2canvas(document.querySelector("#invoice-data"))
             .then(function(canvas) {
                 let divHeight = $('#invoice-data').height();
                 let divWidth = $('#invoice-data').width();
                 let ratio = divHeight / divWidth;
 
-                let pdf = new jsPDF();
+                let pdf = new jsPDF({
+                    unit: 'px',
+                    format: 'a4'
+                });
                 let width = pdf.internal.pageSize.getWidth();
                 let height = pdf.internal.pageSize.getHeight();
                 height = ratio * width;
@@ -230,56 +267,104 @@ export default {
                 // pdf.addImage(imgData, (width*0.055) , (height*0.055), width-(width*0.1), height-(height*0.1));
 
                 // return pdf;
-                pdf.save('converteddoc.pdf');
+                // pdf.save('converteddoc.pdf');\
+
+                // var data = {};
+                // var base64pdf = btoa(pdf.output('pdf')); 
+                
+                // const pdfdata = pdf.output();
+                // console.log(roughSizeOfObject(pdfdata));
+
+                var formData = new FormData();
+                formData.append("filename", pdf.output('pdf'));
+
+                axios.post('http://localhost:4000/invoiceupload/',formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response)=>{   // if successful
+                    console.log(response);
+                }).catch(function (error) {     // if error occurs
+                    console.log(error);
+                });
+
             });
         },
         submitDetails(){
-            this.savePDF();
-            const r = confirm("Issuing invoice is irreversible !\nAre you sure you want to continue ?");
-            if (r == true) {    // if confirmed
-                this.invoiceIssued = true;
-                let lastTranstion;
-                axios.get('http://localhost:4000/toprecordbycustomerid/'+this.id)
-                .then(response=>{
-                    if(response.data.length!=0)
-                        lastTranstion = response.data[0];
+            Swal.fire({
+                title: 'Are you sure you want to issue this invoice ?',
+                text: "You won't be able to revert this!",
+                type:'question',
+                showCancelButton: true,
+                confirmButtonColor:'#4839eb',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText:'No'
+            }).then((result) => {
+                if (result.value) {
+                    this.savePDF();
+                    this.invoiceIssued = true;
+                    let lastTranstion;
+                    axios.get('http://localhost:4000/toprecordbycustomerid/'+this.id)
+                    .then(response=>{
+                        let count=0;
+                        if(response.data.length!=0)
+                            lastTranstion = response.data[0];
 
-                    let calculatedDue = this.grandTotal;
-                    if(lastTranstion!=undefined && lastTranstion!=null){
-                        calculatedDue += lastTranstion.amountDue;
-                    }
-                    axios.post('http://localhost:4000/amountdue/',{
-                        fkCustomerEmailId: this.customer.customerEmailId,
-                        transactionDate: this.invoiceDate,
-                        amountDue: calculatedDue,
-                        amountPaid: 0,
-                        description: "Invoice issued on Date "+this.invoiceDate
-                    }).then(response=>{
-                        if(response.status==200){
-                            window.scrollTo(0,0);     // move to top of page
-                            alert("Amount due added ! ");//+response.data.sqlMessage);
-                            // this.$router.push('/customer/'+this.customer.customerEmailId);
+                        let calculatedDue = this.grandTotal;
+                        if(lastTranstion!=undefined && lastTranstion!=null){
+                            calculatedDue += lastTranstion.amountDue;
                         }
+                        axios.post('http://localhost:4000/amountdue/',{
+                            fkCustomerEmailId: this.customer.customerEmailId,
+                            transactionDate: this.invoiceDate,
+                            amountDue: calculatedDue,
+                            amountPaid: 0,
+                            description: "Invoice issued on Date "+this.invoiceDate
+                        }).then(response=>{
+                            if(response.status==200){
+                                count++;
+                                if(count==2)
+                                {
+                                    Swal.fire(
+                                        'Issued !',
+                                        'Invoice has been issued.',
+                                        'success'
+                                    )
+                                    // window.scrollTo(0,0);     // move to top of page
+                                    this.$router.back();
+                                }
+                            }
+                        });
+                        axios.post('http://localhost:4000/invoice/',{
+                            fkCustomerEmailId: this.customer.customerEmailId,
+                            invoiceDate: new Date(),
+                            invoiceName: (new Date()).toString()
+                        }).then(repsonse=>{
+                            if(response.status==200){
+                                count++;
+                                if(count==2)
+                                {
+                                    Swal.fire(
+                                        'Issued !',
+                                        'Invoice has been issued.',
+                                        'success'
+                                    )
+                                    // window.scrollTo(0,0);     // move to top of page
+                                    this.$router.back();
+                                }
+                            }
+                        });
                     });
-                    axios.post('http://localhost:4000/invoice/',{
-                        fkCustomerEmailId: this.customer.customerEmailId,
-                        invoiceDate: new Date(),
-                        invoiceName: (new Date()).toString()
-                    }).then(repsonse=>{
-                        if(response.status==200){
-                            alert("invoice entry added");
-                            console.log(response);
-                        }
-                        else{
-                            alert("Problem in invoice entry check console");
-                            console.log(response);
-                        }
-                    });
-                });
-            } 
-            else {
-                alert("Issueing of invoice canceled");
-            }
+                }
+                else{
+                    Swal.fire(
+                        'Canceled !',
+                        'Issueing of invoice Canceled !',
+                        'error'
+                    )
+                }
+            })
         },
         gotoCustomer(){
             this.$router.back();

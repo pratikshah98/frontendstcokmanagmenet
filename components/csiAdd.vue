@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <form action="#"  class="steps-validation wizard-circle" @submit.prevent="details()"> 
+                                        <form action="#"  class="steps-validation wizard-circle">
                                             <fieldset>
                                                 <div class="row form-group">
                                                     <div v-if="mode!='item'" class="col-md-6">
@@ -179,7 +179,7 @@
                                                             <button style="float:left;" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>
                                                         </div>
                                                         <div>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
                                                             <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
                                                         </div>
                                                     </div>

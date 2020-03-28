@@ -262,11 +262,17 @@ export default {
                                 saleQuantity: this.insertItemObjects[index].quantity,
                                 creditRate:0
                             }).then(response=>{
-                                console.log(response);
+                                // console.log(response);
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Sales recorded !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Sale recorded Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
                                         this.$router.push('/sale/');
                                     }
@@ -297,11 +303,17 @@ export default {
                                 fkItemId: this.insertItemObjects[index].fkItemId,
                                 purchaseQuantity: this.insertItemObjects[index].quantity
                             }).then(response=>{
-                                console.log(response);
+                                // console.log(response);
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted == this.totalItems){
-                                        alert("Purchase recorded !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success !',
+                                            text: 'Purchase recorded successfully !',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'
+                                        })
                                         this.itemsInserted=0;
                                         this.$router.push('/purchase/');
                                     }
@@ -339,7 +351,13 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Sales details updated !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Sale updated Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
                                         this.$router.push('/sale/'+this.id);
                                     }
@@ -363,7 +381,7 @@ export default {
                 }).then(response=>{
                     if(response.status==200)
                     {
-                        alert("Sales updated");
+                        // alert("Sales updated");
                     }
                     else
                     {
@@ -388,7 +406,13 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Purchase details updated !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Purchase updated Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
                                         this.$router.push('/purchase/'+this.id);
                                     }
@@ -410,7 +434,7 @@ export default {
                 }).then(response=>{
                     if(response.status==200)
                     {
-                        alert("Purchase updated");
+                        // alert("Purchase updated");
                     }
                     else
                     {
