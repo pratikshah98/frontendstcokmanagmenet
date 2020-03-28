@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <form action="#" class="steps-validation wizard-circle">
+                                        <form action="#"  class="steps-validation wizard-circle" @submit.prevent="details()"> 
                                             <fieldset>
                                                 <div class="row form-group">
                                                     <div v-if="mode!='item'" class="col-md-6">
@@ -34,20 +34,37 @@
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
-                                                            <input type="text" required class="form-control " v-model="name">
+                                                            <input type="text" class="form-control " v-model="$v.name.$model" :class="{'is-invalid':$v.name.$error}" required>
+                                                            
+                                                            <div class="invalid-feedback">
+                                                            <div class="error" v-if="!$v.name.required">Name is required</div>
+                                                            <div class="error" v-if="!$v.name.alpha">Only characters allowed</div>
+                                                            </div>
                                                         </div>
+                                                        
                                                     </div>
                                                     <div v-else class="col-md-4">
                                                         <label for="firstName3">Item Name*</label>
-                                                        <input type="text" required class="form-control " v-model="name">
+                                                        <input type="text" required class="form-control " v-model="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
+                                                        <div class="invalid-feedback">
+                                                            <div class="error" v-if="!$v.name.required">Name is required</div>
+                                                            <div class="error" v-if="!$v.name.alpha">Only characters allowed</div>
+                                                            </div>
                                                     </div>
-
+                                                    
                                                     <div v-if="mode!='item'"  class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastName3">
                                                                 Mobile Number*
                                                             </label>
-                                                            <input type="text" required class="form-control " v-model="mobNo" >
+                                                            <input type="text" required class="form-control" v-model="$v.mobNo.$model" :class="{'is-invalid':$v.mobNo.$error}">
+                                                             
+                                                             <div class="invalid-feedback">
+                                                             <div class="error" v-if="!$v.mobNo.numeric">Only numeric allowed</div>
+                                                             <div class="error" v-if="!$v.mobNo.maxLength">Invalid mobile number</div>
+                                                             <div class="error" v-if="!$v.mobNo.minLength">Mobile number must have {{ $v.mobNo.$params.minLength.min}} digits</div>
+                                                              <div class="error" v-if="!$v.mobNo.required">Mobile number is required</div>
+                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div v-else class="row col-md-8">
@@ -55,7 +72,10 @@
                                                             <label>
                                                                 Price*
                                                             </label>
-                                                            <input type="number" required class="form-control " v-model="price">
+                                                            <input type="number" required class="form-control " v-model="$v.price.$model" :class="{'is-invalid':$v.price.$error}">
+                                                            <div class="invalid-feedback">
+                                                                <div class="error" v-if="!$v.price.required">price is required</div>
+                                                             </div>
                                                         </div>
                                                         <div class="col-md-8">
                                                             <label>Default Supplier*</label>
@@ -67,26 +87,38 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                                    
                                                 <div class="row" v-if="mode!='item' && mode!='branch'">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">
                                                                 Email*
                                                             </label>
-                                                            <input type="email" required class="form-control " :disabled="id!=null" v-model="email" >
+                                                            <input type="email" required class="form-control " :disabled="id!=null" v-model="$v.email.$model" :class="{'is-invalid':$v.email.$error}">
+                                                             <div class="invalid-feedback">
+                                                                <div class="error" v-if="!$v.email.required">Email is required</div>
+                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div v-if="mode=='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Password</label>
-                                                            <input type="text" required class="form-control " v-model="password" >
+                                                            <input type="password" required class="form-control " v-model="$v.password.$model" :class="{'is-invalid':$v.password.$error}">
+                                                             <div class="invalid-feedback">
+                                                                <div class="error" v-if="!$v.password.required">password is required</div>
+                                                                <div class="error" v-if="!$v.password.minLength">Password must have atleast {{ $v.password.$params.minLength.min}} characters</div>
+                                                             </div>
                                                         </div>
                                                      </div>
                                                     <div v-else class="col-md-6">
                                                         <div class="form-group">
                                                             <label >GSTIN</label>
-                                                            <input type="text" class="form-control " v-model="gst" >                                                            
+                                                            <input type="text" class="form-control " v-model="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
+                                                            <div class="invalid-feedback">
+                                                            <div class="error" v-if="!$v.gst.maxLength">Invalid GST Number</div>               
+                                                            <div class="error" v-if="!$v.gst.alphaNum">Only alphaNumeric allowed</div> 
+                                                            <div class="error" v-if="!$v.gst.minLength">GST number must have {{ $v.gst.$params.minLength.min}} characters</div> 
+                                                            </div>                                                       
                                                         </div>
                                                     </div>
                                                 </div>
@@ -127,7 +159,7 @@
                                                     <div v-if="mode!='item' && mode!='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
-                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                            <textarea name="shortDescription" v-model="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                                     <div v-if="mode=='item'" class="col-md-6">
@@ -147,7 +179,7 @@
                                                             <button style="float:left;" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>
                                                         </div>
                                                         <div>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null">Submit</button>
                                                             <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
                                                         </div>
                                                     </div>
@@ -168,6 +200,8 @@
 <script>
 import axios from 'axios'
 import select2 from '../components/select2Component'
+import vuelidate from '../plugins/vuelidate'
+import {required,minLength,maxLength,alpha,numeric,email,alphaNum} from 'vuelidate/lib/validators'
 
 export default {
     components:{
@@ -193,7 +227,7 @@ export default {
                 type: Number,
                 required: false
             }
-        },
+        }, 
     data(){
         return{
             supplierList:[],
@@ -213,8 +247,38 @@ export default {
             password:"",
             allBranch:[],
             role:"",
-            allRole:[]
+            allRole:[],
+            isVisible:""
         }
+    },
+    validations: {
+    name: {
+      required,
+      alpha
+     },
+     mobNo:{
+           required,
+         numeric,
+         maxLength:maxLength(10),
+         minLength:minLength(10)
+     },
+     email:{
+           required,
+         email
+     },
+     password:{
+         required,
+         minLength:minLength(5)
+     },
+     gst:{
+        maxLength:maxLength(15),
+        minLength:minLength(15),
+        alphaNum
+     },
+     price:{
+         required,
+         numeric
+     }
     },
     mounted(){
         if(this.mode=='item')
@@ -254,7 +318,20 @@ export default {
             });
         },
         details(){
-            if(this.id==null){
+            if($("div .error").is(":visible"))
+            {
+                Swal.DismissReason.backdrop,
+              Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There is something wrong',
+                    confirmButtonColor:'#4839eb',
+                    confirmButtonText: 'Ok'
+                    })
+            }
+            else
+            {
+                if(this.id==null){
                 if(this.mode=='customer'){
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         customerEmailId:this.email,
@@ -264,9 +341,16 @@ export default {
                         customerGstNo:this.gst
                     }).then(response=>{
                         if(response){
-                            alert("Customer Succesfully Added");
+                             Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Customer added Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/customer");
-                        }
+                            }
                     });
                     
                 }
@@ -280,7 +364,14 @@ export default {
                         supplierGstNo:this.gst
                     }).then(response=>{
                         if(response){
-                            alert("Supplier Succesfully Added");
+                            Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Supplier added Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/supplier");
                         }
                     });
@@ -292,7 +383,14 @@ export default {
                         branchPhoneNo:this.mobNo
                     }).then(response=>{
                         if(response){
-                            alert("Branch Succesfully Added");
+                            Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Branch added Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/branch");
                         }
                     });
@@ -308,7 +406,14 @@ export default {
                         fkBranchId:this.branch
                     }).then(response=>{
                         if(response){
-                            alert("User Succesfully Added");
+                            Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'User added Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/user");
                         }
                     });
@@ -323,7 +428,14 @@ export default {
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                            alert("Item Succesfully Added + "+this.selectedDefaultSupplier);
+                           Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Item Succesfully Added + '+this.selectedDefaultSupplier,
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             console.log(response);  
                             this.$router.push("/item");
                         }
@@ -340,7 +452,14 @@ export default {
                         customerGstNo:this.gst
                     }).then(response=>{
                         if(response){
-                            alert("Customer Succesfully Updated");
+                               Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Customer Updated Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/customer/"+this.id);
                         }
                     });
@@ -355,7 +474,14 @@ export default {
                         supplierGstNo:this.gst
                     }).then(response=>{
                         if(response){
-                            alert("Supplier Succesfully Updated");
+                            Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Supplier Updated Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/supplier/"+this.id);
                         }
                     });
@@ -369,7 +495,14 @@ export default {
                         branchPhoneNo:this.mobNo
                     }).then(response=>{
                         if(response){
-                            alert("Branch Succesfully Updated");
+                           Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Branch Updated Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             console.log(response);
                             this.$router.push("/branch/"+this.id);
                         }
@@ -383,10 +516,17 @@ export default {
                         userAddress:this.address,
                         userPhoneNo:this.mobNo,
                         fkRoleId:this.role,
-                        fkBranchId:this.branch,
+                        fkBranchId:this.branch
                     }).then(response=>{
                         if(response){
-                            alert("User Succesfully Updated");
+                           Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'User Updated Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/user");
                         }
                     });
@@ -402,11 +542,19 @@ export default {
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                            alert("Item Succesfully Updated");
+                           Swal.DismissReason.backdrop,
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Item Updated Successfully.',
+                                confirmButtonColor:'#4839eb',
+                                confirmButtonText: 'Ok'  
+                                })
                             this.$router.push("/item/"+this.id);
                         }
                     });
                 }
+            }
             }
         },
         getDetails(){
@@ -473,3 +621,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+.error{
+    color:red;
+    visibility: visible;
+}
+</style>
