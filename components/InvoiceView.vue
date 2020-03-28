@@ -1,34 +1,22 @@
 <template>
    <div class="content-body">
-        <!-- invoice functionality start -->
         <section class="invoice-print mb-1">
             <div class="row">
-
-                <fieldset class="col-12 col-md-5 mb-1 mb-md-0">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Email" aria-describedby="button-addon2">
-                        <div class="input-group-append" id="button-addon2">
-                            <button class="btn btn-outline-primary" type="button">Send Invoice</button>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end">
-                    <button style="float:right;" class="btn btn-outline-primary" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button>
-                    <button class="btn btn-primary ml-md-1" @click="submitDetails()"> <i class="feather icon-check"></i> Issue Invoice </button>
-                    <button class="btn btn-primary btn-print mb-1 mb-md-0 ml-md-1"> <i class="feather icon-file-text"></i> Print</button>
-                    <button class="btn btn-outline-primary  ml-0 ml-md-1"> <i class="feather icon-download"></i> Download</button>
-                </div>
+                <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
+                    <!-- <button v-if="invoiceIssued" @click="printContent('invoice-data')" class="btn btn-primary btn-print mb-1 mb-md-0 ml-md-1"> <i class="feather icon-file-text"></i> Print</button> -->
+                    <!-- <button v-if="invoiceIssued" @click="savePDF" class="btn btn-outline-primary  ml-0 ml-md-1"> <i class="feather icon-download"></i> Download</button> -->
+                <!-- </div> -->
             </div>
         </section>
-        <!-- invoice functionality end -->
+        
         <!-- invoice page -->
-        <section class="card invoice-page">
+        <div id="invoice-data" class="card invoice-page">
             <div id="invoice-template" class="card-body">
                 <!-- Invoice Company Details -->
                 <div id="invoice-company-details" class="row">
                     <div class="col-sm-6 col-12 text-left pt-1">
                         <div class="media pt-1">
-                            <img src="../static/vardhman-logo.jpg" width="100%" alt="company logo" />
+                            <img src="/vardhman-logo.jpg" width="100%" alt="company logo" />
                         </div>
                     </div>
                     <div class="col-sm-6 col-12 text-right">
@@ -83,7 +71,7 @@
                 <div id="invoice-items-details" class="pt-1 invoice-items-table">
                     <div class="row">
                         <div class="table-responsive col-12">
-                            <table class="table table-borderless">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
@@ -158,13 +146,28 @@
                 <!--/ Invoice Footer -->
 
             </div>
-        </section>
+        </div>
         <!-- invoice page end -->
+
+        <!-- invoice functionality start -->
+        <section class="invoice-print mb-1">
+            <div class="row">
+                <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
+                    <button v-if="!invoiceIssued" class="btn btn-primary" @click="submitDetails()"> <i class="feather icon-check"></i> Issue Invoice </button>
+                    <button v-if="!invoiceIssued" style="float:right;" class="btn btn-outline-primary  ml-md-1" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button> 
+                <!-- </div> -->
+            </div>
+        </section>
+        <!-- invoice functionality end -->
 
     </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+
 
 export default {
     props: {
@@ -196,13 +199,45 @@ export default {
         },
     data(){
         return{
-           
+           invoiceIssued:false
         }
     },
     methods:{
+        savePDF(){
+            html2canvas(document.querySelector("#invoice-data"))
+            .then(function(canvas) {
+                let divHeight = $('#invoice-data').height();
+                let divWidth = $('#invoice-data').width();
+                let ratio = divHeight / divWidth;
+
+                let pdf = new jsPDF();
+                let width = pdf.internal.pageSize.getWidth();
+                let height = pdf.internal.pageSize.getHeight();
+                height = ratio * width;
+                let imgData = canvas.toDataURL("PNG", 1.0);
+                pdf.addImage(
+                    imgData, 
+                    'PNG', 
+                    (width*0.055), 
+                    (height*0.055), 
+                    width-(width*0.1), 
+                    height-(height*0.1), 
+                    undefined,
+                    'FAST'
+                );
+
+
+                // pdf.addImage(imgData, (width*0.055) , (height*0.055), width-(width*0.1), height-(height*0.1));
+
+                // return pdf;
+                pdf.save('converteddoc.pdf');
+            });
+        },
         submitDetails(){
+            this.savePDF();
             const r = confirm("Issuing invoice is irreversible !\nAre you sure you want to continue ?");
             if (r == true) {    // if confirmed
+                this.invoiceIssued = true;
                 let lastTranstion;
                 axios.get('http://localhost:4000/toprecordbycustomerid/'+this.id)
                 .then(response=>{
@@ -221,12 +256,26 @@ export default {
                         description: "Invoice issued on Date "+this.invoiceDate
                     }).then(response=>{
                         if(response.status==200){
-                            alert("Amount due added ! "+response.data.sqlMessage);
-                            this.$router.push('/customer/'+this.customer.customerEmailId);
+                            window.scrollTo(0,0);     // move to top of page
+                            alert("Amount due added ! ");//+response.data.sqlMessage);
+                            // this.$router.push('/customer/'+this.customer.customerEmailId);
+                        }
+                    });
+                    axios.post('http://localhost:4000/invoice/',{
+                        fkCustomerEmailId: this.customer.customerEmailId,
+                        invoiceDate: new Date(),
+                        invoiceName: (new Date()).toString()
+                    }).then(repsonse=>{
+                        if(response.status==200){
+                            alert("invoice entry added");
+                            console.log(response);
+                        }
+                        else{
+                            alert("Problem in invoice entry check console");
+                            console.log(response);
                         }
                     });
                 });
-                
             } 
             else {
                 alert("Issueing of invoice canceled");
@@ -248,3 +297,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+canvas{
+    display: hidden;
+}
+#invoice-data,table,th{
+    font-size: 1.2vw;
+    color:black;
+}
+</style>
