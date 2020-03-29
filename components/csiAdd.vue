@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <form action="#"  class="steps-validation wizard-circle">
+                                        <form class="steps-validation wizard-circle" @submit.prevent="details()">
                                             <fieldset>
                                                 <div class="row form-group">
                                                     <div v-if="mode!='item'" class="col-md-6">
@@ -176,11 +176,11 @@
                                                     <div class="col-md-9 col-4"></div>
                                                     <div class="row col-md-3 col-8" >
                                                         <div>
-                                                            <button style="float:left;" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>
+                                                            <button style="float:left;" class="btn btn-outline-primary " type="submit" @click="goBack()">Cancel</button>
                                                         </div>
                                                         <div>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-if="id==null" @click="details()">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-else @click="details()">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -383,7 +383,26 @@ export default {
                         branchPhoneNo:this.mobNo
                     }).then(response=>{
                         if(response){
-                            Swal.DismissReason.backdrop,
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/item')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:res2[i].itemId,
+                                            fkBranchId:response.data,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+                                                                Swal.DismissReason.backdrop,
                         Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -392,6 +411,8 @@ export default {
                                 confirmButtonText: 'Ok'  
                                 })
                             this.$router.push("/branch");
+                                });
+
                         }
                     });
                 }
@@ -428,7 +449,26 @@ export default {
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                           Swal.DismissReason.backdrop,
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/branch')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:response.data,
+                                            fkBranchId:res2[i].branchId,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            // console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+Swal.DismissReason.backdrop,
                         Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -438,6 +478,8 @@ export default {
                                 })
                             console.log(response);  
                             this.$router.push("/item");
+                                });
+                            
                         }
                     });
                 }
