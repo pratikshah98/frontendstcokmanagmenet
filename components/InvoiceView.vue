@@ -153,7 +153,7 @@
         <section class="invoice-print mb-1">
             <div class="row">
                 <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
-                    <button v-if="!invoiceIssued" class="btn btn-primary" @click="savePDF()"> <i class="feather icon-check"></i> Issue Invoice </button>
+                    <button v-if="!invoiceIssued" class="btn btn-primary"  @click="savePDF()"> <i class="feather icon-check"></i> Issue Invoice </button>
                     <button v-if="!invoiceIssued" style="float:right;" class="btn btn-outline-primary  ml-md-1" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button> 
                 <!-- </div> -->
             </div>
@@ -275,15 +275,22 @@ export default {
                 // const pdfdata = pdf.output();
                 // console.log(roughSizeOfObject(pdfdata));
 
-                var formData = new FormData();
-                formData.append("filename", pdf.output('pdf'));
+                var blob = pdf.output('blob');
+                var form=document.createElement("FORM");
+                var formData = new FormData(form);
+                formData.append("filename",blob,'mypdf1.pdf');
+                // formData.append("filename", );
 
-                axios.post('http://localhost:4000/invoiceupload/',formData, {
+                axios.post('http://localhost:4000/invoiceupload/',formData,{
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then((response)=>{   // if successful
-                    console.log(response);
+                }
+                ).then((response)=>{   // if successful
+                    // console.log(response);
+                    if(response){
+                        alert("Invoice Uploaded");
+                    }
                 }).catch(function (error) {     // if error occurs
                     console.log(error);
                 });
