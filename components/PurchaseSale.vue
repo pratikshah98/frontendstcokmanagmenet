@@ -90,34 +90,35 @@
                                                             <input type="number" min=1 class="form-control" v-model="insertItemObjects[item-1].quantity">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label> </label>
                                                             <button v-if="totalItems!=1" style="float:right;" class="form-control btn btn-danger" type="button" @click="removeItem(item-1)">
                                                                 <i class="feather icon-minus-square"></i>
-                                                                Remove This Item
+                                                                Remove
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-5"></div>
                                                 </div>
                                                 
-                                                <div class="row col-md-4">
+                                                <div class="row col-md-2">
                                                     <div class="form-group">
                                                         <button style="float:right;" class="form-control btn btn-primary" type="button" @click="addItem">
                                                             <i class="feather icon-plus-square"></i>
-                                                            Add Another Item
+                                                            Add Item
                                                         </button>
                                                     </div>
                                                 </div>
                                             </fieldset>
                                             <fieldset>
                                                 <div  class="row">
-                                                    <div class="col-md-10 col-4"></div>
-                                                    <div class="col-md-2 col-8" >
+                                                    <div class="col-md-9 col-4"></div>
+                                                    <div class="col-md-3 col-8" >
                                                         <div class="form-group">
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-if="id==null" @click="submitDetails">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-else @click="updateDetails">Update</button>
+                                                            <button class="btn btn-outline-primary" type="button" @click="goBack">Cancel</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="submitDetails">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="updateDetails">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -241,32 +242,39 @@ export default {
             });            
         },
         submitDetails(){
-            const idTimeStamp = this.getTimeStamp;
+            // const idTimeStamp = this.getTimeStamp;
             if(this.mode=='sale')
             {
                 axios.post('http://localhost:4000/Sale/',{
-                    saleId: idTimeStamp,
+                    // saleId: idTimeStamp,
                     salesDate: this.selectedDate,
                     isInvoiceGenerated: 0,
                     fkSaleTypeId: this.selectedSaleType,
                     fkCustomerEmailId: this.selectedCustomerOrSupplier,
                     fkBranchId: this.selectedBranch
                 }).then(response=>{
-                    // console.log(response);
+                    // console.log(response.data);
                     if(response.status==200){
                         for(let index in this.insertItemObjects){
                             axios.post('http://localhost:4000/saleDetail/',{
-                                fkSaleId: idTimeStamp,
+                                fkSaleId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
                                 saleQuantity: this.insertItemObjects[index].quantity,
                                 creditRate:0
                             }).then(response=>{
-                                console.log(response);
+                                // console.log(response);
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Sales recorded !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Sale recorded Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
+                                        this.$router.push('/sale/');
                                     }
                                 }else{  
                                     alert("Error in SaleDetails");
@@ -283,25 +291,32 @@ export default {
             else    // mode is purchase
             {
                 axios.post('http://localhost:4000/Purchase/',{
-                    purchaseId: idTimeStamp,
                     purchaseDate: this.selectedDate,
                     fkSupplierEmailId: this.selectedCustomerOrSupplier,
                     fkBranchId: this.selectedBranch
                 }).then(response=>{
-                    console.log(response);
+                    // console.log(response);
                     if(response.status==200){
                         for(let index in this.insertItemObjects){
-                            alert(index);
                             axios.post('http://localhost:4000/purchaseDetail/',{
-                                fkPurchaseId: idTimeStamp,
+                                fkPurchaseId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
                                 purchaseQuantity: this.insertItemObjects[index].quantity
                             }).then(response=>{
-                                console.log(response);
+                                // console.log(response);
                                 if(response.status==200){
-                                    this.insertedItem++;
-                                    if(this.insertedItem == this.totalItems)
-                                        alert("Purchase recorded !");
+                                    this.itemsInserted++;
+                                    if(this.itemsInserted == this.totalItems){
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success !',
+                                            text: 'Purchase recorded successfully !',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'
+                                        })
+                                        this.itemsInserted=0;
+                                        this.$router.push('/purchase/');
+                                    }
                                 }
                                 else{
                                     alert("Error in purchase details")
@@ -336,8 +351,15 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Sales recorded !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Sale updated Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
+                                        this.$router.push('/sale/'+this.id);
                                     }
                                 }else{  
                                     alert("Error in SaleDetails");
@@ -359,7 +381,7 @@ export default {
                 }).then(response=>{
                     if(response.status==200)
                     {
-                        alert("Sales updated");
+                        // alert("Sales updated");
                     }
                     else
                     {
@@ -384,8 +406,15 @@ export default {
                                 if(response.status==200){
                                     this.itemsInserted++;
                                     if(this.itemsInserted==this.totalItems){
-                                        alert("Purchase recorded !");
+                                        Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Purchase updated Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                        })
                                         this.itemsInserted=0;
+                                        this.$router.push('/purchase/'+this.id);
                                     }
                                 }else{  
                                     alert("Error in PurchaseDetails");
@@ -405,7 +434,7 @@ export default {
                 }).then(response=>{
                     if(response.status==200)
                     {
-                        alert("Purchase updated");
+                        // alert("Purchase updated");
                     }
                     else
                     {
@@ -425,6 +454,9 @@ export default {
             this.totalItems--; 
             this.insertItemObjects.splice(itemIndex,1);
         },
+        goBack(){
+            this.$router.back();
+        }
         
     },
     mounted(){
@@ -514,8 +546,9 @@ export default {
 </script>
 
 <style scoped>
-.datepicker{
-    /* position: fixed;
-    z-index: 2; */
-}
+/* .datepicker{
+    position: fixed;
+    z-index: 2;
+} */
+
 </style>

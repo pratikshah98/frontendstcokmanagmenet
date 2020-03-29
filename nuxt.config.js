@@ -32,6 +32,10 @@ module.exports = {
       { rel:"stylesheet" ,href:"/assets/css/style.css"},
       {rel:"stylesheet" , href:"/app-assets/css/plugins/forms/wizard.min.css"},
       { rel:"stylesheet" , href:"/app-assets/vendors/css/tables/datatable/datatables.min.css"},
+        
+      //for alert
+      {rel:"stylesheet" , href:"/app-assets/vendors/css/animate/animate.css"},
+      {rel:"stylesheet" , href:"/app-assets/vendors/css/extensions/sweetalert2.min.css"},
 
       //for invoice
       {rel:"stylesheet" , href:"/app-assets/css/pages/invoice.css"},
@@ -80,13 +84,21 @@ module.exports = {
     {src:"/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"},
     //---------------
 
+    //for alert
+    {src:"/app-assets/vendors/js/extensions/sweetalert2.all.min.js"},
+    {src:"/app-assets/vendors/js/extensions/polyfill.min.js"},
+    {src:"/app-assets/js/scripts/extensions/sweet-alerts.js"},
+    {src:"/app-assets/vendors/js/extensions/polyfill.min.js"},
+
+    
     //for invoice
     {src:"/app-assets/js/scripts/pages/invoice.js"},
     
     { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
-    { src: '/assets/js/select2.min.js'}
+    { src: '/assets/js/select2.min.js'},
     
-
+    //for validation
+  //  { src: '/node-modules/vuelidate/dist/vuelidate.min.js' }
   ]
 },
 

@@ -1,10 +1,13 @@
 <template>
     <div class="content-wrapper">
         <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
+            <div class="content-header-left col-md-12 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
                         <h2 class="content-header-title float-left mb-0">View {{mode|capitalize}}</h2>
+                        <button style="float:right" class="btn btn-primary" @click="gotoListView">
+                            <i class="feather icon-list"></i> List All {{ mode | capitalize }}s
+                        </button>
                     </div>
                 </div>
             </div>
@@ -144,15 +147,18 @@ export default {
         viewSupplier(){
             this.$router.push('/supplier/'+this.fetchedData.supplierEmailId);
         },
-        gotoEdit:function(){
+        gotoEdit(){
             this.$router.push( '/' + this.mode + '/edit/' + this.id );
+        },
+        gotoListView(){
+            this.$router.push( '/' + this.mode);
         }
     },
     mounted(){
         if(this.mode=='sale')
         {
             console.log(this.$props.id);
-            axios.get('http://localhost:4000/saleBranchCustomer/' + this.$props.id)
+            axios.get('http://localhost:4000/sale/' + this.$props.id)
             .then(Response=>{  
                 console.log(Response);
                 this.fetchedData = Response.data[0];
@@ -167,8 +173,8 @@ export default {
             });
         }
         else
-        {
-            axios.get('http://localhost:4000/purchaseBranchSupplier/' + this.$props.id)
+        {   
+            axios.get('http://localhost:4000/purchase/' + this.$props.id)
             .then(Response=>{  
                 console.log(Response);
                 this.fetchedData = Response.data[0];
