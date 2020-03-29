@@ -446,7 +446,7 @@ export default {
         addItem(){
             this.totalItems++; 
             this.insertItemObjects.push({   
-                fkItemId:"",
+                fkItemId:0,
                 quantity:1
             });
         },

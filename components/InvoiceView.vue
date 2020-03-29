@@ -153,7 +153,11 @@
         <section class="invoice-print mb-1">
             <div class="row">
                 <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
+<<<<<<< HEAD
                     <button v-if="!invoiceIssued" class="btn btn-primary" @click="submitDetails()"> <i class="feather icon-check"></i> Issue Invoice </button>
+=======
+                    <button v-if="!invoiceIssued" class="btn btn-primary"  @click="savePDF()"> <i class="feather icon-check"></i> Issue Invoice </button>
+>>>>>>> cab21ce5938bb1d4565fc0ece0f1914cd2efaeaa
                     <button v-if="!invoiceIssued" style="float:right;" class="btn btn-outline-primary  ml-md-1" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button> 
                 <!-- </div> -->
             </div>
@@ -274,6 +278,12 @@ export default {
                 
                 // const pdfdata = pdf.output();
                 // console.log(roughSizeOfObject(pdfdata));
+                var blob = pdf.output('blob');
+                var form=document.createElement("FORM");
+                var formData = new FormData(form);
+                formData.append("filename",blob,'mypdf1.pdf');
+                // formData.append("filename", );
+
                 var blob = pdf.output('blob');
                 var form=document.createElement("FORM");
                 var formData = new FormData(form);
