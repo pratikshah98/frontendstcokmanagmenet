@@ -153,7 +153,7 @@
         <section class="invoice-print mb-1">
             <div class="row">
                 <!-- <div class="col-12 col-md-7 d-flex flex-column flex-md-row justify-content-end"> -->
-                    <button v-if="!invoiceIssued" class="btn btn-primary"  @click="savePDF()"> <i class="feather icon-check"></i> Issue Invoice </button>
+                    <button v-if="!invoiceIssued" class="btn btn-primary"  @click="submitDetails()"> <i class="feather icon-check"></i> Issue Invoice </button>
                     <button v-if="!invoiceIssued" style="float:right;" class="btn btn-outline-primary  ml-md-1" @click="gotoCustomer"><i class="feather icon-x"></i> Cancel</button> 
                 <!-- </div> -->
             </div>
@@ -231,13 +231,31 @@ export default {
         },
     data(){
         return{
-           invoiceIssued:false
+            flag:0,
+            invoiceIssued:false,
+            invoiceName:"",
+            dateTime: ""
+        }
+    },
+    watch:{
+        flag:function(value){
+            if(value==4)
+            {
+                Swal.fire(
+                    'Invoice Issued !',
+                    'Invoice has been downloaded !',
+                    'success'
+                )
+                // window.scrollTo(0,0);     // move to top of page
+                this.$router.back();
+            }
         }
     },
     methods:{
         
         savePDF(){
-           
+            const vueInstance = this;
+
             html2canvas(document.querySelector("#invoice-data"))
             .then(function(canvas) {
                 let divHeight = $('#invoice-data').height();
@@ -264,23 +282,16 @@ export default {
                 );
 
 
-                // pdf.addImage(imgData, (width*0.055) , (height*0.055), width-(width*0.1), height-(height*0.1));
-
-                // return pdf;
-                // pdf.save('converteddoc.pdf');\
-
-                // var data = {};
-                // var base64pdf = btoa(pdf.output('pdf')); 
-                
-                // const pdfdata = pdf.output();
-                // console.log(roughSizeOfObject(pdfdata));
-
                 var blob = pdf.output('blob');
                 var form=document.createElement("FORM");
                 var formData = new FormData(form);
-                formData.append("filename",blob,'mypdf1.pdf');
+                let fileName = vueInstance.customer.customerEmailId + '_' + vueInstance.dateTime +'.pdf';
+                vueInstance.invoiceName = fileName;
+                formData.append("filename",blob, fileName);
                 // formData.append("filename", );
-
+                pdf.save(fileName, { returnPromise: true }).then(success=>{
+                    vueInstance.flag++;
+                }); // downloading on client's machine
                 axios.post('http://localhost:4000/invoiceupload/',formData,{
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -288,8 +299,9 @@ export default {
                 }
                 ).then((response)=>{   // if successful
                     // console.log(response);
-                    if(response){
-                        alert("Invoice Uploaded");
+                    if(response.status==200){
+                        vueInstance.flag++;
+                        // alert("Invoice Uploaded");
                     }
                 }).catch(function (error) {     // if error occurs
                     console.log(error);
@@ -308,13 +320,22 @@ export default {
                 confirmButtonText: 'Yes',
                 cancelButtonText:'No'
             }).then((result) => {
+                this.dateTime = this.getTimestamp();
                 if (result.value) {
+                    Swal.fire({                     // loading animation
+                        title: 'Generating Invoice !',
+                        text: 'Generated Invoice will be downloaded directly !',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        onOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
                     this.savePDF();
                     this.invoiceIssued = true;
                     let lastTranstion;
                     axios.get('http://localhost:4000/toprecordbycustomerid/'+this.id)
                     .then(response=>{
-                        let count=0;
                         if(response.data.length!=0)
                             lastTranstion = response.data[0];
 
@@ -330,36 +351,16 @@ export default {
                             description: "Invoice issued on Date "+this.invoiceDate
                         }).then(response=>{
                             if(response.status==200){
-                                count++;
-                                if(count==2)
-                                {
-                                    Swal.fire(
-                                        'Issued !',
-                                        'Invoice has been issued.',
-                                        'success'
-                                    )
-                                    // window.scrollTo(0,0);     // move to top of page
-                                    this.$router.back();
-                                }
+                                this.flag++;
                             }
                         });
                         axios.post('http://localhost:4000/invoice/',{
                             fkCustomerEmailId: this.customer.customerEmailId,
                             invoiceDate: new Date(),
-                            invoiceName: (new Date()).toString()
+                            invoiceName: this.customer.customerEmailId + '_' + this.dateTime +'.pdf'
                         }).then(repsonse=>{
                             if(response.status==200){
-                                count++;
-                                if(count==2)
-                                {
-                                    Swal.fire(
-                                        'Issued !',
-                                        'Invoice has been issued.',
-                                        'success'
-                                    )
-                                    // window.scrollTo(0,0);     // move to top of page
-                                    this.$router.back();
-                                }
+                                this.flag++;
                             }
                         });
                     });
@@ -373,8 +374,16 @@ export default {
                 }
             })
         },
+
         gotoCustomer(){
             this.$router.back();
+        },
+        getTimestamp: function() {
+            const today = new Date();
+            const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            const time = today.getHours() + "-" + today.getMinutes() + "-" + today.getSeconds();
+            const dateTime = date +'_'+ time;
+            return dateTime;
         }
     },
     filters: {
