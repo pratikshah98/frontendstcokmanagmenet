@@ -39,7 +39,9 @@ module.exports = {
       
       //for select2 - auto suggest
       {rel:"stylesheet" , href:"/assets/css/select2.min.css"},
-      
+
+      { rel: 'stylesheet', href:'/custom.css' },
+
 
       {rel:"stylesheet" , href:"/app-assets/css/pages/authentication.css"}
     ],
@@ -113,6 +115,8 @@ module.exports = {
     'cookie-universal-nuxt'
   ],
 
+  env:{
+  }, 
   /*
   ** Build configuration
   */

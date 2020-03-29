@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <form action="#" class="steps-validation wizard-circle">
+                                        <form class="steps-validation wizard-circle" @submit.prevent="details()">
                                             <fieldset>
                                                 <div class="row form-group">
                                                     <div v-if="mode!='item'" class="col-md-6">
@@ -144,8 +144,8 @@
                                                     <div class="col-md-10 col-4"></div>
                                                     <div class="col-md-2 col-8" >
                                                         <div class="form-group">
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-if="id==null" @click="details()">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary" type="button" v-else @click="details()">Update</button>
+                                                            <button style="float:right;" class="btn btn-primary" type="submit" v-if="id==null">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary" type="submit" v-else>Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -289,8 +289,29 @@ export default {
                         branchPhoneNo:this.mobNo
                     }).then(response=>{
                         if(response){
-                            alert("Branch Succesfully Added");
-                            window.location="/branch";
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/item')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:res2[i].itemId,
+                                            fkBranchId:response.data,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+                                    alert("Branch Succesfully Added");
+                                    window.location="/branch";
+                                });
+
                         }
                     });
                 }
@@ -320,8 +341,29 @@ export default {
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                            alert("Item Succesfully Added");
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/branch')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:response.data,
+                                            fkBranchId:res2[i].branchId,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            // console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+                                    alert("Item Succesfully Added");
                             window.location="/item";
+                                });
+                            
                         }
                     });
                 }
@@ -397,7 +439,7 @@ export default {
                         reorderLevel:this.reorder,
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
-                        if(response){
+                        if(response){    
                             alert("Item Succesfully Updated");
                             this.$router.push("/item/"+this.id);
                         }

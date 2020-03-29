@@ -14,7 +14,7 @@
                         <th>Email</th>
                         <th v-if="mode=='sale'">Sales Date</th>
                         <th v-else>Purchase Date</th>
-                        <th>Branch</th>
+                        <th v-if="$store.state.selectedBranchId==100">Branch</th>
                         <th>Actions</th>
                     </tr>           
                 </thead>
@@ -35,7 +35,7 @@
                         <td v-if="mode=='sale'"> {{ object.salesDate | filterDateFormat }} </td>
                         <td v-else> {{ object.purchaseDate | filterDateFormat }} </td>
 
-                        <td> {{ object.branchName }} </td>
+                        <td v-if="$store.state.selectedBranchId==100"> {{ object.branchName }} </td>
 
                         <td v-if="mode=='sale'">
                             <!-- view button -->
@@ -73,6 +73,36 @@ export default {
             required: true
         }
     },
+    data(){
+        return{
+            selectedItems:[],
+            fetchedObjects: null,
+            id:"",
+            myBranch:""
+        }
+    },  
+        computed:{
+        getBranch(){
+            return this.$store.state.selectedBranchId;
+        }
+    },
+     watch:{
+        getBranch:function(val){
+            this.myBranch=val;
+            // console.log("csiList= "+this.myBranch); 
+            this.getDetails();
+        },
+     },
+    created(){
+            this.getDetails();        
+    },
+    filters:{
+        filterDateFormat(val){
+            let date = new Date(val);
+            date.setHours(date.getHours()+6);
+            return date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() ;
+        }
+    },
     methods:{
         viewSale(id){
             this.$router.push('/sale/'+id);
@@ -86,36 +116,56 @@ export default {
         updatePurchase(id){
             this.$router.push('/purchase/edit/'+id);
         },
-    },
-    data(){
-        return{
-            selectedItems:[],
-            fetchedObjects: null,
-            id:""
-        }
-    },  
-    mounted(){
-        if(this.mode=="sale")
-        {
-            axios.get('http://localhost:4000/saleBranchCustomer')
-            .then(response => {
-                this.fetchedObjects = response.data;
-            });
-        }
-        else
-        {
-            axios.get('http://localhost:4000/purchaseBranchSupplier')
-            .then(response => {
-                this.fetchedObjects = response.data;
-            });
-        }
-        
-    },
-    filters:{
-        filterDateFormat(val){
-            let date = new Date(val);
-            date.setHours(date.getHours()+6);
-            return date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() ;
+        getDetails(){
+            if(this.mode=="sale")
+            {   
+                if(this.$store.state.selectedBranchId==100){
+                    axios.get('http://localhost:4000/sale')
+                    .then(response => {
+                        this.fetchedObjects = response.data;
+                        // console.log(this.fetchedObjects);
+                    });
+                }
+                else{
+                    if(this.$store.state.selectedBranchId==""){
+                        axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                        .then(res=>{
+                                    axios.get('http://localhost:4000/salebybranchid/'+res.data[0].fkBranchId)
+                                    .then(response => {
+                                        this.fetchedObjects = response.data;
+                                        // console.log(this.fetchedObjects);
+
+                                    });
+                        })
+                    }
+                    else{
+                        axios.get('http://localhost:4000/salebybranchid/'+this.$store.state.selectedBranchId)
+                        .then(response => {
+                            this.fetchedObjects = response.data;
+                            // console.log(this.fetchedObjects);
+
+                        });
+                    }
+                }
+            }
+            else
+            {
+                if(this.$store.state.selectedBranchId==100){
+                    axios.get('http://localhost:4000/purchase')
+                    .then(response => {
+                        this.fetchedObjects = response.data;
+                    });
+                }
+                else{
+                    if(this.$store.state.selectedBranchId!=""){
+                        axios.get('http://localhost:4000/purchasebybranchid/'+this.$store.state.selectedBranchId)
+                        .then(response => {
+                            this.fetchedObjects = response.data;
+                        });
+                    }
+                }
+                
+            }
         }
     }
 }

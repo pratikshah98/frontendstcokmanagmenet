@@ -5,6 +5,8 @@ export const state = () => ({
   isAuth: false,
   biggerScreen: true,
   user:"",
+  selectedBranchId:100
+
 
 })
 
@@ -17,6 +19,9 @@ export const mutations = {
   },
   setUser: function (state, user) {
     state.user = user
+  },
+  setBranchId: function (state, selectedBranchId) {
+    state.selectedBranchId = selectedBranchId
   },
 }
 
@@ -31,7 +36,7 @@ export const actions = {
               let cookieVal= mykey.update(app.$cookies.get('_sessionId'), 'hex','utf8');
               cookieVal+=mykey.final('utf8');
               const session=JSON.parse(cookieVal)
-              if(session.userEmail != "" && session.userPass != "")
+              if(session.userEmail != "")
               {
                 isAuth = true
                 user = session.userEmail;
@@ -42,6 +47,7 @@ export const actions = {
         }
         commit('setAuth', isAuth)
         commit('setUser', user);
+
 
       }
 

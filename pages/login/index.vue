@@ -113,8 +113,7 @@ export default {
             }).then(res=>{
                 if(res){
                     let cookieVal={
-                        userEmail:res.data[0].userEmailId,
-                        userPass:res.data[0].userPassword
+                        userEmail:res.data[0].userEmailId
                     };
                     let mykey = crypto.createCipher('aes-128-ecb','123');
                     let cookieValue=mykey.update(JSON.stringify(cookieVal),'utf8','hex');

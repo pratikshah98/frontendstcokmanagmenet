@@ -35,18 +35,14 @@
                         </ul>
                     </div>
                     <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-language nav-item"><a class="dropdown-toggle nav-link" id="dropdown-flag"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" data-language="en"><i class="flag-icon flag-icon-us"></i> English</a><a class="dropdown-item" data-language="fr"><i class="flag-icon flag-icon-fr"></i> French</a><a class="dropdown-item" data-language="de"><i class="flag-icon flag-icon-de"></i> German</a><a class="dropdown-item" data-language="pt"><i class="flag-icon flag-icon-pt"></i> Portuguese</a></div>
+                        <li class="dropdown dropdown-language nav-item">
+                            <a class="dropdown-toggle nav-link" id="dropdown-flag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language" id="insertBranchName"></span></a> 
+                            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
+                                <!-- <a class="dropdown-item" data-language="pt" v-for="(b,index) in allBranch" @click="setBranch(b.id,b.text)"><i class="flag-icon flag-icon-pt"></i> {{b.text}}</a> -->
+                             </div>
+                    
                         </li>
-                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon feather icon-maximize"></i></a></li>
-                        <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon feather icon-search"></i></a>
-                            <div class="search-input">
-                                <div class="search-input-icon"><i class="feather icon-search primary"></i></div>
-                                <input class="input" type="text" placeholder="Explore Vuexy..." tabindex="-1" data-search="template-list">
-                                <div class="search-input-close"><i class="feather icon-x"></i></div>
-                                <ul class="search-list search-list-main"></ul>
-                            </div>
-                        </li>
+                        
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up">5</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
@@ -261,24 +257,49 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class=" nav-item">
-                    <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
+                    <select2
+                            :options="allBranch"
+                            v-model="myBranch"
+                            classes="form-control col-md-12"
+                    ></select2>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/dashboard" class="name-linking" data-i18n="Dashboard"><i class="feather icon-home"></i>Dashboard</nuxt-link>
+                    <!-- <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
                         <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
-                    </router-link>
-                    
+                    </router-link> -->
+                <li class="navigation-header">
+                    <span>Master Modules</span>
                 </li>
-                <li class=" navigation-header"><span>Apps</span>
+                <li class=" nav-item">
+                    <nuxt-link to="/customer" data-i18n="Customers"><i class="feather icon-users"></i>Customers</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/customer/"><i class="feather icon-users"></i><span class="menu-title">Customers</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/supplier" data-i18n="Suppliers"><i class="feather icon-users"></i>Suppliers</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/supplier/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Chat">Suppliers</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/item" data-i18n="Items"><i class="feather icon-file"></i>Items</nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/item/"><i class="feather icon-file"></i><span class="menu-title" data-i18n="Todo">Items</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/user" data-i18n="User "><i class="feather icon-users"></i>User </nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/user/"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Calender">User</span></a>
-                <li class=" nav-item"><a href="/branch/"><i class="feather icon-map"></i><span class="menu-title" data-i18n="Calender">Branch</span></a>
+                <li class=" nav-item">
+                    <nuxt-link to="/branch" data-i18n="Branch "><i class="feather icon-map"></i>Branch </nuxt-link>
                 </li>
-                <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
-                    <!-- <ul class="menu-content">
+                <li class=" navigation-header">
+                    <span>Transaction Modules</span>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/sale" data-i18n="Sale"><i class="feather icon-bar-chart-2"></i>Sale</nuxt-link>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/purchase" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Purchase</nuxt-link>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/stock" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Stock</nuxt-link>
+                </li>
+                <!-- <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
+                    <ul class="menu-content">
                         <li><a><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">Shop</span></a>
                         </li>
                         <li><a href="javascript:;" ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Details">Details</span></a>
@@ -287,10 +308,10 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Checkout">Checkout</span></a>
                         </li>
-                    </ul> -->
+                    </ul>
                 </li>
                 <li class=" nav-item"><a href="/purchase/"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="User">Purchase</span></a>
-                    <!-- <ul class="menu-content">
+                    <ul class="menu-content">
                         <li>
                             <a href="javascript:;">
                                 <i class="feather icon-circle"></i>
@@ -299,8 +320,8 @@
                         </li>
                         <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="View">View</span></a>
                         </li>
-                    </ul> -->
-                </li> 
+                    </ul>
+                </li>  -->
             </ul>
         </div>
     </div>
@@ -320,12 +341,12 @@
 <script>
 const crypto = require('crypto')
 import axios from 'axios' 
+import select2 from '@/components/select2Component';
 
 export default {
     middleware: "authentication",
 
     mounted(){
-        this.getUserName();
 
         this.addClasses();
         if(window.innerWidth < 767){
@@ -338,13 +359,31 @@ export default {
             d.classList.add("vertical-menu-modern");
         }
     },
+    components:{
+    select2
+},
     data(){
         return{
             username:"",
             currPass:"",
             newPass:"",
-            conPass:""
+            conPass:"",
+            allBranch:[],
+            myBranch:"500"
         }
+    },
+    created(){
+        this.getUserName();
+    },
+    mounted(){
+
+    },
+    watch:{
+        myBranch: function (val) {
+            this.$store.commit('setBranchId', this.myBranch);
+            // console.log("In dashboard= "+this.$store.state.selectedBranchId);
+       }
+    
     },
     methods:{
         // send(mode){
@@ -356,13 +395,52 @@ export default {
         //     else    
         //         this.$router.push('/Items/View');
         // },
-        async getUserName(){
-              await axios.get("http://localhost:4000/user/"+this.$store.state.user)
+        getUserName(){
+                axios.get("http://localhost:4000/user/"+this.$store.state.user)
                   .then(res=>{
                         this.username=res.data[0].userName;
-                        // console.log(this.username);
-                  });
+                        // this.$store.commit('setBranchId', res.data[0].fkBranchId);
+                        this.getBranch(res.data[0].fkBranchId);
+
+                  })
+                  
               
+        },
+        getBranch(id){
+                axios.get('http://localhost:4000/branch').then(res=>{
+                    const options=[];
+                    
+                    for(let index in res.data){
+                        if(res.data[index].branchId!=id){
+                            // console.log(res.data[index].branchName);
+                            // this.myBranch=res.data[index].branchName;
+                            options.push({
+                                "id": res.data[index].branchId,
+                                "text": res.data[index].branchName
+                            });
+                        //     let a=document.getElementById("insertBranchName");
+                        //     let s=document.createTextNode(this.myBranch);
+                        //     a.appendChild(s);
+                        }
+                        else{
+                            options.unshift({
+                                "id": res.data[index].branchId,
+                                "text": res.data[index].branchName
+                            });
+                        }
+                    }
+                    // console.log(options)
+                    options.push({
+                                "id": 100,
+                                "text": "All"                        
+                    });
+                    return options;
+                })
+                .then(res4=>{
+                this.allBranch=res4;
+                this.myBranch=id;
+                    // console.log(this.itemList);
+            });
         },
         chngPass(){
             axios.get("http://localhost:4000/user/"+this.$store.state.user)
