@@ -144,22 +144,21 @@ export default {
                     // datetime.setMinutes(datetime.getMinutes() + 5)
                     let curr=new Date();
                     let exp=new Date(res.data[0].otpTime);
-                    // console.log(curr);
-                    // console.log(exp);
-                    if(res.data[0].otp!=0 && curr>exp){
+                    console.log(curr);
+                    console.log(exp);
+                    console.log(res.data[0].otp);
+                    if(res.data[0].otp==0 || curr>exp){
                         // console.log("Expired");
                         axios.get("http://localhost:4000/sendMail/"+this.email)
                         .then(res1=>{
-                            if(res.response){
+                            if(res1){
                                 this.otpSent=true;
                                 this.loading=false;
                             }
                         });
                     }
                     else{
-                        // console.log("Valid");
-                                                this.loading=false;
-
+                        this.loading=false;
                         alert("OTP has Already been Sent to this Email");
                         this.otpSent=true;
                     }
