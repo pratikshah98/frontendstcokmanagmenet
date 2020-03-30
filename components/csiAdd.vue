@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <form action="#"  class="steps-validation wizard-circle" @submit.prevent="details()"> 
+                                        <form class="steps-validation wizard-circle" @submit.prevent="details()">
                                             <fieldset>
                                                 <div class="row form-group">
                                                     <div v-if="mode!='item'" class="col-md-6">
@@ -34,21 +34,21 @@
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
-                                                            <input type="text" class="form-control " v-model="$v.name.$model" :class="{'is-invalid':$v.name.$error}" required>
+                                                            <input type="text" class="form-control " v-model.lazy="$v.name.$model" :class="{'is-invalid':$v.name.$error}">
                                                             
                                                             <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
-                                                            <div class="error" v-if="!$v.name.alpha">Only characters allowed</div>
+                                                            <div class="error" v-if="!$v.name.alpha">Invalid Name</div>
                                                             </div>
                                                         </div>
                                                         
                                                     </div>
                                                     <div v-else class="col-md-4">
                                                         <label for="firstName3">Item Name*</label>
-                                                        <input type="text" required class="form-control " v-model="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
+                                                        <input type="text" class="form-control " v-model.lazy="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
                                                         <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
-                                                            <div class="error" v-if="!$v.name.alpha">Only characters allowed</div>
+                                                            <div class="error" v-if="!$v.name.alpha">Invalid Name</div>
                                                             </div>
                                                     </div>
                                                     
@@ -57,7 +57,7 @@
                                                             <label for="lastName3">
                                                                 Mobile Number*
                                                             </label>
-                                                            <input type="text" required class="form-control" v-model="$v.mobNo.$model" :class="{'is-invalid':$v.mobNo.$error}">
+                                                            <input type="text" class="form-control" v-model.lazy="$v.mobNo.$model" :class="{'is-invalid':$v.mobNo.$error}">
                                                              
                                                              <div class="invalid-feedback">
                                                              <div class="error" v-if="!$v.mobNo.numeric">Only numeric allowed</div>
@@ -72,7 +72,7 @@
                                                             <label>
                                                                 Price*
                                                             </label>
-                                                            <input type="number" required class="form-control " v-model="$v.price.$model" :class="{'is-invalid':$v.price.$error}">
+                                                            <input type="number" class="form-control " v-model.lazy="$v.price.$model" :class="{'is-invalid':$v.price.$error}">
                                                             <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.price.required">price is required</div>
                                                              </div>
@@ -81,7 +81,7 @@
                                                             <label>Default Supplier*</label>
                                                             <select2 
                                                                 :options="supplierList"
-                                                                v-model="selectedDefaultSupplier"
+                                                                v-model.lazy="selectedDefaultSupplier"
                                                                 classes="form-control col-md-12"
                                                             ></select2>
                                                         </div>
@@ -94,16 +94,17 @@
                                                             <label for="">
                                                                 Email*
                                                             </label>
-                                                            <input type="email" required class="form-control " :disabled="id!=null" v-model="$v.email.$model" :class="{'is-invalid':$v.email.$error}">
+                                                            <input type="text" class="form-control " :disabled="id!=null" v-model.lazy="$v.email.$model" :class="{'is-invalid':$v.email.$error}">
                                                              <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.email.required">Email is required</div>
+                                                                <div class="error" v-if="!$v.email.email">Invalid Email</div>
                                                              </div>
                                                         </div>
                                                     </div>
                                                     <div v-if="mode=='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Password</label>
-                                                            <input type="password" required class="form-control " v-model="$v.password.$model" :class="{'is-invalid':$v.password.$error}">
+                                                            <input type="password" class="form-control " v-model.lazy="$v.password.$model" :class="{'is-invalid':$v.password.$error}">
                                                              <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.password.required">password is required</div>
                                                                 <div class="error" v-if="!$v.password.minLength">Password must have atleast {{ $v.password.$params.minLength.min}} characters</div>
@@ -113,7 +114,7 @@
                                                     <div v-else class="col-md-6">
                                                         <div class="form-group">
                                                             <label >GSTIN</label>
-                                                            <input type="text" class="form-control " v-model="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
+                                                            <input type="text" class="form-control " v-model.lazy="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
                                                             <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.gst.maxLength">Invalid GST Number</div>               
                                                             <div class="error" v-if="!$v.gst.alphaNum">Only alphaNumeric allowed</div> 
@@ -129,13 +130,13 @@
                                                             <label >
                                                                 GSM
                                                             </label>
-                                                            <input type="number"  class="form-control " v-model="gsm" >
+                                                            <input type="number"  class="form-control " v-model.lazy="gsm" >
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Size</label>
-                                                            <input type="text"  class="form-control " v-model="size" >                                                            
+                                                            <input type="text"  class="form-control " v-model.lazy="size" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -143,13 +144,13 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
-                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                            <textarea name="shortDescription" required v-model.lazy="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Branch*</label>
-                                                            <select class="custom-select form-control" required v-model="branch">
+                                                            <select class="custom-select form-control" required v-model.lazy="branch">
                                                                 <option  v-for="(a,index) in allBranch" :key="index" :value="a.branchId">{{a.branchName}}</option>
                                                             </select>
                                                         </div>
@@ -159,13 +160,13 @@
                                                     <div v-if="mode!='item' && mode!='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
-                                                            <textarea name="shortDescription" v-model="address" rows="4" class="form-control"></textarea>
+                                                            <textarea name="shortDescription" v-model.lazy="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                                     <div v-if="mode=='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Reorder Level*</label>
-                                                            <input type="number" required class="form-control " v-model="reorder" >                                                            
+                                                            <input type="number" required class="form-control " v-model.lazy="reorder" >                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6"></div>
@@ -176,11 +177,11 @@
                                                     <div class="col-md-9 col-4"></div>
                                                     <div class="row col-md-3 col-8" >
                                                         <div>
-                                                            <button style="float:left;" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>
+                                                            <button style="float:left;" class="btn btn-outline-primary " type="submit" @click="goBack()">Cancel</button>
                                                         </div>
                                                         <div>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-if="id==null" @click="details()">Submit</button>
+                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-else @click="details()">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -202,6 +203,7 @@ import axios from 'axios'
 import select2 from '../components/select2Component'
 import vuelidate from '../plugins/vuelidate'
 import {required,minLength,maxLength,alpha,numeric,email,alphaNum} from 'vuelidate/lib/validators'
+import { helpers } from 'vuelidate/lib/validators'
 
 export default {
     components:{
@@ -254,7 +256,7 @@ export default {
     validations: {
     name: {
       required,
-      alpha
+        alpha:helpers.regex('alpha', /^[a-zA-Z\s.]*$/)
      },
      mobNo:{
            required,
@@ -263,8 +265,8 @@ export default {
          minLength:minLength(10)
      },
      email:{
-           required,
-         email
+        required,
+        email
      },
      password:{
          required,
@@ -298,7 +300,6 @@ export default {
         }
     },
     created(){
-        
         if(this.mode=='user'){
             this.getUserDtl();
         }
@@ -318,16 +319,38 @@ export default {
             });
         },
         details(){
-            if($("div .error").is(":visible"))
+            if(this.mode=='customer')
             {
-                Swal.DismissReason.backdrop,
-              Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'There is something wrong',
-                    confirmButtonColor:'#4839eb',
-                    confirmButtonText: 'Ok'
-                    })
+                this.password="sample123",
+                this.price=100
+            }else if(this.mode=='supplier')
+            {
+                this.password="sample123",
+                this.price=100
+            }else if(this.mode=='user')
+            {
+                this.price=100
+            }else if(this.mode=='branch')
+            {
+                this.password="sample123",
+                this.price=100,
+                this.email="sample@gmail.com"
+            }else{  
+                 this.password="sample123",
+                this.mobNo=9166711274,
+                this.email="sample@gmail.com"
+            }
+            this.$v.$touch();
+            if (this.$v.$invalid) { //invalid, becomes true when a validations return false
+                //you have validation error.So do what u want to do here
+                // Swal.DismissReason.backdrop,
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: 'Error!',
+                //     text: 'There is something wrong',
+                //     confirmButtonColor:'#4839eb',
+                //     confirmButtonText: 'Ok'
+                // })
             }
             else
             {
@@ -383,7 +406,26 @@ export default {
                         branchPhoneNo:this.mobNo
                     }).then(response=>{
                         if(response){
-                            Swal.DismissReason.backdrop,
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/item')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:res2[i].itemId,
+                                            fkBranchId:response.data,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+                                    Swal.DismissReason.backdrop,
                         Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -392,6 +434,8 @@ export default {
                                 confirmButtonText: 'Ok'  
                                 })
                             this.$router.push("/branch");
+                                });
+
                         }
                     });
                 }
@@ -428,7 +472,26 @@ export default {
                         fkSupplierEmailId: this.selectedDefaultSupplier
                     }).then(response=>{
                         if(response){
-                           Swal.DismissReason.backdrop,
+                            // console.log(response.data);
+                            axios.get('http://localhost:4000/branch')
+                                .then(res=>{
+                                    let all=res.data;
+                                    return all;
+                                })
+                                .then(res2=>{
+                                    for(let i=0;i<res2.length;i++){
+                                        axios.post('http://localhost:4000/stock',{
+                                            fkItemId:response.data,
+                                            fkBranchId:res2[i].branchId,
+                                            stockQuantity:0
+                                        })
+                                        .then(res3=>{
+                                            // console.log("Done");
+                                        });
+                                    }
+                                })
+                                .then(res3=>{
+                        Swal.DismissReason.backdrop,
                         Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -438,6 +501,8 @@ export default {
                                 })
                             console.log(response);  
                             this.$router.push("/item");
+                                });
+                            
                         }
                     });
                 }
