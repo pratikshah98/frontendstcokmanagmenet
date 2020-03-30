@@ -32,6 +32,9 @@
                                                         <button v-if="mode=='customer'" @click="gotoInvoice()"  class="btn btn-primary">
                                                             <i class="feather icon-file"></i> Generate Invoice
                                                         </button>
+                                                        <button v-if="mode=='customer'" @click="gotoInvoiceList()"  class="btn btn-primary">
+                                                            <i class="feather icon-file"></i> Issued Invoices
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
@@ -146,6 +149,9 @@ export default {
         },
         gotoInvoice(){
             this.$router.push('/invoice/'+this.id);
+        },
+        gotoInvoiceList(){
+            this.$router.push('/invoice/view/'+this.id);
         }
     },
     mounted(){

@@ -35,18 +35,14 @@
                         </ul>
                     </div>
                     <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-language nav-item"><a class="dropdown-toggle nav-link" id="dropdown-flag"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" data-language="en"><i class="flag-icon flag-icon-us"></i> English</a><a class="dropdown-item" data-language="fr"><i class="flag-icon flag-icon-fr"></i> French</a><a class="dropdown-item" data-language="de"><i class="flag-icon flag-icon-de"></i> German</a><a class="dropdown-item" data-language="pt"><i class="flag-icon flag-icon-pt"></i> Portuguese</a></div>
+                        <li class="dropdown dropdown-language nav-item">
+                            <a class="dropdown-toggle nav-link" id="dropdown-flag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language" id="insertBranchName"></span></a> 
+                            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
+                                <!-- <a class="dropdown-item" data-language="pt" v-for="(b,index) in allBranch" @click="setBranch(b.id,b.text)"><i class="flag-icon flag-icon-pt"></i> {{b.text}}</a> -->
+                             </div>
+                    
                         </li>
-                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon feather icon-maximize"></i></a></li>
-                        <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon feather icon-search"></i></a>
-                            <div class="search-input">
-                                <div class="search-input-icon"><i class="feather icon-search primary"></i></div>
-                                <input class="input" type="text" placeholder="Explore Vuexy..." tabindex="-1" data-search="template-list">
-                                <div class="search-input-close"><i class="feather icon-x"></i></div>
-                                <ul class="search-list search-list-main"></ul>
-                            </div>
-                        </li>
+                        
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up">5</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
@@ -99,10 +95,14 @@
                             </ul>
                         </li>
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">John Doe</span><span class="user-status">Available</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
+                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" ><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" ><i class="feather icon-mail"></i> My Inbox</a><a class="dropdown-item" ><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item"><i class="feather icon-message-square"></i> Chats</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" ><i class="feather icon-power"></i> Logout</a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" ><i class="feather icon-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter"><i class="feather icon-mail"></i> Change Password</a>
+                                <a class="dropdown-item" ><i class="feather icon-check-square"></i> Task</a>
+                                <a class="dropdown-item"><i class="feather icon-message-square"></i> Chats</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" @click="logout()" ><i class="feather icon-power"></i> Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -187,6 +187,57 @@
                 <div class="d-flex justify-content-start"><span class="mr-75 feather icon-alert-circle"></span><span>No results found.</span></div>
             </a></li>
     </ul>
+                                            <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalCenterTitle">Vertically Centered</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >Current Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="currPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >New Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="newPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label >Confirm Password*</label>                                                            
+                                                                    <input type="text" required class="form-control " v-model="conPass">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div  class="row">
+                                                            <div class="col-md-10 col-4"></div>
+                                                            <div class="col-md-2 col-8" >
+                                                                <div class="form-group">
+                                                                    <button style="float:right;" class="btn btn-primary" type="button" @click="chngPass()">Change</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-light waves-effect waves-light" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  
     <!-- END: Header-->
 
 
@@ -206,6 +257,13 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class=" nav-item">
+                    <select2
+                            :options="allBranch"
+                            v-model="myBranch"
+                            classes="form-control col-md-12"
+                    ></select2>
+                </li>
+                <li class=" nav-item">
                     <nuxt-link to="/dashboard" class="name-linking" data-i18n="Dashboard"><i class="feather icon-home"></i>Dashboard</nuxt-link>
                     <!-- <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
                         <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
@@ -223,10 +281,10 @@
                     <nuxt-link to="/item" data-i18n="Items"><i class="feather icon-file"></i>Items</nuxt-link>
                 </li>
                 <li class=" nav-item">
-                    <nuxt-link to="/user" data-i18n="User Management"><i class="feather icon-users"></i>User Management</nuxt-link>
+                    <nuxt-link to="/user" data-i18n="User "><i class="feather icon-users"></i>User </nuxt-link>
                 </li>
                 <li class=" nav-item">
-                    <nuxt-link to="/branch" data-i18n="Branch Management"><i class="feather icon-map-pin"></i>Branch Management</nuxt-link>
+                    <nuxt-link to="/branch" data-i18n="Branch "><i class="feather icon-map"></i>Branch </nuxt-link>
                 </li>
                 <li class=" navigation-header">
                     <span>Transaction Modules</span>
@@ -236,6 +294,9 @@
                 </li>
                 <li class=" nav-item">
                     <nuxt-link to="/purchase" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Purchase</nuxt-link>
+                </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/stock" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Stock</nuxt-link>
                 </li>
                 <!-- <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
                     <ul class="menu-content">
@@ -277,8 +338,15 @@
 </template>
 <script>
 import '@/plugins/echarts'
+const crypto = require('crypto')
+import axios from 'axios' 
+import select2 from '@/components/select2Component';
+
 export default {
+    middleware: "authentication",
+
     mounted(){
+
         this.addClasses();
         if(window.innerWidth < 767){
             let d=document.body;
@@ -290,6 +358,32 @@ export default {
             d.classList.add("vertical-menu-modern");
         }	
     },
+    components:{
+    select2
+},
+    data(){
+        return{
+            username:"",
+            currPass:"",
+            newPass:"",
+            conPass:"",
+            allBranch:[],
+            myBranch:"500"
+        }
+    },
+    created(){
+        this.getUserName();
+    },
+    mounted(){
+
+    },
+    watch:{
+        myBranch: function (val) {
+            this.$store.commit('setBranchId', this.myBranch);
+            // console.log("In dashboard= "+this.$store.state.selectedBranchId);
+       }
+    
+    },
     methods:{
         // send(mode){
         //     console.log("gg");
@@ -300,6 +394,89 @@ export default {
         //     else    
         //         this.$router.push('/Items/View');
         // },
+        getUserName(){
+                axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                  .then(res=>{
+                        this.username=res.data[0].userName;
+                        // this.$store.commit('setBranchId', res.data[0].fkBranchId);
+                        this.getBranch(res.data[0].fkBranchId);
+
+                  })
+                  
+              
+        },
+        getBranch(id){
+                axios.get('http://localhost:4000/branch').then(res=>{
+                    const options=[];
+                    
+                    for(let index in res.data){
+                        if(res.data[index].branchId!=id){
+                            // console.log(res.data[index].branchName);
+                            // this.myBranch=res.data[index].branchName;
+                            options.push({
+                                "id": res.data[index].branchId,
+                                "text": res.data[index].branchName
+                            });
+                        //     let a=document.getElementById("insertBranchName");
+                        //     let s=document.createTextNode(this.myBranch);
+                        //     a.appendChild(s);
+                        }
+                        else{
+                            options.unshift({
+                                "id": res.data[index].branchId,
+                                "text": res.data[index].branchName
+                            });
+                        }
+                    }
+                    // console.log(options)
+                    options.push({
+                                "id": 100,
+                                "text": "All"                        
+                    });
+                    return options;
+                })
+                .then(res4=>{
+                this.allBranch=res4;
+                this.myBranch=id;
+                    // console.log(this.itemList);
+            });
+        },
+        chngPass(){
+            axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                  .then(res=>{
+                        if(this.currPass==res.data[0].userPassword){
+                            if(this.newPass==this.conPass){
+                                axios.put("http://localhost:4000/changepassword/",{
+                                    userEmailId:this.$store.state.user,
+                                    userPassword:this.newPass
+                                })
+                                .then(res1=>{
+                                    console.log(res1);
+                                    alert("Password Changed Successfuly");
+                                // window.location.reload();                                    
+                                })
+
+                            }
+                            else{
+                                alert("New Password and Confirm Password should be same");
+                            }
+                        }
+                        else{
+                            alert("Current Password is not correct");
+                        }
+                  });
+        },
+        logout(){
+            try{
+		  		this.$cookies.remove("_sessionId");
+           		window.location='/login'
+               }
+               catch{
+                   this.$cookies.remove("_sessionId");
+           		window.location='/login'
+                   
+			   }
+        },
         addClasses(){
             let d=document.body;
             d.classList.add("vertical-layout");

@@ -179,7 +179,13 @@ export default {
                 description: this.description
             }).then(response=>{
                 if(response.status==200){
-                    alert("Amount due added ! "+response.data.sqlMessage);
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Success!',
+                        text: 'Payment recorded Successfully.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
                     this.fetchDetails();
                 }
             });
