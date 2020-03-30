@@ -34,7 +34,7 @@
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
-                                                            <input type="text" class="form-control " v-model="$v.name.$model" :class="{'is-invalid':$v.name.$error}" required>
+                                                            <input type="text" class="form-control " v-model.lazy="$v.name.$model" :class="{'is-invalid':$v.name.$error}">
                                                             
                                                             <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
@@ -45,7 +45,7 @@
                                                     </div>
                                                     <div v-else class="col-md-4">
                                                         <label for="firstName3">Item Name*</label>
-                                                        <input type="text" required class="form-control " v-model="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
+                                                        <input type="text" class="form-control " v-model.lazy="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
                                                         <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
                                                             <div class="error" v-if="!$v.name.alpha">Only characters allowed</div>
@@ -57,7 +57,7 @@
                                                             <label for="lastName3">
                                                                 Mobile Number*
                                                             </label>
-                                                            <input type="text" required class="form-control" v-model="$v.mobNo.$model" :class="{'is-invalid':$v.mobNo.$error}">
+                                                            <input type="text" class="form-control" v-model.lazy="$v.mobNo.$model" :class="{'is-invalid':$v.mobNo.$error}">
                                                              
                                                              <div class="invalid-feedback">
                                                              <div class="error" v-if="!$v.mobNo.numeric">Only numeric allowed</div>
@@ -72,7 +72,7 @@
                                                             <label>
                                                                 Price*
                                                             </label>
-                                                            <input type="number" required class="form-control " v-model="$v.price.$model" :class="{'is-invalid':$v.price.$error}">
+                                                            <input type="number" class="form-control " v-model.lazy="$v.price.$model" :class="{'is-invalid':$v.price.$error}">
                                                             <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.price.required">price is required</div>
                                                              </div>
@@ -81,7 +81,7 @@
                                                             <label>Default Supplier*</label>
                                                             <select2 
                                                                 :options="supplierList"
-                                                                v-model="selectedDefaultSupplier"
+                                                                v-model.lazy="selectedDefaultSupplier"
                                                                 classes="form-control col-md-12"
                                                             ></select2>
                                                         </div>
@@ -94,7 +94,7 @@
                                                             <label for="">
                                                                 Email*
                                                             </label>
-                                                            <input type="email" required class="form-control " :disabled="id!=null" v-model="$v.email.$model" :class="{'is-invalid':$v.email.$error}">
+                                                            <input type="email" class="form-control " :disabled="id!=null" v-model.lazy="$v.email.$model" :class="{'is-invalid':$v.email.$error}">
                                                              <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.email.required">Email is required</div>
                                                              </div>
@@ -103,7 +103,7 @@
                                                     <div v-if="mode=='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Password</label>
-                                                            <input type="password" required class="form-control " v-model="$v.password.$model" :class="{'is-invalid':$v.password.$error}">
+                                                            <input type="password" class="form-control " v-model.lazy="$v.password.$model" :class="{'is-invalid':$v.password.$error}">
                                                              <div class="invalid-feedback">
                                                                 <div class="error" v-if="!$v.password.required">password is required</div>
                                                                 <div class="error" v-if="!$v.password.minLength">Password must have atleast {{ $v.password.$params.minLength.min}} characters</div>
@@ -113,7 +113,7 @@
                                                     <div v-else class="col-md-6">
                                                         <div class="form-group">
                                                             <label >GSTIN</label>
-                                                            <input type="text" class="form-control " v-model="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
+                                                            <input type="text" class="form-control " v-model.lazy="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
                                                             <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.gst.maxLength">Invalid GST Number</div>               
                                                             <div class="error" v-if="!$v.gst.alphaNum">Only alphaNumeric allowed</div> 
@@ -129,13 +129,13 @@
                                                             <label >
                                                                 GSM
                                                             </label>
-                                                            <input type="number"  class="form-control " v-model="gsm" >
+                                                            <input type="number"  class="form-control " v-model.lazy="gsm" >
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Size</label>
-                                                            <input type="text"  class="form-control " v-model="size" >                                                            
+                                                            <input type="text"  class="form-control " v-model.lazy="size" >                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -143,13 +143,13 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
-                                                            <textarea name="shortDescription" required v-model="address" rows="4" class="form-control"></textarea>
+                                                            <textarea name="shortDescription" required v-model.lazy="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Branch*</label>
-                                                            <select class="custom-select form-control" required v-model="branch">
+                                                            <select class="custom-select form-control" required v-model.lazy="branch">
                                                                 <option  v-for="(a,index) in allBranch" :key="index" :value="a.branchId">{{a.branchName}}</option>
                                                             </select>
                                                         </div>
@@ -159,13 +159,13 @@
                                                     <div v-if="mode!='item' && mode!='user'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Address</label>
-                                                            <textarea name="shortDescription" v-model="address" rows="4" class="form-control"></textarea>
+                                                            <textarea name="shortDescription" v-model.lazy="address" rows="4" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                                     <div v-if="mode=='item'" class="col-md-6">
                                                         <div class="form-group">
                                                             <label >Reorder Level*</label>
-                                                            <input type="number" required class="form-control " v-model="reorder" >                                                            
+                                                            <input type="number" required class="form-control " v-model.lazy="reorder" >                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6"></div>
@@ -318,16 +318,17 @@ export default {
             });
         },
         details(){
-            if($("div .error").is(":visible"))
-            {
-                Swal.DismissReason.backdrop,
-              Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'There is something wrong',
-                    confirmButtonColor:'#4839eb',
-                    confirmButtonText: 'Ok'
-                    })
+            this.$v.$touch();
+            if (this.$v.$invalid) { //invalid, becomes true when a validations return false
+                //you have validation error.So do what u want to do here
+                // Swal.DismissReason.backdrop,
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: 'Error!',
+                //     text: 'There is something wrong',
+                //     confirmButtonColor:'#4839eb',
+                //     confirmButtonText: 'Ok'
+                // })
             }
             else
             {
