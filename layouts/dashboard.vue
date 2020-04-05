@@ -8,7 +8,7 @@
                 <div class="navbar-collapse" id="navbar-mobile">
                     <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
                         <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" @click="openNav()" ><i class="ficon feather icon-menu"></i></a></li>
+                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" @click="openNav()" ><div class="fonticon-wrap"><i class="fa fa-bars"></i></div></a></li>
                         </ul>
                         <ul class="nav navbar-nav bookmark-icons">
                             <!-- li.nav-item.mobile-menu.d-xl-none.mr-auto-->
@@ -250,7 +250,7 @@
                         <h4 class="brand-text mb-0">Vardmaan</h4>
                     </a>
                 </li>
-                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" @click="closeNav()" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+               <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
             </ul>
         </div>
         <div class="shadow-bottom"></div>
@@ -334,11 +334,10 @@
             <nuxt/>                        
     </div>
     <!-- END: Content-->
-
-
 </span>
 </template>
 <script>
+import '@/plugins/echarts'
 const crypto = require('crypto')
 import axios from 'axios' 
 import select2 from '@/components/select2Component';
@@ -357,7 +356,7 @@ export default {
         else{
             let d=document.body;
             d.classList.add("vertical-menu-modern");
-        }
+        }	
     },
     components:{
     select2
@@ -503,17 +502,15 @@ export default {
             let d=document.body;
             d.classList.remove("menu-open");
             d.classList.add("menu-hide");
-            
-
         }
     }
 }
 </script>
+
 <style scoped>
 @media only screen and (max-width: 767px){
     .content{
         margin-left: 0;
      }
 }   
-
 </style>
