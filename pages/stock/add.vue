@@ -282,6 +282,17 @@ watch: {
                            promise2.then((resolve2)=>{
                                if(resolve2=='1'){
                                     let promise3 = new Promise((resolve3,reject3)=>{
+                                        Swal.fire({                     // loading animation
+                                            title: 'Processing Records !',
+                                            text: 'Wait while all records are being processed',
+                                            allowEscapeKey: false,
+                                            allowOutsideClick: false,
+                                            onOpen: () => {
+                                                Swal.showLoading();
+                                            }           
+                                            });
+                                        
+
                                     //for storing csv entries:-
                                         let itemSizeName=[];
                                         let itemRecords=[];
@@ -332,6 +343,7 @@ watch: {
                                             //console.log(itemSizeName);
                                             //console.log(itemRecords);
                                         if(fileRead!=-1){
+                                                    
                                                 let stockUsage=[];
                                                 let j;
                                             for(j=0;j<itemRecords.length;j++){
@@ -348,8 +360,22 @@ watch: {
                                                 resolve3(stockUsage);
                                             }
                                         }
-                                        else
-                                        alert("File Data already Processed and recorded");
+                                        else{
+                                                Swal.DismissReason.backdrop,                    
+                                                Swal.fire({
+                                                    type: 'error',
+                                                    title: 'Oops...',
+                                                    text: 'Records of this file Already recorded!',
+                                                    confirmButtonColor:'red',
+                                                    confirmButtonText: 'Ok',  
+                                                    onOpen: () => {
+                                                        Swal.hideLoading();
+                                                    }
+                                                })
+   
+                                                                             
+                                        }
+                                        // alert("File Data already Processed and recorded");
                                         // return stockUsage;
                                         });
                                         promise3.then((resolve3)=>{
@@ -376,10 +402,39 @@ watch: {
                                                                 }
                                                             }
                                                             if(isErr==stockUsage2.length){
-                                                                alert("All Records Recorded");
+    
+                                                                let totalStock=0;
+                                                                let m;
+                                                                for(m=0;m<stockUsage2.length;m++){
+                                                                    totalStock+=stockUsage2[m].stockQuantity;
+                                                                }
+                                                                if(m==stockUsage2.length){
+                                                                    let dd=new Date();
+                                                                    // d.setHours(d.getHours + 5);
+                                                                    // d.setMinutes(d.getMinutes + 30);
+                                                                    console.log(dd);
+                                                                    axios.post('http://localhost:4000/Sale/',{
+                                                                        // saleId: idTimeStamp,
+                                                                        salesDate:dd,
+                                                                        isInvoiceGenerated: 0,
+                                                                        fkCustomerEmailId:null,
+                                                                        fkSaleTypeId: "4d0666c5-7274-11ea-b720-588a5a24e720",
+                                                                        fkBranchId: this.selectedBranch
+                                                                    }).then(response=>{
+                                                                        if(response){
+                                                                             Swal.fire(
+                                                                                'Recorded !',
+                                                                                'All Records Recorded Successfully.',
+                                                                                'success'
+                                                                            );
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                // alert("All Records Recorded");
                                                             }
                                                             else{
-                                                                alert("Some Error Occured.Please Re upload File");
+                                                                // alert("Some Error Occured.Please Re upload File");
                                                             }
                                                         });    
                                                     // }

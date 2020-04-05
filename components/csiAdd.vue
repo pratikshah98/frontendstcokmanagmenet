@@ -173,15 +173,18 @@
                                             </fieldset>
                                             <fieldset>
                                                 <div  class="row">
-                                                    <div class="col-md-9 col-4"></div>
-                                                    <div class="row col-md-3 col-8" >
-                                                        <div>
-                                                            <button style="float:left;" class="btn btn-outline-primary " type="submit" @click="goBack()">Cancel</button>
-                                                        </div>
-                                                        <div>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-if="id==null" @click="details()">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="submit" v-else @click="details()">Update</button>
-                                                        </div>
+                                                    <div class="col-md-8 col-2"></div>
+                                                    <div class="col-md-4 col-10" >
+                                                        <div class="row form-group">
+                                                            <div class="col-md-2"></div>                                                            
+                                                            <div class="col-md-5 col-6" style="padding-right:0px;">
+                                                                <button style="float:right" class="btn btn-outline-primary " type="submit" @click="goBack()">Cancel</button>                                                            
+                                                            </div> 
+                                                            <div class="col-md-5 col-6">
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
+                                                            </div>    
+                                                        </div>    
                                                     </div>
                                                 </div>
                                             </fieldset>

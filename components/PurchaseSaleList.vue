@@ -1,6 +1,6 @@
 <template>
     <span >
-        <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
+        <button type="button"  v-if="selectedItems.length > 0" class="btn btn-danger" @click="deleteRec('multiple')"><i class="feather icon-trash-2"></i> Delete </button>
 
         <div class="table-responsive">
 
@@ -45,7 +45,7 @@
                             <!-- edit button - yellow color -->
                             <button title="Edit this sale" class="btn btn-warning" @click="updateSale(object.saleId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this sale" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this sale" class="btn btn-danger" @click="deleteRec(object.saleId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                         <td v-else>
                             <!-- view button -->
@@ -55,7 +55,7 @@
                             <!-- edit button - yellow color -->
                             <button title="Edit this purchase" class="btn btn-warning" @click="updatePurchase(object.purchaseId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this purchase" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this purchase" class="btn btn-danger" @click="deleteRec(object.purchaseId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -115,6 +115,72 @@ export default {
         },
         updatePurchase(id){
             this.$router.push('/purchase/edit/'+id);
+        },
+        deleteRec(id){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.value) {
+                    if(id == 'multiple'){
+                        axios.post('http://localhost:4000/'+this.mode+"/deleteMultiple",this.selectedItems)
+                        .then(res=>{
+                            if(res.data.affectedRows){
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Record Deleted Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                            });
+                                            this.getDetails();
+                            }
+                            else{
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Cannot Delete Record!',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
+                            }
+                        });
+                    }
+                    else{
+                        axios.delete('http://localhost:4000/'+this.mode+"/"+id)
+                        .then(res=>{
+                            if(res.data.affectedRows){
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Record Deleted Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                            });
+                                            this.getDetails();
+                            }
+                            else{
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Cannot Delete Record!',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
+                            }
+                        });
+                    }    
+                }
+            })
         },
         getDetails(){
             if(this.mode=="sale")
