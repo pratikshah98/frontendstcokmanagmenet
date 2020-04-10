@@ -28,8 +28,8 @@
     "vue-observe-visibility": "^0.4.6",
     "vue-select2": "^0.2.6",
     "vuejs-datepicker": "^1.6.2",
-    "xlsx": "^0.15.6",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.5",
+    "xlsx": "^0.15.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

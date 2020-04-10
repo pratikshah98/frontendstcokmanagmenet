@@ -1,0 +1,261 @@
+<template>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-left mb-0">Statistics</h2>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="card">
+                            <div class="card-header d-flex flex-column align-items-start pb-0">
+                                <div class="avatar bg-rgba-success p-50 m-0">
+                                    <div class="avatar-content">
+                                        <i class="feather icon-credit-card text-success font-medium-5"></i>
+                                    </div>
+                                </div>
+                                <h2 class="text-bold-700 mt-1">97.5k</h2>
+                                <p class="mb-0">Revenue Generated</p>
+                            </div>
+                            <div class="card-content">
+                                <div id="line-area-chart-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="card">
+                            <div class="card-header d-flex flex-column align-items-start pb-0">
+                                <div class="avatar bg-rgba-danger p-50 m-0">
+                                    <div class="avatar-content">
+                                        <i class="feather icon-shopping-cart text-danger font-medium-5"></i>
+                                    </div>
+                                </div>
+                                <h2 class="text-bold-700 mt-1">36%</h2>
+                                <p class="mb-0">Quarterly Sales</p>
+                            </div>
+                            <div class="card-content">
+                                <div id="line-area-chart-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="card">
+                            <div class="card-header d-flex flex-column align-items-start pb-0">
+                                <div class="avatar bg-rgba-warning p-50 m-0">
+                                    <div class="avatar-content">
+                                        <i class="feather icon-package text-warning font-medium-5"></i>
+                                    </div>
+                                </div>
+                                <h2 class="text-bold-700 mt-1">97.5K</h2>
+                                <p class="mb-0">Orders Received</p>
+                            </div>
+                            <div class="card-content">
+                                <div id="line-area-chart-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="card">
+                            <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
+                                <chart :options="salesPieChartOptions"></chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="card">
+                            <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
+                                <chart :options="salesLineChartOptions"></chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>   
+</template>
+<script>
+import axios from 'axios'
+import '@/plugins/echarts'
+
+ export default {
+    layout:"dashboard",
+    beforeCreate(){
+        const vueInstance = this;
+        axios.get('http://localhost:4000/item')
+        .then(response=>{
+            const items = response.data;
+            const salesLegendData = [];
+            const salesSeriesData = [];
+            for(let index in items){
+                axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId)
+                .then(response=>{
+                    if(response.data.length > 0){
+                        salesLegendData.push(response.data[0].name);
+                        salesSeriesData.push({
+                            name: response.data[0].name,
+                            value: response.data[0].quantity
+                        });
+                    }
+                });
+            }
+            vueInstance.salesPieChartOptions.legend.data = salesLegendData;
+            vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
+        });
+        axios.get('http://localhost:4000/chartreport')
+        .then(response=>{
+            const salesLegendData = [];
+            const salesSeriesData = [];
+            if(response.data.length > 0){
+                for(let index in response.data){
+                    salesLegendData.push(response.data[index].month+ '-20' + response.data[index].year);
+                    salesSeriesData.push({
+                        name: response.data[index].month + '-20' + response.data[index].year,
+                        value: response.data[index].totalSale
+                    });
+                }
+                vueInstance.salesLineChartOptions.xAxis.data = salesLegendData;
+                vueInstance.salesLineChartOptions.series[0].data = salesSeriesData;
+            }
+        });
+
+    },
+    data: () => ({
+        salesLineChartOptions: { 
+            polar: {
+                center: ['50%', '54%']
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            angleAxis: {
+                type: 'value',
+                startAngle: 0
+            },
+            radiusAxis: {
+                min: 0
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: [63, 75, 24, 92]
+                }
+            ],
+            title: {
+                text: 'Last year sales',
+                x: 'center',
+                textStyle: {
+                fontSize: 24
+                }
+            },
+            color: ['#127ac2']
+        },
+        salesPieChartOptions: {
+            //pie chart
+            title : {
+                text: "Item's share in overall sales",
+                // subtext: 'Fictitious',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                // data: ['Direct Interview','E-Mail Marketing','Advertising Alliance','Video Ads','Search Engine']
+                data: null
+            },
+            series : [
+                {
+                    name: 'Access Sources',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data: null,
+                    // data:[
+                    //     {value:335, name:'Direct Interview'},
+                    //     {value:310, name:'E-Mail Marketing'},
+                    //     {value:234, name:'Advertising Alliance'},
+                    //     {value:135, name:'Video Ads'},
+                    //     {value:1548, name:'Search Engine'}
+                    // ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 0,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0)'
+                        }
+                    }
+                }
+            ]
+
+            // line chart
+            // xAxis: {
+            //     data: [
+            //     "Jan",
+            //     "Feb",
+            //     "Mar",
+            //     "Apr",
+            //     "May",
+            //     "Jun",
+            //     "Jul",
+            //     "Aug",
+            //     "Sep",
+            //     "Oct",
+            //     "Nov",
+            //     "Dec"
+            //     ]
+            // },
+            // yAxis: {
+            //     type: "value"
+            // },
+            // series: [
+            //     {
+            //     type: "line",
+            //     data: [55, 72, 84, 48, 59, 62, 87, 75, 94, 101, 127, 118]
+            //     }
+            // ],
+            // title: {
+            //     text: "Monthly Stock Prices",
+            //     x: "center",
+            //     textStyle: {
+            //         fontSize: 24
+            //     }
+            // },
+            // color: ["#127ac2"]
+        }
+    }),
+}
+</script>
+
+<style scoped>
+.chart-wrapper {
+  width: 100%;
+  height: 700px;
+}
+
+.echarts {
+  width: 100%;
+  height: 100%;
+}
+</style>
