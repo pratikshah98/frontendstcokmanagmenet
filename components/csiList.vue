@@ -71,7 +71,7 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Customer"class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this Customer" class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
                             <button title="Delete this Customer" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
                             
