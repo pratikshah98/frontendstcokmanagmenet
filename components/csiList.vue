@@ -3,7 +3,7 @@
             <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
 
         <div class="table-responsive" v-if="showTable==true" id="mytable">
-            <div id="DataTables_Table_4_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <!-- <div id="DataTables_Table_4_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="dt-buttons btn-group">      
                 <button class="btn btn-secondary buttons-copy buttons-html5" ><span>Copy</span></button> 
                 <button class="btn btn-secondary buttons-pdf buttons-html5" ><span>PDF</span></button>
@@ -13,7 +13,7 @@
              <div id="DataTables_Table_4_filter" class="dataTables_filter">
                 <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="DataTables_Table_4">
                 </label>
-             </div>
+             </div> -->
             <table class="table table-striped dataex-html5-selectors dataTable" id="DataTables_Table_4" role="grid" aria-describedby="DataTables_Table_4_info">     
                 <thead>
                     <tr v-if="mode=='user'" >
@@ -71,9 +71,9 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Customer"class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
+                            <button title="Edit this Customer" class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Customer" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Customer" class="btn btn-danger" @click="deleteRec(object.customerEmailId)"><i class="feather icon-trash-2"></i></button>
                             
                         </td>
                     </tr>
@@ -102,7 +102,7 @@
                             <!-- edit button - yellow color -->
                             <button title="Edit this User" class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this User" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this User" class="btn btn-danger" @click="deleteRec(object.userEmailId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -123,7 +123,7 @@
                             <!-- edit button - yellow color -->
                             <button title="Edit this Supplier" class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Supplier" class="btn btn-danger" ><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Supplier" class="btn btn-danger" @click="deleteRec(object.supplierEmailId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -141,7 +141,7 @@
                             <!-- edit button - yellow color -->
                             <button title="Edit this Branch" class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Branch" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Branch" class="btn btn-danger" @click="deleteRec(object.branchId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -161,13 +161,12 @@
                             <button title="Edit this Item" class="btn btn-warning" @click="update(object.itemId)">
                                 <i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Item" class="btn btn-danger"><i class="feather icon-trash-2"></i></button>
+                            <button title="Delete this Item" class="btn btn-danger" @click="deleteRec(object.itemId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             </div>
-        </div>
     </span>            
 </template>
 <script>
@@ -192,14 +191,14 @@ export default {
     },  
     created(){
         this.getDetails();
+        this.getDetails();
+
     },
     mounted(){
-        // if(this.myBranch!=this.$store.state.selectedBranchId){
-        //     this.myBranch=this.$store.state.selectedBranchId;
-        //             this.getDetails();
-        // console.log("csiList= "+this.myBranch); 
-
-        // }
+        
+        // this.$nextTick(() => {
+            
+        // });
     },
     computed:{
         getBranch(){
@@ -211,6 +210,7 @@ export default {
             this.myBranch=val;
             // console.log("csiList= "+this.myBranch); 
             this.getDetails();
+            
         },
      },
     //     myBranch:function (val) {
@@ -245,7 +245,48 @@ export default {
         update(id){
             this.$router.push('/'+this.mode+"/edit/"+id);   
         },
+        deleteRec(id){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.value) {
+                     axios.delete('http://localhost:4000/'+this.mode+"/"+id)
+                    .then(res=>{
+                        if(res.data.affectedRows){
+                            Swal.DismissReason.backdrop,
+                                Swal.fire({
+                                        type: 'success',
+                                        title: 'Success!',
+                                        text: 'Record Deleted Successfully.',
+                                        confirmButtonColor:'#4839eb',
+                                        confirmButtonText: 'Ok'  
+                                        });
+                                        this.getDetails();
+                        }
+                        else{
+                            Swal.DismissReason.backdrop,
+                                Swal.fire({
+                                        type: 'error',
+                                        title: 'Oops...',
+                                        text: 'Cannot Delete Record!',
+                                        confirmButtonColor:'red',
+                                        confirmButtonText: 'Ok'  
+                                        })
+                        }
+                    });
+                }
+            })
+           
+        },
+       
         async getDetails(){
+            
             if(this.mode=='user'){
                 if(this.$store.state.selectedBranchId==100){
                     await axios.get('http://localhost:4000/'+this.mode)
@@ -253,11 +294,8 @@ export default {
                         this.fetchedObjects = response.data;
                     })
                     .then(res1=>{
+
                         this.showTable=true;
-                    })
-                    .then(res2=>{
-                        let d=document.getElementById("mytable");
-                        d.classList.add("table-responsive");
                     });
                 }
                 else{
@@ -270,11 +308,9 @@ export default {
                                         // console.log(this.fetchedObjects);
                                     })
                                     .then(res3=>{
+
+
                                         this.showTable=true;
-                                    })
-                                    .then(res4=>{
-                                        let d=document.getElementById("mytable");
-                                        d.classList.add("table-responsive");
                                     });
                             
                         });
@@ -286,21 +322,7 @@ export default {
                         })
                         .then(res1=>{
                             this.showTable=true;
-                        })
-                        .then(res2=>{
-                            let d=document.getElementById("mytable");
-                            // let d1=document.createElement("DIV");
-                            // d1.classList.add("dataTables_wrapper");
-                            // d1.classList.add("dt-bootstrap4");
-                            // d1.setAttribute("id","DataTables_Table_4_wrapper");
-                            // // let d2=document.createElement("DIV");
-                            // // d2.classList.add()
-                            // let t=document.getElementsByTagName("table");
-                            // t.setAttribute("aria-describedby","DataTables_Table_4_info");
-                            // t.setAttribute("id","DataTables_Table_4");
-                            // d1.appendChild(t); 
-                            d.classList.add("table-responsive");
-                            // d.appendChild(d1);
+
                         });
                     }
                 }        
@@ -313,10 +335,6 @@ export default {
                     })
                     .then(res1=>{
                         this.showTable=true;
-                    })
-                    .then(res2=>{
-                        let d=document.getElementById("mytable");
-                        d.classList.add("table-responsive");
                     });
                 }
                 else{
@@ -330,12 +348,7 @@ export default {
                                     })
                                     .then(res3=>{
                                         this.showTable=true;
-                                    })
-                                    .then(res4=>{
-                                        let d=document.getElementById("mytable");
-                                        d.classList.add("table-responsive");
                                     });
-                            
                         });
                     }
                     else{
@@ -345,21 +358,6 @@ export default {
                         })
                         .then(res1=>{
                             this.showTable=true;
-                        })
-                        .then(res2=>{
-                            let d=document.getElementById("mytable");
-                            // let d1=document.createElement("DIV");
-                            // d1.classList.add("dataTables_wrapper");
-                            // d1.classList.add("dt-bootstrap4");
-                            // d1.setAttribute("id","DataTables_Table_4_wrapper");
-                            // // let d2=document.createElement("DIV");
-                            // // d2.classList.add()
-                            // let t=document.getElementsByTagName("table");
-                            // t.setAttribute("aria-describedby","DataTables_Table_4_info");
-                            // t.setAttribute("id","DataTables_Table_4");
-                            // d1.appendChild(t); 
-                            d.classList.add("table-responsive");
-                            // d.appendChild(d1);
                         });
                     }
                 }
@@ -371,13 +369,52 @@ export default {
                 })
                 .then(res1=>{
                     this.showTable=true;
-                })
-                .then(res2=>{
-                    let d=document.getElementById("mytable");
-                    d.classList.add("table-responsive");
-                });                
+                    this.loadTable();
+                }) 
             }
-        }
+        },
+        loadTable(){
+            if ( $.fn.DataTable.isDataTable('.dataex-html5-selectors') ) {
+                            $('.dataex-html5-selectors').DataTable().destroy();
+                        }
+
+                        // $('.dataex-html5-selectors tbody').empty();
+                        $('.dataex-html5-selectors').DataTable( {
+                        dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: [ 0, ':visible' ]
+                                }
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            },
+                            {
+                                text: 'JSON',
+                                action: function ( e, dt, button, config ) {
+                                    var data = dt.buttons.exportData();
+
+                                    $.fn.dataTable.fileSave(
+                                        new Blob( [ JSON.stringify( data ) ] ),
+                                        'Export.json'
+                                    );
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            }
+                        ]
+                    });
+        }    
+
     }
 }
 </script>

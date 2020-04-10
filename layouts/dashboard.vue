@@ -256,7 +256,7 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class=" nav-item">
+                <li class="nav-item" style="margin-bottom:10px;">
                     <select2
                             :options="allBranch"
                             v-model="myBranch"
@@ -298,19 +298,18 @@
                 <li class=" nav-item">
                     <nuxt-link to="/stock" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Stock</nuxt-link>
                 </li>
-                <!-- <li class=" nav-item"><a href="/sale/"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="Ecommerce">Sales</span></a>
+                <li class=" navigation-header">
+                    <span>Report Modules</span>
+                </li>
+                <li class=" nav-item">
+                   <nuxt-link to="#" data-i18n="Generate Report"><i class="feather icon-file-text"></i><span class="menu-title">Generate Report</span></nuxt-link>
                     <ul class="menu-content">
-                        <li><a><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">Shop</span></a>
+                        <li><nuxt-link to="/purchaseReport" data-i18n="Purchase Report"><i class="feather icon-circle"></i><span class="menu-item" >Purchase Report</span></nuxt-link>
                         </li>
-                        <li><a href="javascript:;" ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Details">Details</span></a>
-                        </li>
-                        <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">Wish List</span></a>
-                        </li>
-                        <li><a ><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Checkout">Checkout</span></a>
-                        </li>
+                        <li><nuxt-link to="/saleReport" data-i18n="Sales Report"><i class="feather icon-circle"></i><span class="menu-item" >Sale Report</span></nuxt-link></li>
                     </ul>
                 </li>
-                <li class=" nav-item"><a href="/purchase/"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="User">Purchase</span></a>
+                <!-- <li class=" nav-item"><a href="/purchase/"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="User">Purchase</span></a>
                     <ul class="menu-content">
                         <li>
                             <a href="javascript:;">
@@ -402,8 +401,6 @@ export default {
                         this.getBranch(res.data[0].fkBranchId);
 
                   })
-                  
-              
         },
         getBranch(id){
                 axios.get('http://localhost:4000/branch').then(res=>{
@@ -452,7 +449,7 @@ export default {
                                 })
                                 .then(res1=>{
                                     console.log(res1);
-                                    alert("Password Changed Successfuly");
+                                    alert("Password Changed Successfully");
                                 // window.location.reload();                                    
                                 })
 
@@ -513,4 +510,14 @@ export default {
         margin-left: 0;
      }
 }   
+a .menu-title::after{
+ content: "\f105";
+    font-family: 'FontAwesome';
+    font-size: 1.1rem;
+    display: inline-block;
+    position: absolute;
+    right: 25px;
+    top: 10px;
+    transform: rotate(0deg);
+    transition: -webkit-transform 0.2s ease-in-out; }
 </style>

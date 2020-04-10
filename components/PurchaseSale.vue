@@ -102,23 +102,29 @@
                                                     <div class="col-md-5"></div>
                                                 </div>
                                                 
-                                                <div class="row col-md-2">
-                                                    <div class="form-group">
+                                                <div class="row" style="margin-top:15px;">
+                                                    <div class="form-group col-md-2">
                                                         <button style="float:right;" class="form-control btn btn-primary" type="button" @click="addItem">
                                                             <i class="feather icon-plus-square"></i>
                                                             Add Item
                                                         </button>
                                                     </div>
+                                                    <div class="col-md-10"></div>
                                                 </div>
                                             </fieldset>
                                             <fieldset>
                                                 <div  class="row">
-                                                    <div class="col-md-9 col-4"></div>
-                                                    <div class="col-md-3 col-8" >
-                                                        <div class="form-group">
-                                                            <button class="btn btn-outline-primary" type="button" @click="goBack">Cancel</button>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="submitDetails">Submit</button>
-                                                            <button style="float:right;" class="btn btn-primary ml-md-1" type="button" v-else @click="updateDetails">Update</button>
+                                                    <div class="col-md-8 col-2"></div>
+                                                    <div class="col-md-4 col-10" >
+                                                        <div class="row form-group">
+                                                            <div class="col-md-2"></div>                                                            
+                                                            <div class="col-md-5 col-6" style="padding-right:0px;">
+                                                                <button style="float:right;" class="btn btn-outline-primary" type="button" @click="goBack">Cancel</button>
+                                                            </div> 
+                                                            <div class="col-md-5 col-6">
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="submitDetails">Submit</button>
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-else @click="updateDetails">Update</button>
+                                                            </div>    
                                                         </div>
                                                     </div>
                                                 </div>
