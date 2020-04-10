@@ -13,7 +13,7 @@ $(document).ready(function() {
     *       js of zero configuration        *
     ****************************************/
 
-    $('.zero-configuration').DataTable();
+    // $('.zero-configuration').DataTable();
 
     /********************************************
      *        js of Order by the grouping        *

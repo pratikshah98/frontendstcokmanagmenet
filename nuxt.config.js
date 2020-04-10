@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const webpack = require("webpack");
 
 module.exports = {
   mode: 'universal',
@@ -30,9 +31,18 @@ module.exports = {
       { rel:"stylesheet" ,href:"/app-assets/css/pages/dashboard-ecommerce.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/pages/card-analytics.css"},
       { rel:"stylesheet" ,href:"/assets/css/style.css"},
-      {rel:"stylesheet" , href:"/app-assets/css/plugins/forms/wizard.min.css"},
+      // {rel:"stylesheet" , href:"/app-assets/css/plugins/forms/wizard.min.css"},
+
+      //for datatable:- 
       { rel:"stylesheet" , href:"/app-assets/vendors/css/tables/datatable/datatables.min.css"},
-        
+
+      // {rel:"stylesheet" , href:"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"},
+      // {rel:"stylesheet" , href:"https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css"},  
+      // {rel:"stylesheet" , href:"https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.bootstrap.min.css"},  
+      // {rel:"stylesheet" , href:"https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css"},  
+
+
+
       //for alert
       {rel:"stylesheet" , href:"/app-assets/vendors/css/animate/animate.css"},
       {rel:"stylesheet" , href:"/app-assets/vendors/css/extensions/sweetalert2.min.css"},
@@ -53,11 +63,15 @@ module.exports = {
 
   script:[
 
-    {
-      src: "https://code.jquery.com/jquery-3.3.1.slim.min.js",
-      type: "text/javascript"
-    },
-    
+    // {
+    //   src: "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+    //   type: "text/javascript"
+    // },
+    // {
+    //   src:
+    //     "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js",
+    //   type: "text/javascript"
+    // },
     {src:"/app-assets/vendors/js/vendors.min.js"},
     {src:"/app-assets/vendors/js/charts/apexcharts.min.js"},
     {src:"/app-assets/js/core/app-menu.js"},
@@ -66,22 +80,31 @@ module.exports = {
     {src:"/app-assets/js/scripts/pages/dashboard-ecommerce.js"},
 
     // for Form
-    {src:"/app-assets/js/scripts/forms/wizard-steps.min.js"},
+    // {src:"/app-assets/js/scripts/forms/wizard-steps.min.js"},
    {src:"/app-assets/vendors/js/extensions/jquery.steps.min.js"},
    {src:"/app-assets/vendors/js/forms/validation/jquery.validate.min.js"},
     //--------------
 
 
     //for datatables
-    { src:"/app-assets/js/scripts/datatables/datatable.js"} ,    
-    {src:"/app-assets/vendors/js/tables/datatable/pdfmake.min.js"},
-    {src:"/app-assets/vendors/js/tables/datatable/vfs_fonts.js"},
+    {src:"https://code.jquery.com/jquery-3.3.1.js"},
+    // { src:"/app-assets/js/scripts/datatables/datatable.js"} ,    
     {src:"/app-assets/vendors/js/tables/datatable/datatables.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/buttons.print.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"},
     {src:"/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"},
+    {src:"/app-assets/vendors/js/tables/datatable/pdfmake.min.js"},
+    {src:"/app-assets/vendors/js/tables/datatable/vfs_fonts.js"},
+    // {src:"https://code.jquery.com/jquery-3.3.1.js"},
+    // {src:"https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"},
+    // {src:"https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"},
+    // {src:"https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"},
+    // {src:"https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"},
+    // {src:"https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"},
+    // {src:"mydatatablejquery.js"},
+
     //---------------
 
     //for alert
@@ -94,7 +117,7 @@ module.exports = {
     //for invoice
     {src:"/app-assets/js/scripts/pages/invoice.js"},
     
-    { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
+    // { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
     { src: '/assets/js/select2.min.js'},
     
     //for validation
@@ -136,6 +159,12 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+  //  vendor: ["jquery", "bootstrap"],
+  //   plugins: [
+  //     new webpack.ProvidePlugin({
+  //       $: "jquery"
+  //     })
+  //   ],
     extend(config, ctx) {
       
     }

@@ -256,7 +256,7 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class=" nav-item">
+                <li class="nav-item" style="margin-bottom:10px;">
                     <select2
                             :options="allBranch"
                             v-model="myBranch"
