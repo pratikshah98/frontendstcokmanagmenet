@@ -80,7 +80,7 @@
                 </tbody>
                 <tbody v-else-if="mode=='stock'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.userEmailId">  {{ index + 1 }}</td>
+                        <td> {{ index + 1 }}</td>
                         <td> {{ object.name }} </td>
                         <td> {{ object.stockQuantity}}</td>
                         <td v-if="$store.state.selectedBranchId==100"> {{ object.branchName }}</td>                                                  

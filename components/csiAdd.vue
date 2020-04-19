@@ -169,7 +169,18 @@
                                                             <input type="number" required class="form-control " v-model.lazy="reorder" >                                                            
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6"></div>
+                                                    <div v-if="mode=='branch'" class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label >GSTIN</label>
+                                                            <input type="text" class="form-control " v-model.lazy="$v.gst.$model" :class="{'is-invalid':$v.gst.$error}">  
+                                                            <div class="invalid-feedback">
+                                                            <div class="error" v-if="!$v.gst.maxLength">Invalid GST Number</div>               
+                                                            <div class="error" v-if="!$v.gst.alphaNum">Only alphaNumeric allowed</div> 
+                                                            <div class="error" v-if="!$v.gst.minLength">GST number must have {{ $v.gst.$params.minLength.min}} characters</div> 
+                                                            </div>                                                       
+                                                        </div>
+                                                    </div>
+                                                    <div v-if="mode!='branch'" class="col-md-6"></div>
                                                 </div>
                                             </fieldset>
                                             <fieldset>
@@ -406,10 +417,11 @@ export default {
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         branchName:this.name,
                         branchAddress:this.address,
-                        branchPhoneNo:this.mobNo
+                        branchPhoneNo:this.mobNo,
+                        gstNumber:this.gst
                     }).then(response=>{
                         if(response){
-                            // console.log(response.data);
+                            // console.log("Branch Added"+response.data);}
                             axios.get('http://localhost:4000/item')
                                 .then(res=>{
                                     let all=res.data;
@@ -560,7 +572,8 @@ export default {
                         branchId:this.id,
                         branchName:this.name,
                         branchAddress:this.address,
-                        branchPhoneNo:this.mobNo
+                        branchPhoneNo:this.mobNo,
+                        gstNumber:this.gst
                     }).then(response=>{
                         if(response){
                            Swal.DismissReason.backdrop,
