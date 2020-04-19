@@ -64,14 +64,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-12 col-12">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
                                 <chart :options="salesPieChartOptions"></chart>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-12">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
                                 <chart :options="salesLineChartOptions"></chart>
@@ -89,7 +91,36 @@ import '@/plugins/echarts'
 
  export default {
     layout:"dashboard",
-    beforeCreate(){
+    methods:{
+        getMonthAndYear(){
+            let i=12;
+            const dt = new Date();
+            dt.setFullYear(dt.getFullYear() - 1);
+            dt.setMonth(dt.getMonth() + 1);
+            const arrayOfObj = [];
+            while(i!=0)
+            {
+                let month;
+                if( (dt.getMonth()+1) < 10)
+                {
+                    month = '0' + (dt.getMonth()+1);
+                }
+                else
+                {
+                    month = (dt.getMonth()+1);
+                }
+                const obj = {
+                    name: month + '-' +  dt.getFullYear(),
+                    value: 0
+                }
+                arrayOfObj.push(obj);
+                dt.setMonth(dt.getMonth()+1);
+                i = i - 1;
+            }
+            return arrayOfObj;
+        }
+    },
+    beforeMount(){
         const vueInstance = this;
         axios.get('http://localhost:4000/item')
         .then(response=>{
@@ -114,14 +145,18 @@ import '@/plugins/echarts'
         axios.get('http://localhost:4000/chartreport')
         .then(response=>{
             const salesLegendData = [];
-            const salesSeriesData = [];
+            const salesSeriesData = this.getMonthAndYear();
+            salesSeriesData.forEach(item=>{
+                console.log(item.name);
+                salesLegendData.push(item.name);
+            });
             if(response.data.length > 0){
                 for(let index in response.data){
-                    salesLegendData.push(response.data[index].month+ '-20' + response.data[index].year);
-                    salesSeriesData.push({
-                        name: response.data[index].month + '-20' + response.data[index].year,
-                        value: response.data[index].totalSale
+                    const object = salesSeriesData.find(obj => {
+                        return obj.name == (response.data[index].month + '-20' + response.data[index].year)
                     });
+                    if(object!=undefined)
+                        object.value =  response.data[index].totalSale;                   
                 }
                 vueInstance.salesLineChartOptions.xAxis.data = salesLegendData;
                 vueInstance.salesLineChartOptions.series[0].data = salesSeriesData;
@@ -156,14 +191,14 @@ import '@/plugins/echarts'
             series: [
                 {
                     type: 'line',
-                    data: [63, 75, 24, 92]
+                    data: null
                 }
             ],
             title: {
-                text: 'Last year sales',
+                text: 'Sales',
                 x: 'center',
                 textStyle: {
-                fontSize: 24
+                    fontSize: 24
                 }
             },
             color: ['#127ac2']
