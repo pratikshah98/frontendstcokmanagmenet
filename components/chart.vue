@@ -64,19 +64,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12 col-12">
+                    <div class="col-lg-4 col-sm-4 col-4">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
                                 <chart :options="salesPieChartOptions"></chart>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-sm-12 col-12">
+                <!-- </div>
+                <div class="row"> -->
+                    <div class="col-lg-8 col-sm-8 col-8">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
-                                <chart :options="salesLineChartOptions"></chart>
+                                <chart :options="salesBarChartOptions"></chart>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ import '@/plugins/echarts'
                 }
                 const obj = {
                     name: month + '-' +  dt.getFullYear(),
-                    value: 0
+                    value: 0,
                 }
                 arrayOfObj.push(obj);
                 dt.setMonth(dt.getMonth()+1);
@@ -147,33 +147,36 @@ import '@/plugins/echarts'
             const salesLegendData = [];
             const salesSeriesData = this.getMonthAndYear();
             salesSeriesData.forEach(item=>{
-                console.log(item.name);
                 salesLegendData.push(item.name);
             });
             if(response.data.length > 0){
+                const colors = ['blue','red','green'];
                 for(let index in response.data){
                     const object = salesSeriesData.find(obj => {
                         return obj.name == (response.data[index].month + '-20' + response.data[index].year)
                     });
-                    if(object!=undefined)
+                    if(object!=undefined){
                         object.value =  response.data[index].totalSale;                   
+                        object.itemStyle = {color: colors[index%3]} ;
+                    }
                 }
-                vueInstance.salesLineChartOptions.xAxis.data = salesLegendData;
-                vueInstance.salesLineChartOptions.series[0].data = salesSeriesData;
+                vueInstance.salesBarChartOptions.xAxis.data = salesLegendData;
+                vueInstance.salesBarChartOptions.series[0].data = salesSeriesData;
             }
         });
 
     },
     data: () => ({
-        salesLineChartOptions: { 
+        salesBarChartOptions: { 
             polar: {
                 center: ['50%', '54%']
             },
             tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross'
-                }
+                trigger: 'item',
+                formatter: "{a} in {b} : {c}"
+                // axisPointer: {
+                //     type: 'cross'
+                // }
             },
             angleAxis: {
                 type: 'value',
@@ -190,7 +193,8 @@ import '@/plugins/echarts'
             },
             series: [
                 {
-                    type: 'line',
+                    name: 'Sales',
+                    type: 'bar',
                     data: null
                 }
             ],
@@ -208,21 +212,26 @@ import '@/plugins/echarts'
             title : {
                 text: "Item's share in overall sales",
                 // subtext: 'Fictitious',
-                x:'center'
+                x:'center',
+                textStyle:{
+                    fontSize: 24
+                }
             },
             tooltip : {
                 trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                // formatter: "{a} <br/>{b} : {c} ({d}%)"
+                formatter: "{b} : {d}%"
             },
             legend: {
                 orient: 'vertical',
                 left: 'left',
+
                 // data: ['Direct Interview','E-Mail Marketing','Advertising Alliance','Video Ads','Search Engine']
                 data: null
             },
             series : [
                 {
-                    name: 'Access Sources',
+                    name: 'Item and its share in sales',
                     type: 'pie',
                     radius : '55%',
                     center: ['50%', '60%'],
@@ -287,6 +296,7 @@ import '@/plugins/echarts'
 .chart-wrapper {
   width: 100%;
   height: 700px;
+  z-index: 11;
 }
 
 .echarts {
