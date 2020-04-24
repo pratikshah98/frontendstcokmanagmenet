@@ -310,6 +310,9 @@
                 <li class=" nav-item">
                     <nuxt-link to="/saleReport" data-i18n="Sales Report"><i class="feather icon-file-text"></i>Sale Report</nuxt-link>
                 </li>
+                <li class=" nav-item">
+                    <nuxt-link to="/creditorReport" data-i18n="Creditor Report"><i class="feather icon-file-text"></i>Creditor Report</nuxt-link>
+                </li>
 
                 <!-- Commented by Maulik -->
                 <!-- <li class=" nav-item">

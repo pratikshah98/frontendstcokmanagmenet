@@ -20,6 +20,7 @@ module.exports = {
       {rel:"stylesheet" , href:"https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" },
       { rel:"stylesheet" ,href:"/app-assets/vendors/css/vendors.min.css"},
       { rel:"stylesheet" ,href:"/app-assets/vendors/css/charts/apexcharts.css"},
+      {rel:"stylesheet" ,href:"/app-assets/vendors/css/pickers/pickadate/pickadate.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/bootstrap.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/bootstrap-extended.css"},
       { rel:"stylesheet" ,href:"/app-assets/css/colors.css"},
@@ -119,7 +120,10 @@ module.exports = {
     
     // { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
     { src: '/assets/js/select2.min.js'},
-    
+    {src:"/app-assets/vendors/js/pickers/pickadate/picker.js"},
+    {src:"/app-assets/vendors/js/pickers/pickadate/picker.date.js"},
+    {src:"/app-assets/vendors/js/pickers/pickadate/picker.time.js"},
+    {src:"/app-assets/vendors/js/pickers/pickadate/legacy.js"},
     //for validation
   //  { src: '/node-modules/vuelidate/dist/vuelidate.min.js' }
   ]
