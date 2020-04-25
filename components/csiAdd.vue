@@ -220,9 +220,17 @@ import {required,minLength,maxLength,alpha,numeric,email,alphaNum} from 'vuelida
 import { helpers } from 'vuelidate/lib/validators'
 
 export default {
+    //middleware not working in component
+    //  middleware ({ store, redirect }) {
+    //     if (store.state.role!='operator') {
+    //         return redirect('/Dashboard');
+    //         console.log("Called");
+    //     }
+    // },
     components:{
         select2
     },
+
     filters: {
         capitalize: function (value) {
             if (!value) return ''
@@ -296,7 +304,14 @@ export default {
          numeric
      }
     },
+    beforeCreate(){
+
+    },
     mounted(){
+                if(this.$store.state.role=='operator'){
+                    this.$router.push("/"+this.mode);
+                }
+        console.log("Role= "+this.$store.state.role);
         if(this.mode=='item')
         {
             const vueInstance = this;
@@ -461,7 +476,7 @@ export default {
                         userPassword:this.password,
                         userAddress:this.address,
                         userPhoneNo:this.mobNo,
-                        fkRoleId:"6edd2ae4-6c35-11ea-92f1-ace2d35545ec",
+                        fkRoleId:null,
                         fkBranchId:this.branch
                     }).then(response=>{
                         if(response){

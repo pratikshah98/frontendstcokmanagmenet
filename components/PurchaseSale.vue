@@ -61,7 +61,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div v-if="$store.state.role!='operator'" class="col-md-3">
                                                         <div class="form-group">
                                                             <label> Branch*</label>
                                                             <select2
@@ -69,6 +69,12 @@
                                                                 v-model="selectedBranch"
                                                                 classes="form-control col-md-12"
                                                             ></select2>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label> Branch*</label>
+                                                            <input type="text" class="form-control" disabled :value="defaultBranch">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -173,7 +179,7 @@ export default {
             selectedCustomerOrSupplier:0,
             selectedBranch:0,
             selectedSaleType:0,
-
+            defaultBranch:"",
             totalItems:1,
             itemsInserted:0,
             selectedDate: new Date(),
@@ -471,6 +477,16 @@ export default {
     },
     beforeMount(){
         
+        if(this.$store.state.role=='operator')
+        {
+            axios.get('http://localhost:4000/branch/'+this.$store.state.selectedBranchId)
+            .then(response=>{
+                if(response){
+                    this.defaultBranch=response.data[0].branchName;
+                    this.selectedBranch=this.$store.state.selectedBranchId;
+                }
+            });
+        }
         if(this.$props.mode=='purchase')
         {
             axios.get('http://localhost:4000/supplier').then(response=>{

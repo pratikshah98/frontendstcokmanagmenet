@@ -144,9 +144,9 @@ export default {
                     // datetime.setMinutes(datetime.getMinutes() + 5)
                     let curr=new Date();
                     let exp=new Date(res.data[0].otpTime);
-                    console.log(curr);
-                    console.log(exp);
-                    console.log(res.data[0].otp);
+                    // console.log(curr);
+                    // console.log(exp);
+                    // console.log(res.data[0].otp);
                     if(res.data[0].otp==0 || curr>exp){
                         // console.log("Expired");
                         axios.get("http://localhost:4000/sendMail/"+this.email)

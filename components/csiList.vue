@@ -1,6 +1,6 @@
 <template>
     <span >
-            <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button>
+            <!-- <button v-if="selectedItems.length > 0" class="btn btn-danger"><i class="feather icon-trash-2"></i> Delete </button> -->
 
         <div class="table-responsive" v-if="showTable==true" id="mytable">
             <!-- <div id="DataTables_Table_4_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -32,7 +32,7 @@
                         <th v-if="$store.state.selectedBranchId==100">Branch</th>
                     </tr>    
                     <tr v-else-if="mode=='customer' || mode=='supplier'" >
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Sr.No</th>
                         <th>Name</th>
                         <th>Mobile No.</th>
@@ -41,14 +41,14 @@
                         <th>Actions</th>
                     </tr>
                     <tr v-else-if="mode=='branch'">
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Sr.No</th>
                         <th>Name</th>
                         <th>Mobile No.</th>
                         <th>Actions</th>
                     </tr>            
                     <tr v-else>
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Sr.No</th>
                         <th>Name</th>
                         <th>Price</th>
@@ -59,7 +59,7 @@
                 
                 <tbody v-if="mode=='customer'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.customerEmailId"></td>
+                        <!-- <td><input type="checkbox" v-model="selectedItems" :value="object.customerEmailId"></td> -->
                         <td>  {{ index + 1 }}</td>
                         <td> {{ object.customerName }} </td>
                         <td> {{ object.customerPhoneNo }}</td>
@@ -71,9 +71,9 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Customer" class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Edit this Customer" class="btn btn-warning" @click="update(object.customerEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Customer" class="btn btn-danger" @click="deleteRec(object.customerEmailId)"><i class="feather icon-trash-2"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Delete this Customer" class="btn btn-danger" @click="deleteRec(object.customerEmailId)"><i class="feather icon-trash-2"></i></button>
                             
                         </td>
                     </tr>
@@ -88,28 +88,30 @@
                 </tbody>
                  <tbody v-else-if="mode=='user'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td> <input type="checkbox" v-model="selectedItems" :value="object.userEmailId">  {{ index + 1 }}</td>
+                        <!-- <td> <input type="checkbox" v-model="selectedItems" :value="object.userEmailId">  {{ index + 1 }}</td> -->
+                        <td> {{ index + 1 }} </td>                        
                         <td> {{ object.userName }} </td>
                         <td> {{ object.userPhoneNo }}</td>
                         <td> {{ object.userEmailId }}</td>
                         <td v-if="$store.state.selectedBranchId==100"> {{ object.branchName }}</td>                                                  
-                        <td> {{ object.roleName }}</td>                                                  
+                        <td v-if="object.fkRoleId==null">Operator </td>
+                        <td v-else>Admin</td>                                                  
                         <td>
                             <!-- view button -->
                             <button title="View this User" @click="viewUser(object.userEmailId)"  class="btn btn-primary ">
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this User" class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Edit this User" class="btn btn-warning"  @click="update(object.userEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this User" class="btn btn-danger" @click="deleteRec(object.userEmailId)"><i class="feather icon-trash-2"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Delete this User" class="btn btn-danger" @click="deleteRec(object.userEmailId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
 
                 <tbody v-else-if="mode=='supplier'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.supplierEmailId"></td>
+                        <!-- <td><input type="checkbox" v-model="selectedItems" :value="object.supplierEmailId"></td> -->
                         <td>{{ index + 1 }}</td>
                         <td> {{ object.supplierName }} </td>
                         <td> {{ object.supplierPhoneNo }}</td>
@@ -121,15 +123,15 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Supplier" class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Edit this Supplier" class="btn btn-warning" @click="update(object.supplierEmailId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Supplier" class="btn btn-danger" @click="deleteRec(object.supplierEmailId)"><i class="feather icon-trash-2"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Delete this Supplier" class="btn btn-danger" @click="deleteRec(object.supplierEmailId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
                 <tbody v-else-if="mode=='branch'" > 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.branchId"></td>
+                        <!-- <td><input type="checkbox" v-model="selectedItems" :value="object.branchId"></td> -->
                         <td>{{ index + 1 }}</td>
                         <td> {{ object.branchName }} </td>
                         <td> {{ object.branchPhoneNo }}</td>                                             
@@ -139,15 +141,15 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Branch" class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Edit this Branch" class="btn btn-warning" @click="update(object.branchId)"><i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Branch" class="btn btn-danger" @click="deleteRec(object.branchId)"><i class="feather icon-trash-2"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Delete this Branch" class="btn btn-danger" @click="deleteRec(object.branchId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
                 <tbody v-else> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td><input type="checkbox" v-model="selectedItems" :value="object.itemId"></td>
+                        <!-- <td><input type="checkbox" v-model="selectedItems" :value="object.itemId"></td> -->
                         <td>  {{ index + 1 }}</td>
                         <td> {{ object.name }} </td>
                         <td> {{ object.minimumRate }}</td>
@@ -158,10 +160,10 @@
                                 <i class="feather icon-list"></i>
                             </button>
                             <!-- edit button - yellow color -->
-                            <button title="Edit this Item" class="btn btn-warning" @click="update(object.itemId)">
+                            <button v-if="$store.state.role!='operator'" title="Edit this Item" class="btn btn-warning" @click="update(object.itemId)">
                                 <i class="feather icon-edit"></i></button>
                             <!-- delete button - red color -->
-                            <button title="Delete this Item" class="btn btn-danger" @click="deleteRec(object.itemId)"><i class="feather icon-trash-2"></i></button>
+                            <button v-if="$store.state.role!='operator'" title="Delete this Item" class="btn btn-danger" @click="deleteRec(object.itemId)"><i class="feather icon-trash-2"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -246,7 +248,8 @@ export default {
             this.$router.push('/'+this.mode+"/edit/"+id);   
         },
         deleteRec(id){
-            Swal.fire({
+            if(this.mode=='branch'){
+                Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
@@ -255,34 +258,72 @@ export default {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
-                if (result.value) {
-                     axios.delete('http://localhost:4000/'+this.mode+"/"+id)
-                    .then(res=>{
-                        if(res.data.affectedRows){
-                            Swal.DismissReason.backdrop,
-                                Swal.fire({
-                                        type: 'success',
-                                        title: 'Success!',
-                                        text: 'Record Deleted Successfully.',
-                                        confirmButtonColor:'#4839eb',
-                                        confirmButtonText: 'Ok'  
-                                        });
-                                        this.getDetails();
-                        }
-                        else{
-                            Swal.DismissReason.backdrop,
-                                Swal.fire({
-                                        type: 'error',
-                                        title: 'Oops...',
-                                        text: 'Cannot Delete Record!',
-                                        confirmButtonColor:'red',
-                                        confirmButtonText: 'Ok'  
-                                        })
-                        }
-                    });
-                }
-            })
-           
+                    if (result.value) {
+                        axios.delete('http://localhost:4000/'+this.mode+"/"+id)
+                        .then(res=>{
+                            if(res.data.affectedRows){
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Record Deleted Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                            });
+                                            this.getDetails();
+                            }
+                            else{
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Cannot Delete Record!',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
+                            }
+                        });
+                    }
+                })
+            }
+            else{
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        axios.delete('http://localhost:4000/'+this.mode+"/"+id)
+                        .then(res=>{
+                            if(res.data.affectedRows){
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'success',
+                                            title: 'Success!',
+                                            text: 'Record Deleted Successfully.',
+                                            confirmButtonColor:'#4839eb',
+                                            confirmButtonText: 'Ok'  
+                                            });
+                                            this.getDetails();
+                            }
+                            else{
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Cannot Delete Record!',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
+                            }
+                        });
+                    }
+                })
+            }           
         },
        
         async getDetails(){

@@ -5,7 +5,8 @@ export const state = () => ({
   isAuth: false,
   biggerScreen: true,
   user:"",
-  selectedBranchId:100
+  selectedBranchId:100,
+  role:""
 
 
 })
@@ -23,6 +24,9 @@ export const mutations = {
   setBranchId: function (state, selectedBranchId) {
     state.selectedBranchId = selectedBranchId
   },
+  setRole: function (state, selectedRole) {
+    state.role = selectedRole
+  },
 }
 
 export const actions = {
@@ -30,6 +34,7 @@ export const actions = {
   nuxtServerInit({ commit }, { app }) {
         let isAuth = false;
         let user=null;
+        let selectedRole="";
         if (app.$cookies.get('_sessionId') != "") {
           try {
               let mykey = crypto.createDecipher('aes-128-ecb', '123');
@@ -38,8 +43,9 @@ export const actions = {
               const session=JSON.parse(cookieVal)
               if(session.userEmail != "")
               {
-                isAuth = true
+                isAuth = true;
                 user = session.userEmail;
+                selectedRole=session.userRole;
               }
           } catch (err) {
             // No valid cookie found
@@ -47,7 +53,7 @@ export const actions = {
         }
         commit('setAuth', isAuth)
         commit('setUser', user);
-
+        commit('setRole',selectedRole);
 
       }
 

@@ -413,6 +413,7 @@ watch: {
                                                                     // d.setHours(d.getHours + 5);
                                                                     // d.setMinutes(d.getMinutes + 30);
                                                                     console.log(dd);
+                                                                    console.log(totalStock);
                                                                     axios.post('http://localhost:4000/Sale/',{
                                                                         // saleId: idTimeStamp,
                                                                         salesDate:dd,

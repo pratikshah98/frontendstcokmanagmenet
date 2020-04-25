@@ -113,7 +113,8 @@ export default {
             }).then(res=>{
                 if(res){
                     let cookieVal={
-                        userEmail:res.data[0].userEmailId
+                        userEmail:res.data[0].userEmailId,
+                        userRole:res.data[0].fkRoleId==null?"operator":"admin"
                     };
                     let mykey = crypto.createCipher('aes-128-ecb','123');
                     let cookieValue=mykey.update(JSON.stringify(cookieVal),'utf8','hex');
@@ -127,7 +128,7 @@ export default {
                 window.location='/dashboard'
             })
             .catch(err=>{
-                alert("Invalid Login Credentials"+err);
+                alert("Invalid Login Username and/or Password");
             });
         }
     }
