@@ -239,7 +239,7 @@ export default {
     },
     watch:{
         flag:function(value){
-            if(value==4)
+            if(value==5)
             {
                 Swal.fire(
                     'Invoice Issued !',
@@ -359,6 +359,12 @@ export default {
                             invoiceDate: new Date(),
                             invoiceName: this.customer.customerEmailId + '_' + this.dateTime +'.pdf'
                         }).then(repsonse=>{
+                            if(response.status==200){
+                                this.flag++;
+                            }
+                        });
+                        axios.put('http://localhost:4000/invoicegenerated/'+this.customer.customerEmailId).
+                        then(response=>{
                             if(response.status==200){
                                 this.flag++;
                             }

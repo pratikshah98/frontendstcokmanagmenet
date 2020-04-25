@@ -2,40 +2,63 @@
     <span>
         <div class="row">
             <div class="col-md-4">
-                    <div class="form-group">
-                     <label >Item Name*</label>
-                      <select class="custom-select form-control" v-model="itemBind" @change="getDetails">
-                      <option  v-for="(a,index) in allItems" :key="index" v-bind:value="a.itemId">{{a.name}}</option>
-                     </select>
-            </div>
-         </div>
-            <div class="col-md-4">
                 <div class="form-group">
-                        <label> Start Date*</label>
-                           <client-only>
-                                <date-picker
-                                    input-class="form-control col-md-12"
-                                    class="datepicker"
-                                    format="d-MM-yyyy"
-                                    v-model="startDate"
-                                ></date-picker>
-                            </client-only>
+                    <label> Start Date*</label>
+                        <client-only>
+                            <date-picker
+                                input-class="form-control col-md-12"
+                                class="datepicker"
+                                format="d-MM-yyyy"
+                                v-model="startDate"
+                            ></date-picker>
+                        </client-only>
                 </div>
             </div>                                                                                                
             <div class="col-md-4">
                 <div class="form-group">
                     <label> End Date*</label>
                         <client-only>
-                        <date-picker
+                          <date-picker
                             input-class="form-control col-md-12"
                             class="datepicker"
                             format="d-MM-yyyy"
                             v-model="selectedDate"
-                        ></date-picker>
+                          ></date-picker>
                         </client-only>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <button class="btn btn-primary" @click="search()" type="submit">
+                         <i class="fa fa-search"></i>
+                          Search
+                    </button>
+                </div>
+            </div>         
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label >Item Name*</label>
+                    <select2-multiple-control :options="getitemData" v-model="itemBind"  />
+                </div>
+            </div>  
+            
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label >Branch Name*</label>
+                    <select2-multiple-control :options="getbranchData" v-model="branchBind"  />
+                </div>
             </div>
+           <div class="col-md-4">
+                <div class="form-group">
+                    <button class="btn btn-primary" @click="getDetails()" type="submit">
+                         <i class="fa fa-repeat"></i>
+                          Reset
+                    </button>
+                </div>
+            </div> 
+        </div>
             <div class="row">
                 <div class="col-md-12 col-12" >
                     <div class="table-responsive">
@@ -45,15 +68,14 @@
                         <th>Item Name</th>
                         <th v-if="mode=='sale'">Sales Quantity</th>
                         <th v-else>Purchase Quantity</th>
-                        <th v-if="$store.state.selectedBranchId==100">Branch</th>
+                        <th>Branch</th>
                     </tr>
                      </thead>
                     <tbody> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        
                         <td >{{ object.name }}</td>
                         <td >{{ object.Quantity }}</td>
-                        <td v-if="$store.state.selectedBranchId==100"> {{ object.branchName }} </td>
+                        <td >{{ object.branchName }}</td>
                     </tr>
                     </tbody>           
              </table>
@@ -66,9 +88,12 @@
 <script>
 import axios from 'axios' 
 import select2 from '../components/select2Component'
+import Select2MultipleControl from 'v-select2-multiple-component'
+
 export default {
      components:{
-        select2
+        select2,
+        Select2MultipleControl
     },
       props: {
         id: {
@@ -86,33 +111,31 @@ export default {
     },
      data(){
         return{
+            getitemData: [],
+            getbranchData: [],
             selectedItems:[],
-            fetchedObjects: null,
-            id:"",
+            fetchedObjects:"",
+            // id:"",
             myBranch:"",
-            itemBind:"",
+            itemBind:[],
+            branchBind:[],
             // startDate: new Date(),
             selectedDate: new Date(),
-             allItems:[]
+             allItems:[],
+             allbranch:[],
+             reportObject:""
         }
     },  
-     computed:{
-        getBranch(){
-            return this.$store.state.selectedBranchId;
+    watch: {
+           
         },
+     computed:{
         startDate(){
             let dt = new Date();
             dt.setMonth(dt.getMonth()-1);
             return dt;
         }
      },
-    watch:{
-        getBranch:function(val){
-            this.myBranch=val;
-            // console.log("csiList= "+this.myBranch); 
-            this.getDetails();
-        }
-     }, 
      created(){
             this.getDetails();        
     },
@@ -131,127 +154,165 @@ export default {
             axios.get('http://localhost:4000/item/')
                 .then(res=>{
                 this.allItems=res.data;
-                });
+                const options=[]
+                for(let index in this.allItems){
+                    options.push({
+                        "id": this.allItems[index].itemId,
+                        "text": this.allItems[index].name
+                    });
+                    //options.push(this.allItems[index].itemId)
+                }
+                this.getitemData= options;
+            });
+            
 
+            axios.get('http://localhost:4000/branch/')
+                .then(res=>{
+                this.allbranch=res.data;
+                const options=[]
+                for(let index in this.allbranch){
+                    options.push({
+                        "id": this.allbranch[index].branchId,
+                        "text": this.allbranch[index].branchName
+                    });
+                    //options.push(this.allItems[index].itemId)
+                }
+                this.getbranchData= options;
+                });
+            
+            this.itemBind=[]
+             this.branchBind=[]
             if(this.mode=="sale")
             {   
-                if(this.$store.state.selectedBranchId==100){
-                    if(this.itemBind==""){
+                axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                .then(response => {
+                    this.fetchedObjects = response.data;
+                    // console.log(this.fetchedObjects);
+                });
+            }
+            else if(this.mode=="purchase")
+            {
+                axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                .then(response => {
+                    this.fetchedObjects = response.data;
+                    // console.log(this.fetchedObjects);
+                });
+            }
+        },
+        search(){
+            if(this.mode=="sale"){
+                if(this.itemBind.length>0 && this.branchBind.length>0)
+                {
                     axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
                     .then(response => {
-                        this.fetchedObjects = response.data;
-                        // console.log(this.fetchedObjects);
+                        this.reportObject = response.data;
+                        this.fetchedObjects = this.reportObject.filter(object=>{    
+                            for(let items of this.itemBind){
+                                if(object.itemId == items){
+                                    return true;
+                                }
+                            }
+
+                            for(let branch of this.branchBind){
+                                if(object.fkBranchId == branch){
+                                    return true;
+                                }
+                            }
+                        });
                     });
-                    }
-                    else{
-                    axios.get('http://localhost:4000/salereportitemdate/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                }
+                else if(this.itemBind.length>0){
+                 axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
                     .then(response => {
-                        this.fetchedObjects = response.data;
-                        // console.log(this.fetchedObjects);
-                    });    
-                    }
+                        this.reportObject = response.data;
+                        this.fetchedObjects = this.reportObject.filter(object=>{    
+                            for(let items of this.itemBind){
+                                if(object.itemId == items){
+                                    return true;
+                                }
+                            }
+                        });
+                    });
+                }
+                else if(this.branchBind.length>0){
+                 axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                    .then(response => {
+                        this.reportObject = response.data;
+                        this.fetchedObjects = this.reportObject.filter(object=>{   
+                            for(let branch of this.branchBind){
+                                if(object.fkBranchId == branch){
+                                    return true;
+                                }
+                            }
+                        });
+                    });
                 }
                 else{
-                    if(this.$store.state.selectedBranchId==""){
-                        if(this.itemBind==""){
-                        axios.get("http://localhost:4000/user/"+this.$store.state.user)
-                        .then(res=>{
-                                    axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+res.data[0].fkBranchId)
-                                    .then(response => {
-                                        this.fetchedObjects = response.data;
-                                        // console.log(this.fetchedObjects);
-
-                                    });
-                        })
-                        }else{
-                            axios.get("http://localhost:4000/user/"+this.$store.state.user)
-                        .then(res=>{
-                                    axios.get('http://localhost:4000/salereportitemdate/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+res.data[0].fkBranchId)
-                                    .then(response => {
-                                        this.fetchedObjects = response.data;
-                                        // console.log(this.fetchedObjects);
-
-                                    });
-                        })
-                        }
-                    }
-                    else{
-                        if(this.itemBind==""){
-                        axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+this.$store.state.selectedBranchId)
-                        .then(response => {
-                            this.fetchedObjects = response.data;
-                            // console.log(this.fetchedObjects);
-
-                        });
-                        }else{
-                        axios.get('http://localhost:4000/salereportitemdate/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+this.$store.state.selectedBranchId)
-                        .then(response => {
-                            this.fetchedObjects = response.data;
-                            // console.log(this.fetchedObjects);
-
-                        });
-                        }
-                    }
+                     axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                .then(response => {
+                    this.fetchedObjects = response.data;
+                    // console.log(this.fetchedObjects);
+                });
                 }
             }
-            else
-            {
-                if(this.$store.state.selectedBranchId==100){
-                     if(this.itemBind==""){
+            else{
+                if(this.itemBind.length>0 && this.branchBind.length>0)
+                {
                     axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
                     .then(response => {
-                        this.fetchedObjects = response.data;
-                    });
-                     }else{
-                          axios.get('http://localhost:4000/purchasereportdateitem/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
-                    .then(response => {
-                        this.fetchedObjects = response.data;
-                    });
-                     }
-                }
-                else{
-                    if(this.$store.state.selectedBranchId==""){
-                        if(this.itemBind==""){
-                        axios.get("http://localhost:4000/user/"+this.$store.state.user)
-                        .then(res=>{
-                                    axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+res.data[0].fkBranchId)
-                                    .then(response => {
-                                        this.fetchedObjects = response.data;
-                                        // console.log(this.fetchedObjects);
+                        this.reportObject = response.data;
+                        this.fetchedObjects = this.reportObject.filter(object=>{    
+                            for(let items of this.itemBind){
+                                if(object.itemId == items){
+                                    return true;
+                                }
+                            }
 
-                                    });
-                        })
-                        }else{
-                           axios.get("http://localhost:4000/user/"+this.$store.state.user)
-                        .then(res=>{
-                                    axios.get('http://localhost:4000/purchasereportdateitem/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+res.data[0].fkBranchId)
-                                    .then(response => {
-                                        this.fetchedObjects = response.data;
-                                        // console.log(this.fetchedObjects);
-
-                                    });
-                        }) 
-                        }
-                    }
-                    else{
-                        if(this.itemBind==""){
-                        axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+this.$store.state.selectedBranchId)
-                        .then(response => {
-                            this.fetchedObjects = response.data;
-                            // console.log(this.fetchedObjects);
-
+                            for(let branch of this.branchBind){
+                                if(object.fkBranchId == branch){
+                                    return true;
+                                }
+                            }
                         });
-                        }else{
-                            axios.get('http://localhost:4000/purchasereportdateitem/'+this.itemBind+'/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate)+'/'+this.$store.state.selectedBranchId)
-                        .then(response => {
-                            this.fetchedObjects = response.data;
-                            // console.log(this.fetchedObjects);
-
-                        });
-                        }
-                    }
+                    });
                 }
-                
+                else if(this.itemBind.length>0){
+                    axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                        .then(response => {
+                            this.reportObject = response.data;
+                            this.fetchedObjects = this.reportObject.filter(object=>{    
+                                 console.log(object.itemId); 
+                                for(let items of this.itemBind){
+                                    console.log(items);
+                                    if(object.itemId == items){
+                                        return true;
+                                    }
+                                }
+                            });
+                        });
+                    }
+                else if(this.branchBind.length>0){
+                    axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                        .then(response => {
+                            this.reportObject = response.data;
+                            this.fetchedObjects = this.reportObject.filter(object=>{   
+                                console.log(object.fkBranchId); 
+                                for(let branch of this.branchBind){
+                                    console.log(branch);
+                                    if(object.fkBranchId == branch){
+                                        return true;
+                                    }
+                                }
+                            });
+                        });
+                  }
+                  else{
+                       axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
+                .then(response => {
+                    this.fetchedObjects = response.data;
+                    // console.log(this.fetchedObjects);
+                });
+                  }        
             }
         }
     }

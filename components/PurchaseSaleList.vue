@@ -95,7 +95,7 @@ export default {
         },
      },
     created(){
-            this.getDetails();        
+        this.getDetails();        
     },
     filters:{
         filterDateFormat(val){
@@ -192,27 +192,22 @@ export default {
                     axios.get('http://localhost:4000/sale')
                     .then(response => {
                         this.fetchedObjects = response.data;
-                        // console.log(this.fetchedObjects);
                     });
                 }
                 else{
                     if(this.$store.state.selectedBranchId==""){
                         axios.get("http://localhost:4000/user/"+this.$store.state.user)
                         .then(res=>{
-                                    axios.get('http://localhost:4000/salebybranchid/'+res.data[0].fkBranchId)
-                                    .then(response => {
-                                        this.fetchedObjects = response.data;
-                                        // console.log(this.fetchedObjects);
-
-                                    });
+                            axios.get('http://localhost:4000/salebybranchid/'+res.data[0].fkBranchId)
+                            .then(response => {
+                                this.fetchedObjects = response.data;
+                            });
                         })
                     }
                     else{
                         axios.get('http://localhost:4000/salebybranchid/'+this.$store.state.selectedBranchId)
                         .then(response => {
                             this.fetchedObjects = response.data;
-                            // console.log(this.fetchedObjects);
-
                         });
                     }
                 }
@@ -226,14 +221,22 @@ export default {
                     });
                 }
                 else{
-                    if(this.$store.state.selectedBranchId!=""){
+                    if(this.$store.state.selectedBranchId==""){
+                        axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                        .then(res=>{
+                            axios.get('http://localhost:4000/purchasebybranchid/'+res.data[0].fkBranchId)
+                            .then(response => {
+                                this.fetchedObjects = response.data;
+                            });
+                        })
+                    }
+                    else{
                         axios.get('http://localhost:4000/purchasebybranchid/'+this.$store.state.selectedBranchId)
                         .then(response => {
                             this.fetchedObjects = response.data;
                         });
                     }
-                }
-                
+                }                
             }
         }
     }
