@@ -56,7 +56,7 @@
                                                         <div class="text-right"><a @click="forget()" class="card-link">Forgot Password?</a></div>
                                                     </div>
                                                     
-                                                    <button type="button" class="btn btn-primary float-right btn-inline" @click="login()">Login</button>
+                                                    <input type="submit" class="btn btn-primary float-right btn-inline" @click="login()" value="Login">
                                                 </form>
                                             </div>
                                         </div>

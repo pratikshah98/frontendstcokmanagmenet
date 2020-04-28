@@ -8,7 +8,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Sr.No</th>
+                        <!-- <th>Sr.No</th> -->
                         <th v-if="mode=='sale'">Customer Name</th>
                         <th v-else>Supplier Name</th>
                         <th>Phone No.</th>
