@@ -34,8 +34,8 @@
                                                             <label v-else-if="mode=='supplier'" for="firstName3">Supplier Name*</label>
                                                             
                                                             <label v-else for="firstName3">Branch Name*</label>                                                            
-                                                            <input type="text" class="form-control " v-model.lazy="$v.name.$model" :class="{'is-invalid':$v.name.$error}">
-                                                            
+                                                            <input type="text" class="form-control " v-model="$v.name.$model" @input="checkName()" :class="{'is-invalid':$v.name.$error}">
+                                                            <div class="error" v-if="nameValid==false">Branch Name Already Exist</div>
                                                             <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
                                                             <div class="error" v-if="!$v.name.alpha">Invalid Name</div>
@@ -45,7 +45,8 @@
                                                     </div>
                                                     <div v-else class="col-md-4">
                                                         <label for="firstName3">Item Name*</label>
-                                                        <input type="text" class="form-control " v-model.lazy="$v.name.$model"  :class="{'is-invalid':$v.name.$error}">
+                                                        <input type="text" class="form-control " v-model="$v.name.$model" @input="checkName()" :class="{'is-invalid':$v.name.$error}">
+                                                            <div class="error" v-if="nameValid==false">Item Name Already Exist</div>
                                                         <div class="invalid-feedback">
                                                             <div class="error" v-if="!$v.name.required">Name is required</div>
                                                             <div class="error" v-if="!$v.name.alpha">Invalid Name</div>
@@ -190,13 +191,14 @@
                                                         <div class="row form-group">
                                                             <div class="col-md-2"></div>                                                            
                                                             <div class="col-md-5 col-6" style="padding-right:0px;">
-                                                                <button style="float:right" class="btn btn-outline-primary " type="submit" @click="goBack()">Cancel</button>                                                            
+                                                                <button style="float:right" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>                                                            
                                                             </div> 
                                                             <div class="col-md-5 col-6">
-                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" :disabled="!nameValid" @click="details()">Submit</button>
                                                                 <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
                                                             </div>    
                                                         </div>    
+                                                        
                                                     </div>
                                                 </div>
                                             </fieldset>
@@ -256,7 +258,6 @@ export default {
         return{
             supplierList:[],
             selectedDefaultSupplier:"",
-
             name:"",
             mobNo:"",
             email:"",
@@ -272,7 +273,8 @@ export default {
             allBranch:[],
             role:"",
             allRole:[],
-            isVisible:""
+            isVisible:"",
+            nameValid:true
         }
     },
     validations: {
@@ -295,6 +297,7 @@ export default {
          minLength:minLength(5)
      },
      gst:{
+        required,
         maxLength:maxLength(15),
         minLength:minLength(15),
         alphaNum
@@ -311,9 +314,10 @@ export default {
                 if(this.$store.state.role=='operator'){
                     this.$router.push("/"+this.mode);
                 }
-        console.log("Role= "+this.$store.state.role);
+        // console.log("Role= "+this.$store.state.role);
         if(this.mode=='item')
-        {
+        {   
+            // console.log("Inside");
             const vueInstance = this;
             axios.get("http://localhost:4000/supplier")
             .then(function(response){
@@ -336,6 +340,11 @@ export default {
             this.getDetails()
         }
     },
+    // watch:{
+    //   name:function(val){
+    //       console.log("Name= "+val);
+    //   }  
+    // },
     methods:{
         getUserDtl(){
             axios.get('http://localhost:4000/branch/')
@@ -450,7 +459,7 @@ export default {
                                             stockQuantity:0
                                         })
                                         .then(res3=>{
-                                            console.log("Done");
+                                            // console.log("Done");
                                         });
                                     }
                                 })
@@ -529,7 +538,7 @@ export default {
                                 confirmButtonColor:'#4839eb',
                                 confirmButtonText: 'Ok'  
                                 })
-                            console.log(response);  
+                            // console.log(response);  
                             this.$router.push("/item");
                                 });
                             
@@ -599,7 +608,7 @@ export default {
                                 confirmButtonColor:'#4839eb',
                                 confirmButtonText: 'Ok'  
                                 })
-                            console.log(response);
+                            // console.log(response);
                             this.$router.push("/branch/"+this.id);
                         }
                     });
@@ -654,7 +663,7 @@ export default {
             }
         },
         getDetails(){
-            console.log(this.mode);
+            // console.log(this.mode);
             if(this.mode=='customer'){
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
@@ -702,17 +711,35 @@ export default {
             else{
                 axios.get('http://localhost:4000/'+this.mode+"/"+this.id)
                 .then(res=>{
-                    let mydata=res.data[0];                    
+                    let mydata=res.data[0];
+                    // console.log(res);                  
                     this.name=mydata.name;
                     this.gsm=mydata.gsm;
                     this.size=mydata.size;
                     this.price=mydata.minimumRate;
                     this.reorder=mydata.reorderLevel;
+                    this.selectedDefaultSupplier=mydata.fkSupplierEmailId;
                 });
             }
         },
         goBack(){
             this.$router.back();
+        },
+        checkName(){
+            if(this.mode=='item' || this.mode=='branch'){
+                // console.log("Inside CheckNAme= "+val);
+                console.log("Inside CheckNAme= "+this.name);
+
+                axios.get('http://localhost:4000/'+this.mode+"/name/"+this.name)
+                .then(res=>{
+                    if(res.data.length>0){
+                            this.nameValid=false;
+                    }
+                    else{
+                        this.nameValid=true;
+                    }
+                });
+            }
         }
     }
 }
