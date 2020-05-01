@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <button class="btn btn-primary" @click="search()" type="submit">
+                    <button class="btn btn-primary" @click="check()" type="submit">
                          <i class="fa fa-search"></i>
                           Search
                     </button>
@@ -119,23 +119,17 @@ export default {
             myBranch:"",
             itemBind:[],
             branchBind:[],
-            // startDate: new Date(),
-            selectedDate: new Date(),
+            startDate: "",
+            selectedDate: "",
              allItems:[],
              allbranch:[],
-             reportObject:""
+             reportObject:"",
+            test:""
         }
     },  
     watch: {
-           
+          
         },
-     computed:{
-        startDate(){
-            let dt = new Date();
-            dt.setMonth(dt.getMonth()-1);
-            return dt;
-        }
-     },
      created(){
             this.getDetails();        
     },
@@ -149,6 +143,24 @@ export default {
     methods:{
         changeDateFormat(dt){
             return dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate();
+        },
+        check(){
+            if(this.startDate > this.selectedDate)
+            {
+                Swal.DismissReason.backdrop,
+                 Swal.fire({
+                     icon: 'error',
+                     title: 'Error!',
+                     text: 'Start Date Cannot be greater than end date',
+                     confirmButtonColor:'#4839eb',
+                     confirmButtonText: 'Ok'
+                 })
+
+                 this.getDetails();
+            }
+            else{
+               this.search()
+            }
         },
         getDetails(){
             axios.get('http://localhost:4000/item/')
@@ -181,7 +193,18 @@ export default {
                 });
             
             this.itemBind=[]
-             this.branchBind=[]
+            this.branchBind=[]
+
+            //if(this.selectedDate==""){
+                this.selectedDate=new Date();
+            //} 
+
+            //if(this.startDate==""){
+                 let dt = new Date();
+                 dt.setMonth(dt.getMonth()-12);
+                this.startDate=dt;
+            //}
+
             if(this.mode=="sale")
             {   
                 axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
@@ -209,15 +232,13 @@ export default {
                         this.fetchedObjects = this.reportObject.filter(object=>{    
                             for(let items of this.itemBind){
                                 if(object.itemId == items){
-                                    return true;
-                                }
-                            }
-
-                            for(let branch of this.branchBind){
+                                     for(let branch of this.branchBind){
                                 if(object.fkBranchId == branch){
                                     return true;
                                 }
+                                }
                             }
+                        }
                         });
                     });
                 }
@@ -250,6 +271,7 @@ export default {
                 else{
                      axios.get('http://localhost:4000/report/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
                 .then(response => {
+                    console.log("called sale");
                     this.fetchedObjects = response.data;
                     // console.log(this.fetchedObjects);
                 });
@@ -309,6 +331,7 @@ export default {
                   else{
                        axios.get('http://localhost:4000/purchasereport/'+this.changeDateFormat(this.startDate)+'/'+this.changeDateFormat(this.selectedDate))
                 .then(response => {
+                    console.log("called purhase");
                     this.fetchedObjects = response.data;
                     // console.log(this.fetchedObjects);
                 });
