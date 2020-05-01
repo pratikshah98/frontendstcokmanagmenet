@@ -67,7 +67,9 @@
                     <div class="col-lg-4 col-sm-4 col-4">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
-                                <chart :options="salesPieChartOptions"></chart>
+                                <client-only>
+                                    <chart :options="salesPieChartOptions"></chart>
+                                </client-only>
                             </div>
                         </div>
                     </div>
@@ -76,7 +78,9 @@
                     <div class="col-lg-8 col-sm-8 col-8">
                         <div class="card">
                             <div id="chartContainer chart-wrapper" style="height: 370px; width: 100%;">
-                                <chart :options="salesBarChartOptions"></chart>
+                                <client-only>
+                                    <chart :options="salesBarChartOptions"></chart>
+                                </client-only>
                             </div>
                         </div>
                     </div>

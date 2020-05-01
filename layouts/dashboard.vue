@@ -10,98 +10,15 @@
                         <ul class="nav navbar-nav">
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" @click="openNav()" ><div class="fonticon-wrap"><i class="fa fa-bars"></i></div></a></li>
                         </ul>
-                        <ul class="nav navbar-nav bookmark-icons">
-                            <!-- li.nav-item.mobile-menu.d-xl-none.mr-auto-->
-                            <!--   a.nav-link.nav-menu-main.menu-toggle.hidden-xs(href='#')-->
-                            <!--     i.ficon.feather.icon-menu-->
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link"  data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link"  data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link"  data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon feather icon-mail"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link"  data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon feather icon-calendar"></i></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon feather icon-star warning"></i></a>
-                                <div class="bookmark-input search-input">
-                                    <div class="bookmark-input-icon"><i class="feather icon-search primary"></i></div>
-                                    <input class="form-control input" type="text" placeholder="Explore Vuexy..." tabindex="0" data-search="template-list">
-                                    <ul class="search-list search-list-bookmark"></ul>
-                                </div>
-                                <!-- select.bookmark-select-->
-                                <!--   option Chat-->
-                                <!--   option email-->
-                                <!--   option todo-->
-                                <!--   option Calendar-->
-                            </li>
-                        </ul>
                     </div>
                     <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-language nav-item">
-                            <a class="dropdown-toggle nav-link" id="dropdown-flag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language" id="insertBranchName"></span></a> 
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
-                                <!-- <a class="dropdown-item" data-language="pt" v-for="(b,index) in allBranch" @click="setBranch(b.id,b.text)"><i class="flag-icon flag-icon-pt"></i> {{b.text}}</a> -->
-                             </div>
-                    
-                        </li>
                         
-                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up">5</span></a>
-                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
-                                <li class="dropdown-menu-header">
-                                    <div class="dropdown-header m-0 p-2">
-                                        <h3 class="white">5 New</h3><span class="notification-title">App Notifications</span>
-                                    </div>
-                                </li>
-                                <li class="scrollable-container media-list"><a class="d-flex justify-content-between" >
-                                        <div class="media d-flex align-items-start">
-                                            <div class="media-left"><i class="feather icon-plus-square font-medium-5 primary"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="primary media-heading">You have new order!</h6><small class="notification-text"> Are your going to meet me tonight?</small>
-                                            </div><small>
-                                                <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">9 hours ago</time></small>
-                                        </div>
-                                    </a><a class="d-flex justify-content-between" >
-                                        <div class="media d-flex align-items-start">
-                                            <div class="media-left"><i class="feather icon-download-cloud font-medium-5 success"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="success media-heading red darken-1">99% Server load</h6><small class="notification-text">You got new order of goods.</small>
-                                            </div><small>
-                                                <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">5 hour ago</time></small>
-                                        </div>
-                                    </a><a class="d-flex justify-content-between" >
-                                        <div class="media d-flex align-items-start">
-                                            <div class="media-left"><i class="feather icon-alert-triangle font-medium-5 danger"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="danger media-heading yellow darken-3">Warning notifixation</h6><small class="notification-text">Server have 99% CPU usage.</small>
-                                            </div><small>
-                                                <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Today</time></small>
-                                        </div>
-                                    </a><a class="d-flex justify-content-between" >
-                                        <div class="media d-flex align-items-start">
-                                            <div class="media-left"><i class="feather icon-check-circle font-medium-5 info"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="info media-heading">Complete the task</h6><small class="notification-text">Cake sesame snaps cupcake</small>
-                                            </div><small>
-                                                <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Last week</time></small>
-                                        </div>
-                                    </a><a class="d-flex justify-content-between" >
-                                        <div class="media d-flex align-items-start">
-                                            <div class="media-left"><i class="feather icon-file font-medium-5 warning"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="warning media-heading">Generate monthly report</h6><small class="notification-text">Chocolate cake oat cake tiramisu marzipan</small>
-                                            </div><small>
-                                                <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Last month</time></small>
-                                        </div>
-                                    </a></li>
-                                <li class="dropdown-menu-footer"><a class="dropdown-item p-1 text-center" >Read all notifications</a></li>
-                            </ul>
-                        </li>
+                        
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" ><i class="feather icon-user"></i> Edit Profile</a>
                                 <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter"><i class="feather icon-mail"></i> Change Password</a>
-                                <a class="dropdown-item" ><i class="feather icon-check-square"></i> Task</a>
-                                <a class="dropdown-item"><i class="feather icon-message-square"></i> Chats</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item" @click="logout()" ><i class="feather icon-power"></i> Logout</a>
                             </div>
                         </li>
@@ -210,7 +127,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label >New Password*</label>                                                            
-                                                                    <input type="text" required class="form-control " v-model="newPass">
+                                                                    <input type="password" required class="form-control " v-model="newPass">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -218,7 +135,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label >Confirm Password*</label>                                                            
-                                                                    <input type="text" required class="form-control " v-model="conPass">
+                                                                    <input type="password" required class="form-control " v-model="conPass">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -232,7 +149,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-light waves-effect waves-light" data-dismiss="modal">Close</button>
+                                                        <button type="button" id="modalClose" class="btn btn-outline-light waves-effect waves-light" data-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -461,23 +378,59 @@ export default {
                   .then(res=>{
                         if(this.currPass==res.data[0].userPassword){
                             if(this.newPass==this.conPass){
-                                axios.put("http://localhost:4000/changepassword/",{
+                                if(this.newPass!=this.currPass){
+                                    axios.put("http://localhost:4000/changepassword/",{
                                     userEmailId:this.$store.state.user,
                                     userPassword:this.newPass
-                                })
-                                .then(res1=>{
-                                    console.log(res1);
-                                    alert("Password Changed Successfully");
-                                // window.location.reload();                                    
-                                })
+                                    })
+                                    .then(res1=>{
+                                        // console.log(res1);
+                                        this.currPass="";
+                                        this.newPass="";
+                                        this.conPass="";
+                                        Swal.DismissReason.backdrop,
+                                        Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success!',
+                                                text: 'Password Changed Successfully.',
+                                                confirmButtonColor:'#4839eb',
+                                                confirmButtonText: 'Ok'  
+                                                })
+                                                $("#modalClose").click();                             
+                                    })
+                                }
+                                else{
+                                    Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Your New Password is Same as your Old Password',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
+                                }
 
                             }
                             else{
-                                alert("New Password and Confirm Password should be same");
+                                Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'New Password and Confirm Password should be same',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
                             }
                         }
                         else{
-                            alert("Current Password is not correct");
+                            Swal.DismissReason.backdrop,
+                                    Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Current Password is not Correct',
+                                            confirmButtonColor:'red',
+                                            confirmButtonText: 'Ok'  
+                                            })
                         }
                   });
         },
