@@ -367,7 +367,8 @@ export default {
                 this.price=100
             }else if(this.mode=='user')
             {
-                this.price=100
+                this.price=100,
+                this.gst="GST123231231201"
             }else if(this.mode=='branch')
             {
                 this.password="sample123",
@@ -376,7 +377,8 @@ export default {
             }else{  
                  this.password="sample123",
                 this.mobNo=9166711274,
-                this.email="sample@gmail.com"
+                this.email="sample@gmail.com",
+                 this.gst="GST123231231201"
             }
             this.$v.$touch();
             if (this.$v.$invalid) { //invalid, becomes true when a validations return false
