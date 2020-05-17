@@ -30,7 +30,8 @@
                                                                 :options="customerOrSupplierList" 
                                                                 v-model="selectedCustomerOrSupplier"
                                                                 classes="form-control col-md-12"
-                                                            ></select2>
+                                                            >
+                                                            </select2>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -84,10 +85,12 @@
                                                         <div class="form-group">
                                                             <label>Item*</label>
                                                             <select2 
-                                                                :options="itemList"
+                                                                :isPassingOptions="true"
                                                                 v-model="insertItemObjects[item-1].fkItemId"
-                                                                classes="form-control col-md-12"
-                                                            ></select2>
+                                                                classes="form-control col-md-12 select2ItemList"
+                                                            >
+                                                                <option v-for="item in itemList" :key="item.id" :disabled="item.isDisabled" :value="item.id">{{item.text}}</option>
+                                                            </select2>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -169,9 +172,24 @@ export default {
             required: false
         }
     },
+    watch:{
+        insertItemObjects(val){
+            for(let i=0;i<this.itemList.length;i++){
+                this.itemList[i].isDisabled = false;
+            }
+           for(let i=0;i<val.length;i++){
+               for(let j=0;j<this.itemList.length;j++){
+                   if(val[i].fkItemId == this.itemList[j].id){
+                       this.itemList[j].isDisabled=true;
+                   }
+               }
+           }
+        }
+    },
     data(){
         return{
             itemList:[],
+            originalItemList:[],
             branchList:[],
             customerOrSupplierList:[],
             saleTypeList:[],
@@ -187,7 +205,8 @@ export default {
             insertItemObjects:[{
                 fkItemId:[],
                 quantity:1
-            }]
+            }],
+            ignore:true
         }
     },
     computed:{
@@ -197,6 +216,16 @@ export default {
         }
     },
     methods:{
+        inputDetected(){
+            if(this.ignore){
+                this.ignore = false;
+            }
+            else{
+                
+
+                this.ignore=true;
+            }
+        },
         getDetails(){
             // console.log("Get details");
             axios.get('http://localhost:4000/'+this.mode+'/'+this.id)
@@ -255,6 +284,18 @@ export default {
         },
         submitDetails(){
             // const idTimeStamp = this.getTimeStamp;
+            for(let i=0;i<this.insertItemObjects.length;i++){
+                if(this.insertItemObjects[i].quantity<1){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Invalid Quantity !',
+                        text: 'It seems one of the item has quantity less than 1. Item cannot have quantity less than 1.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
+                    return;
+                }
+            }
             if(this.mode=='sale')
             {
                 axios.post('http://localhost:4000/Sale/',{
@@ -345,6 +386,18 @@ export default {
             // alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
         },
         updateDetails(){
+            for(let i=0;i<this.insertItemObjects.length;i++){
+                if(this.insertItemObjects[i].quantity<1){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Invalid Quantity !',
+                        text: 'It seems one of the item has quantity less than 1. Item cannot have quantity less than 1.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
+                    return;
+                }
+            }
             if(this.mode=='sale')
             {
                 axios.delete('http://localhost:4000/saleDetail/'+this.id)
@@ -549,9 +602,11 @@ export default {
                 }
                 options.push({
                     "id": response.data[index].itemId,
-                    "text": itemName
+                    "text": itemName,
+                    "isDisabled": false
                 });
             }
+            this.originalItemList=options;
             this.itemList = options;
         });
 

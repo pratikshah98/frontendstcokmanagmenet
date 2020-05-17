@@ -10,7 +10,8 @@ export default {
     props:[
         'options',
         'value',
-        'classes'
+        'classes',
+        'isPassingOptions'
     ],
     mounted(){
         const vm = this;
@@ -29,9 +30,14 @@ export default {
                 .trigger("change");
         },
         options:function(options){
-            $(this.$el)
+            if(this.isPassingOptions){
+                $(this.$el).select2();
+            }
+            else{
+                $(this.$el)
                 .empty()
-                .select2({data: options});
+                .select2({data: options});   
+            }
         }
     },
     destroyed(){

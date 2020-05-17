@@ -13,7 +13,7 @@
         <div class="content-body">
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-lg-4 col-sm-6 col-12">
                         <div class="card">
                             <div class="card-header d-flex flex-column align-items-start pb-0">
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-lg-4 col-sm-4 col-4">
                         <div class="card">
