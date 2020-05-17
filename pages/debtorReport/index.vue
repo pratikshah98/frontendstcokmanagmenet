@@ -4,7 +4,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Creditor Report</h2>
+                            <h2 class="content-header-title float-left mb-0">Debtor Report</h2>
                         </div>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <rView mode="creditor"/>            
+                                        <rView mode="debtor"/>            
                                     </div>    
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
         </div>
 </template>
 <script>
-import rView from "@/components/creditorReport";
+import rView from "@/components/debtorReport";
 export default {
 
     layout:"dashboard",

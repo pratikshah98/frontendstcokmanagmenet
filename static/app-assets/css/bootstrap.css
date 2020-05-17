@@ -1673,6 +1673,7 @@ textarea.form-control {
       margin-bottom: 0; } }
 
 .btn {
+  margin-top: 19px;
   display: inline-block;
   font-weight: 400;
   color: #626262;

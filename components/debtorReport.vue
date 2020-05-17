@@ -1,5 +1,6 @@
 <template>
     <span>
+       
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
@@ -9,15 +10,15 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <button class="btn btn-primary" @click="search()" >
+                    <button class="btn btn-primary mycss" @click="search()">
                          <i class="fa fa-search"></i>
-                          Search By Creditor
+                          Search By Debtor
                     </button>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <button class="btn btn-primary" @click="searchbydate()" >
+                    <button class="btn btn-primary mycss" @click="searchbydate()" >
                          <i class="fa fa-search"></i>
                           Search By Date
                     </button>
@@ -25,7 +26,7 @@
             </div>  
            <div class="col-md-3">
                 <div class="form-group">
-                    <button class="btn btn-primary" @click="getDetails()" >
+                    <button class="btn btn-primary mycss" @click="getDetails()">
                          <i class="fa fa-repeat"></i>
                           Reset
                     </button>
