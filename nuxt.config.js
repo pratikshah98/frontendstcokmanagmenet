@@ -3,7 +3,9 @@ const webpack = require("webpack");
 
 module.exports = {
   mode: 'universal',
-
+  router: {
+    prefetchLinks: false
+  },
   /*
   ** Headers of the page
   */

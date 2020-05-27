@@ -16,7 +16,7 @@
                             <h6 class="mx-0">Cash Sales = {{cashSale}} Rs.</h6>
                         </li>
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
+                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter"><i class="feather icon-mail"></i> Change Password</a>
@@ -184,7 +184,7 @@
                             classes="form-control col-md-12"
                     ></select2>
                 </li>
-                <li class=" nav-item">
+                <li class=" nav-item active">
                     <nuxt-link to="/dashboard" class="name-linking" data-i18n="Dashboard"><i class="feather icon-home"></i>Dashboard</nuxt-link>
                     <!-- <router-link class="text-uppercase name-linking" :to="'/Dashboard'">
                         <i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
@@ -229,7 +229,7 @@
                     <nuxt-link to="/saleReport" data-i18n="Sales Report"><i class="feather icon-file-text"></i>Sale Report</nuxt-link>
                 </li>
                 <li class=" nav-item">
-                    <nuxt-link to="/creditorReport" data-i18n="Creditor Report"><i class="feather icon-file-text"></i>Creditor Report</nuxt-link>
+                    <nuxt-link to="/debtorReport" data-i18n="Debtor Report"><i class="feather icon-file-text"></i>Debtor Report</nuxt-link>
                 </li>
 
                 <!-- Commented by Maulik -->
