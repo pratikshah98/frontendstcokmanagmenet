@@ -210,6 +210,11 @@ export default {
      watch:{
         getBranch:function(val){
             this.myBranch=val;
+            if(this.mode=='user'){
+                if ( $.fn.DataTable.isDataTable('.dataex-html5-selectors') ) {
+                            $('.dataex-html5-selectors').DataTable().destroy();
+                        }
+            }
             // console.log("csiList= "+this.myBranch); 
             this.getDetails();
             
@@ -340,6 +345,9 @@ export default {
                     });
                 }
                 else{
+                    //store by default sets this.$store.state.selectedBranchId to null at start when we start the proj or refresh it
+                    //hence when user will log in then this store will set it to "" at first hence directly getting branch name
+                    //from user table 
                     if(this.$store.state.selectedBranchId==""){
                         await axios.get("http://localhost:4000/user/"+this.$store.state.user)
                         .then(res=>{
@@ -356,6 +364,9 @@ export default {
                             
                         });
                     }
+
+                    //now after login whenever the user will change the branch from select2,then this else condition will
+                    //get executed
                     else{
                         await axios.get('http://localhost:4000/userbybranchid/'+this.$store.state.selectedBranchId)
                         .then(response => {

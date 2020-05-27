@@ -194,7 +194,7 @@
                                                                 <button style="float:right" class="btn btn-outline-primary " type="button" @click="goBack()">Cancel</button>                                                            
                                                             </div> 
                                                             <div class="col-md-5 col-6">
-                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" :disabled="!nameValid" @click="details()">Submit</button>
+                                                                <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-if="id==null" @click="details()">Submit</button>
                                                                 <button style="float:right;"  class="btn btn-primary ml-md-1" type="button" v-else @click="details()">Update</button>
                                                             </div>    
                                                         </div>    
@@ -379,6 +379,8 @@ export default {
                 this.email="sample@gmail.com"
             }
             this.$v.$touch();
+                    console.log("Inside my "+this.mode);
+
             if (this.$v.$invalid) { //invalid, becomes true when a validations return false
                 //you have validation error.So do what u want to do here
                 // Swal.DismissReason.backdrop,
@@ -389,6 +391,8 @@ export default {
                 //     confirmButtonColor:'#4839eb',
                 //     confirmButtonText: 'Ok'
                 // })
+                    console.log("Inside invalid"+this.mode);
+
             }
             else
             {
@@ -502,6 +506,7 @@ export default {
                     });
                 }
                 else{
+                    console.log("Inside Item");
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         name:this.name,
                         gsm:this.gsm,
@@ -728,7 +733,7 @@ export default {
         checkName(){
             if(this.mode=='item' || this.mode=='branch'){
                 // console.log("Inside CheckNAme= "+val);
-                console.log("Inside CheckNAme= "+this.name);
+                // console.log("Inside CheckNAme= "+this.name);
 
                 axios.get('http://localhost:4000/'+this.mode+"/name/"+this.name)
                 .then(res=>{

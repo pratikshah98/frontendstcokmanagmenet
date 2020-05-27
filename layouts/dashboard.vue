@@ -11,9 +11,10 @@
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" @click="openNav()" ><div class="fonticon-wrap"><i class="fa fa-bars"></i></div></a></li>
                         </ul>
                     </div>
-                    <ul class="nav navbar-nav float-right">
-                        
-                        
+                    <ul class="nav navbar-nav "> 
+                        <li class="d-flex align-items-center">
+                            <h6 class="mx-0">Cash Sales = {{cashSale}} Rs.</h6>
+                        </li>
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{username}}</span></div><span><img class="round" src="/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
@@ -301,14 +302,14 @@ export default {
             newPass:"",
             conPass:"",
             allBranch:[],
-            myBranch:"500"
+            myBranch:"500",
+            cashSale:0
         }
     },
     created(){
         this.getUserName();
     },
     mounted(){
-
     },
     watch:{
         myBranch: function (val) {
@@ -334,6 +335,11 @@ export default {
                         this.username=res.data[0].userName;
                         // this.$store.commit('setBranchId', res.data[0].fkBranchId);
                         this.getBranch(res.data[0].fkBranchId);
+                        axios.get('http://localhost:4000/branch/'+res.data[0].fkBranchId)
+                        .then(res1=>{
+                            // console.log(res1.data);
+                            this.cashSale=res1.data[0].cash;
+                        });
 
                   })
         },

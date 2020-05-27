@@ -414,21 +414,28 @@ watch: {
                                                                     // d.setMinutes(d.getMinutes + 30);
                                                                     console.log(dd);
                                                                     console.log(totalStock);
-                                                                    axios.post('http://localhost:4000/Sale/',{
-                                                                        // saleId: idTimeStamp,
-                                                                        salesDate:dd,
-                                                                        isInvoiceGenerated: 0,
-                                                                        fkCustomerEmailId:null,
-                                                                        fkSaleTypeId: "4d0666c5-7274-11ea-b720-588a5a24e720",
-                                                                        fkBranchId: this.selectedBranch
-                                                                    }).then(response=>{
-                                                                        if(response){
-                                                                             Swal.fire(
-                                                                                'Recorded !',
-                                                                                'All Records Recorded Successfully.',
-                                                                                'success'
-                                                                            );
-                                                                        }
+                                                                    axios.post('http://localhost:4000/Sale/cashTally',{
+                                                                        branchId:"a42ed96a-6c24-11ea-83f5-588a5a24e720",
+                                                                        totalSale: totalStock
+                                                                    })
+                                                                    .then(response=>{
+                                                                            axios.post('http://localhost:4000/Sale/',{
+                                                                                // saleId: idTimeStamp,
+                                                                                salesDate:dd,
+                                                                                isInvoiceGenerated: 0,
+                                                                                fkCustomerEmailId:null,
+                                                                                fkSaleTypeId: "4d0666c5-7274-11ea-b720-588a5a24e720",
+                                                                                fkBranchId: this.selectedBranch
+                                                                            }).then(response1=>{
+                                                                                if(response1){
+                                                                                    Swal.fire(
+                                                                                        'Recorded !',
+                                                                                        'All Records Recorded Successfully.',
+                                                                                        'success'
+                                                                                    );
+                                                                                    location.reload();
+                                                                                }
+                                                                            });
                                                                     });
                                                                 }
 
