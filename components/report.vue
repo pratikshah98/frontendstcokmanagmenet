@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label> Start Date*</label>
+                    <label> Start Date<span class="mandatory">*</span></label>
                         <client-only>
                             <date-picker
                                 input-class="form-control col-md-12"
@@ -16,7 +16,7 @@
             </div>                                                                                                
             <div class="col-md-4">
                 <div class="form-group">
-                    <label> End Date*</label>
+                    <label> End Date<span class="mandatory">*</span></label>
                         <client-only>
                           <date-picker
                             input-class="form-control col-md-12"
@@ -39,14 +39,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label >Item Name*</label>
+                    <label>Item Name</label>
                     <select2-multiple-control :options="getitemData" v-model="itemBind"  />
                 </div>
             </div>  
             
             <div class="col-md-4">
                 <div class="form-group">
-                    <label >Branch Name*</label>
+                    <label >Branch Name</label>
                     <select2-multiple-control :options="getbranchData" v-model="branchBind"  />
                 </div>
             </div>
@@ -65,6 +65,7 @@
                     <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
                     <tr>
+                        <th>Sr.No</th>
                         <th>Item Name</th>
                         <th v-if="mode=='sale'">Sales Quantity</th>
                         <th v-else>Purchase Quantity</th>
@@ -73,6 +74,7 @@
                      </thead>
                     <tbody> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td >{{ index + 1 }}</td>
                         <td >{{ object.name }}</td>
                         <td >{{ object.Quantity }}</td>
                         <td >{{ object.branchName }}</td>
@@ -341,3 +343,9 @@ export default {
     }
  }
 </script>
+<style scoped>
+    .mandatory{
+        color: red;
+        font-size: 15px;
+    };
+</style>
