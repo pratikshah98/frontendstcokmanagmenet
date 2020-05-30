@@ -30,7 +30,7 @@
                                                             <div class="row">
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
-                                                                        <label> Date*</label>
+                                                                        <label> Date<span class="mandatory">*</span></label>
                                                                         <client-only>
                                                                             <date-picker
                                                                                 :use-utc=true
@@ -42,11 +42,15 @@
                                                                         </client-only>
                                                                     </div>
                                                                 </div>
-
+                                                                   
                                                                 <div class="col-md-2">
                                                                     <div class="form-group">
-                                                                        <label>Amount Paid*</label>
-                                                                        <input class="form-control" type="number" v-model="amountPaid">
+                                                                        <label>Amount Paid<span class="mandatory">*</span></label>
+                                                                        <input class="form-control" type="number" v-model.lazy="$v.amountPaid.$model" :class="{'is-invalid':$v.amountPaid.$error}" >
+                                                                            <div class="invalid-feedback">
+                                                                                <div class="error" v-if="!$v.amountPaid.minValue">Minimum Amount should be greater than 0 </div>
+                                                                                <div class="error" v-if="!$v.amountPaid.required">Amount cannot be empty</div>
+                                                                            </div>
                                                                     </div>
                                                                 </div>
 
@@ -60,7 +64,7 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label> </label>
-                                                                        <button class="form-control btn btn-primary" type="button" @click="submitDetails">
+                                                                        <button class="form-control btn btn-primary" type="button" @click="submitDetails()">
                                                                             <i class="feather icon-plus"></i>
                                                                             Add Payment
                                                                         </button>
@@ -119,6 +123,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div><span class="mandatory">*</span>Note: Advance payment is quoted as negative amount </div>
                                             </fieldset>
                                         <!-- </form> -->
                                     </div>
@@ -134,6 +139,9 @@
 </template>
 <script>
 import axios from 'axios'
+import vuelidate from '../plugins/vuelidate'
+import { minValue,maxValue,required } from 'vuelidate/lib/validators'
+import { helpers } from 'vuelidate/lib/validators'
 
 export default {
     props: {
@@ -145,10 +153,16 @@ export default {
     data(){
         return{
             selectedDate: new Date(),
-            amountPaid:0,
+            amountPaid:"",
             description:"",
             transactions:[],
             lastTransaction:[]
+        }
+    },
+    validations: {
+    amountPaid: {
+            required,
+            minValue:minValue(1)
         }
     },
     created(){
@@ -166,29 +180,35 @@ export default {
             });
         },
         submitDetails(){
-            let calculatedDue = 0;
-            if(this.lastTransaction!=undefined)
-            {
-                calculatedDue = this.lastTransaction.amountDue - this.amountPaid;
+            this.$v.$touch();
+            if (this.$v.$invalid) {
+                console.log("error");
             }
-            axios.post('http://localhost:4000/amountdue/',{
-                fkCustomerEmailId: this.id,
-                transactionDate: this.selectedDate,
-                amountDue: calculatedDue,
-                amountPaid: this.amountPaid,
-                description: this.description
-            }).then(response=>{
-                if(response.status==200){
-                    Swal.fire({
-                        type: 'success',
-                        title: 'Success!',
-                        text: 'Payment recorded Successfully.',
-                        confirmButtonColor:'#4839eb',
-                        confirmButtonText: 'Ok'  
-                    })
-                    this.fetchDetails();
+            else{
+                let calculatedDue = 0;
+                if(this.lastTransaction!=undefined)
+                {
+                    calculatedDue = this.lastTransaction.amountDue - this.amountPaid;
                 }
-            });
+                axios.post('http://localhost:4000/amountdue/',{
+                    fkCustomerEmailId: this.id,
+                    transactionDate: this.selectedDate,
+                    amountDue: calculatedDue,
+                    amountPaid: this.amountPaid,
+                    description: this.description
+                }).then(response=>{
+                    if(response.status==200 && this.amountPaid!=0){
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Success!',
+                            text: 'Payment recorded Successfully.',
+                            confirmButtonColor:'#4839eb',
+                            confirmButtonText: 'Ok'  
+                        })
+                        this.fetchDetails();
+                    }
+                });
+            }
         },
         gotoCustomer(){
             this.$router.push('/customer/'+this.id);
@@ -218,5 +238,9 @@ export default {
     position: fixed;
     z-index: 2;
 } */
+.mandatory{
+    color: red;
+    font-size: 15px;
+}
 </style>
 

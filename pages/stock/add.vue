@@ -58,7 +58,7 @@
                                         <div class="row">
                                             <div class="col-md-9"></div>
                                             <div class="col-md-3">
-                                                        <button style="float:right;" class="btn btn-primary"  type="submit"><i class="feather icon-plus"></i> Add</button>
+                                                        <button style="float:right;" class="btn btn-primary"  type="button" @click="addUsage()"><i class="feather icon-plus"></i> Add</button>
                                             </div>
                                         </div>
                                     </form>        
@@ -199,14 +199,45 @@ watch: {
     },
     addUsage(){
         if(this.selectedBranch==0 || this.selectedItem==0){
-            alert("Please select Valid Branch and/or Item");
+            Swal.fire({
+                   type: 'error',
+                   title: 'Invalid!',
+                   text: 'It seems you forgot to select a field',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })      
+        }
+        else if(this.stock == ""){
+            Swal.fire({
+                   type: 'error',
+                   title: 'Invalid quantity!',
+                   text: 'Quantity cannot be empty',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })
+        }
+        else if(this.stock <= 0){
+            console.log(this.stock);
+            Swal.fire({
+                   type: 'error',
+                   title: 'Invalid quantity!',
+                   text: 'Quantity should be greater than 0',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })
         }
         else{
             axios.post('http://localhost:4000/stock/managestock/'+this.selectedItem+"/"+this.selectedBranch,{
                         stockQuantity:this.stock
             })
             .then(res1=>{
-                alert("Usage Recorded");
+                Swal.fire({
+                    type: 'success',
+                    title: 'Success!',
+                    text: 'Usage recorded Successfully.',
+                    confirmButtonColor:'#4839eb',
+                    confirmButtonText: 'Ok'  
+                })
                 this.selectedBranch="";
                 this.selectedItem="";
                 this.stock=0;

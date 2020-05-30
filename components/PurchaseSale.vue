@@ -50,7 +50,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div v-if="mode=='purchase'" class="col-md-2"></div>
+                                                    <div v-if="mode=='purchase'" class="col-md-0"></div>
                                                     <div v-else class="col-md-2">
                                                         <div class="form-group">
                                                             <label> Sale Type*</label>
@@ -285,6 +285,16 @@ export default {
         submitDetails(){
             // const idTimeStamp = this.getTimeStamp;
             for(let i=0;i<this.insertItemObjects.length;i++){
+                 if(this.insertItemObjects[i].fkItemId=="" || this.insertItemObjects[i].fkItemId==[] || this.insertItemObjects[i].fkItemId==0 || this.insertItemObjects[i].fkItemId==null || this.insertItemObjects[i].fkItemId==undefined){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'No Item selected !',
+                        text: 'It seems like you have not selected an item.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
+                    return;
+                 }
                 if(this.insertItemObjects[i].quantity<1){
                     Swal.fire({
                         type: 'error',
@@ -296,7 +306,19 @@ export default {
                     return;
                 }
             }
-            if(this.mode=='sale')
+
+            if(this.selectedCustomerOrSupplier==0 || this.selectedSaleType==0 || this.selectedBranch==0) 
+            {
+                Swal.fire({
+                   type: 'error',
+                   title: 'Invalid!',
+                   text: 'It seems you forgot to select a field',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })                         
+            }else
+            {
+                if(this.mode=='sale')
             {
                 axios.post('http://localhost:4000/Sale/',{
                     // saleId: idTimeStamp,
@@ -313,7 +335,8 @@ export default {
                                 fkSaleId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
                                 saleQuantity: this.insertItemObjects[index].quantity,
-                                creditRate:0
+                                creditRate:0,
+                                branchId:this.selectedBranch
                             }).then(response=>{
                                 // console.log(response);
                                 if(response.status==200){
@@ -354,7 +377,8 @@ export default {
                             axios.post('http://localhost:4000/purchaseDetail/',{
                                 fkPurchaseId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
-                                purchaseQuantity: this.insertItemObjects[index].quantity
+                                purchaseQuantity: this.insertItemObjects[index].quantity,
+                                branchId:this.selectedBranch
                             }).then(response=>{
                                 // console.log(response);
                                 if(response.status==200){
@@ -383,6 +407,7 @@ export default {
                 });
             }
 
+            }
             // alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
         },
         updateDetails(){

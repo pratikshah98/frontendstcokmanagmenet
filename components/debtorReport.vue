@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label >Customer Name*</label>
+                    <label >Customer Name</label>
                     <select2 class="custom-select form-control"  :options="getData" v-model="selectedCustomer" />
                 </div>
             </div>
@@ -38,7 +38,8 @@
                     <div class="table-responsive">
                     <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
-                    <tr>
+                    <tr> 
+                        <th>Sr.No</th>
                         <th>Customer Name</th>
                         <th >Customer EmailID</th>
                         <th >Customer PhoneNo</th>
@@ -48,6 +49,7 @@
                      </thead>
                     <tbody> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
+                        <td >{{ index + 1 }}</td>
                         <td >{{ object.customerName }}</td>
                         <td >{{ object.customerEmailId }}</td>
                         <td >{{ object.customerPhoneNo }}</td>
@@ -150,3 +152,9 @@ export default {
     }
  }
 </script>
+<style scoped>
+    .mandatory{
+        color: red;
+        font-size: 15px;
+    };
+</style>
