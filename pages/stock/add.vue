@@ -403,20 +403,20 @@ watch: {
                                                             }
                                                             if(isErr==stockUsage2.length){
     
-                                                                let totalStock=0;
-                                                                let m;
-                                                                for(m=0;m<stockUsage2.length;m++){
-                                                                    totalStock+=stockUsage2[m].stockQuantity;
-                                                                }
-                                                                if(m==stockUsage2.length){
+                                                                // let totalStock=0;
+                                                                // let m;
+                                                                // for(m=0;m<stockUsage2.length;m++){
+                                                                //     totalStock+=stockUsage2[m].stockQuantity;
+                                                                // }
+                                                                // if(m==stockUsage2.length){
                                                                     let dd=new Date();
                                                                     // d.setHours(d.getHours + 5);
                                                                     // d.setMinutes(d.getMinutes + 30);
-                                                                    console.log(dd);
-                                                                    console.log(totalStock);
+                                                                    // console.log(dd);
+                                                                    // console.log(totalStock);
                                                                     axios.post('http://localhost:4000/Sale/cashTally',{
-                                                                        branchId:"a42ed96a-6c24-11ea-83f5-588a5a24e720",
-                                                                        totalSale: totalStock
+                                                                        branchId:this.selectedBranch,
+                                                                        stockUsage: stockUsage2
                                                                     })
                                                                     .then(response=>{
                                                                             axios.post('http://localhost:4000/Sale/',{
@@ -437,7 +437,7 @@ watch: {
                                                                                 }
                                                                             });
                                                                     });
-                                                                }
+                                                                // }
 
                                                                 // alert("All Records Recorded");
                                                             }
