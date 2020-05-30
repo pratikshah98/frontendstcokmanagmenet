@@ -74,7 +74,7 @@
                                                                         <td v-else> {{ item.size }} </td>
                                                                         <td> {{ item.totalquantity }} </td>
                                                                         <td> 
-                                                                            <input class="form-control col-md-3" type="number" min=0 step=0.1 v-model="creditRate[index]">
+                                                                            <input class="form-control col-md-5" type="number" min=0 step=0.1 v-model="creditRate[index]">
                                                                         </td>
                                                                         <td> <span style="float:right;">{{ amount[index] = item.totalquantity * creditRate[index] | round }} </span></td>
                                                                     </tr>
@@ -90,10 +90,11 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                            <button style="float:right;" class="btn btn-primary" type="button" @click="previewInvoice">Preview Invoice</button>
+                                                            <button style="float:right;" class="btn btn-primary" type="button" @click="previewInvoice()">Preview Invoice</button>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div><span class="mandatory">*</span>Note: Advance payment is quoted as negative amount </div>
                                             </fieldset>
                                         <!-- </form> -->
                                     </div>
@@ -106,7 +107,7 @@
                     </div>
                 </section>
                 <!-- Form wizard with step validation section end -->
-
+                
             </div>
         </div>
 
@@ -166,8 +167,20 @@ export default {
             return total.reduce(function(total, num){ return total + num }, 0);
         },
         previewInvoice(){
-            this.viewInvoice = true;
-            window.scrollTo(0,0);   // move to top of page
+            for(let i=0;i<this.creditRate.length;i++){
+                if(this.creditRate[i]<=0){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Invalid CreditRate!',
+                        text: 'It seems item(s) creditRate is less than 1. CreditRate cannot be less than 1.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
+                    return;
+                }
+            }
+                this.viewInvoice = true;
+                window.scrollTo(0,0);   // move to top of page
         },
         gotoCustomer(){
             this.$router.push('/customer/'+this.id);
@@ -196,5 +209,11 @@ export default {
     }
 }
 </script>
+<style scoped>
+.mandatory{
+    color: red;
+    font-size: 15px;
+}
+</style>
 
 

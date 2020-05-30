@@ -762,5 +762,5 @@ export default {
 .mandatory{
     color: red;
     font-size: 15px;
-};
+}
 </style>
