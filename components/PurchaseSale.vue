@@ -306,7 +306,19 @@ export default {
                     return;
                 }
             }
-            if(this.mode=='sale')
+
+            if(this.selectedCustomerOrSupplier==0 || this.selectedSaleType==0 || this.selectedBranch==0) 
+            {
+                Swal.fire({
+                   type: 'error',
+                   title: 'Invalid!',
+                   text: 'It seems you forgot to select a field',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })                         
+            }else
+            {
+                if(this.mode=='sale')
             {
                 axios.post('http://localhost:4000/Sale/',{
                     // saleId: idTimeStamp,
@@ -395,6 +407,7 @@ export default {
                 });
             }
 
+            }
             // alert("Customer: "+this.selectedCustomerOrSupplier +"\nSelected date : " + this.selectedDate + "\nSelected branch : " + this.selectedBranch + "\nSelected sale type : " + this.selectedSaleType);
         },
         updateDetails(){
