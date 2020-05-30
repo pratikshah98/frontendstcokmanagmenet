@@ -50,7 +50,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div v-if="mode=='purchase'" class="col-md-2"></div>
+                                                    <div v-if="mode=='purchase'" class="col-md-0"></div>
                                                     <div v-else class="col-md-2">
                                                         <div class="form-group">
                                                             <label> Sale Type*</label>
@@ -285,6 +285,16 @@ export default {
         submitDetails(){
             // const idTimeStamp = this.getTimeStamp;
             for(let i=0;i<this.insertItemObjects.length;i++){
+                 if(this.insertItemObjects[i].fkItemId=="" || this.insertItemObjects[i].fkItemId==[] || this.insertItemObjects[i].fkItemId==0 || this.insertItemObjects[i].fkItemId==null || this.insertItemObjects[i].fkItemId==undefined){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'No Item selected !',
+                        text: 'It seems like you have not selected an item.',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })
+                    return;
+                 }
                 if(this.insertItemObjects[i].quantity<1){
                     Swal.fire({
                         type: 'error',
