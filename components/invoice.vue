@@ -172,7 +172,7 @@ export default {
                     Swal.fire({
                         type: 'error',
                         title: 'Invalid CreditRate!',
-                        text: 'It seems item(s) creditRate is less than 1. CreditRate cannot be less than 1.',
+                        text: 'It seems an item(s) creditRate is invalid. CreditRate cannot be 0 or less than 0.',
                         confirmButtonColor:'#4839eb',
                         confirmButtonText: 'Ok'  
                     })
