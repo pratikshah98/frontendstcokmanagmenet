@@ -335,7 +335,8 @@ export default {
                                 fkSaleId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
                                 saleQuantity: this.insertItemObjects[index].quantity,
-                                creditRate:0
+                                creditRate:0,
+                                branchId:this.selectedBranch
                             }).then(response=>{
                                 // console.log(response);
                                 if(response.status==200){
@@ -376,7 +377,8 @@ export default {
                             axios.post('http://localhost:4000/purchaseDetail/',{
                                 fkPurchaseId: response.data,
                                 fkItemId: this.insertItemObjects[index].fkItemId,
-                                purchaseQuantity: this.insertItemObjects[index].quantity
+                                purchaseQuantity: this.insertItemObjects[index].quantity,
+                                branchId:this.selectedBranch
                             }).then(response=>{
                                 // console.log(response);
                                 if(response.status==200){
