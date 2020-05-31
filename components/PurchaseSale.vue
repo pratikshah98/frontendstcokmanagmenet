@@ -306,8 +306,7 @@ export default {
                     return;
                 }
             }
-
-            if(this.selectedCustomerOrSupplier==0 || this.selectedSaleType==0 || this.selectedBranch==0) 
+            if(this.selectedCustomerOrSupplier==0 ||  this.selectedBranch==0) 
             {
                 Swal.fire({
                    type: 'error',
@@ -320,6 +319,15 @@ export default {
             {
                 if(this.mode=='sale')
             {
+                if(this.selectedSaleType==0){
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Invalid!',
+                        text: 'It seems you forgot to select Sale type',
+                        confirmButtonColor:'#4839eb',
+                        confirmButtonText: 'Ok'  
+                    })        
+                }
                 axios.post('http://localhost:4000/Sale/',{
                     // saleId: idTimeStamp,
                     salesDate: this.selectedDate,
