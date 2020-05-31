@@ -124,51 +124,97 @@ import '@/plugins/echarts'
             return arrayOfObj;
         }
     },
-    beforeMount(){
-        const vueInstance = this;
-        axios.get('http://localhost:4000/item')
-        .then(response=>{
-            const items = response.data;
-            const salesLegendData = [];
-            const salesSeriesData = [];
-            for(let index in items){
-                axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId)
-                .then(response=>{
-                    if(response.data.length > 0){
-                        salesLegendData.push(response.data[0].name);
-                        salesSeriesData.push({
-                            name: response.data[0].name,
-                            value: response.data[0].quantity
-                        });
-                    }
-                });
-            }
-            vueInstance.salesPieChartOptions.legend.data = salesLegendData;
-            vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
-        });
-        axios.get('http://localhost:4000/chartreport')
-        .then(response=>{
-            const salesLegendData = [];
-            const salesSeriesData = this.getMonthAndYear();
-            salesSeriesData.forEach(item=>{
-                salesLegendData.push(item.name);
-            });
-            if(response.data.length > 0){
-                const colors = ['blue','red','green'];
-                for(let index in response.data){
-                    const object = salesSeriesData.find(obj => {
-                        return obj.name == (response.data[index].month + '-20' + response.data[index].year)
+    created:function(){
+        if(this.$store.state.selectedBranchId==100){
+            const vueInstance = this;
+            axios.get('http://localhost:4000/item')
+            .then(response=>{
+                const items = response.data;
+                const salesLegendData = [];
+                const salesSeriesData = [];
+                for(let index in items){
+                    axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId)
+                    .then(response=>{
+                        if(response.data.length > 0){
+                            salesLegendData.push(response.data[0].name);
+                            salesSeriesData.push({
+                                name: response.data[0].name,
+                                value: response.data[0].quantity
+                            });
+                        }
                     });
-                    if(object!=undefined){
-                        object.value =  response.data[index].totalSale;                   
-                        object.itemStyle = {color: colors[index%3]} ;
-                    }
                 }
-                vueInstance.salesBarChartOptions.xAxis.data = salesLegendData;
-                vueInstance.salesBarChartOptions.series[0].data = salesSeriesData;
-            }
-        });
-
+                vueInstance.salesPieChartOptions.legend.data = salesLegendData;
+                vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
+            });
+            axios.get('http://localhost:4000/chartreport')
+            .then(response=>{
+                const salesLegendData = [];
+                const salesSeriesData = this.getMonthAndYear();
+                salesSeriesData.forEach(item=>{
+                    salesLegendData.push(item.name);
+                });
+                if(response.data.length > 0){
+                    const colors = ['blue','red','green'];
+                    for(let index in response.data){
+                        const object = salesSeriesData.find(obj => {
+                            return obj.name == (response.data[index].month + '-20' + response.data[index].year)
+                        });
+                        if(object!=undefined){
+                            object.value =  response.data[index].totalSale;                   
+                            object.itemStyle = {color: colors[index%3]} ;
+                        }
+                    }
+                    vueInstance.salesBarChartOptions.xAxis.data = salesLegendData;
+                    vueInstance.salesBarChartOptions.series[0].data = salesSeriesData;
+                }
+            });
+        }
+        else{
+            const vueInstance = this;
+            axios.get('http://localhost:4000/item')
+            .then(response=>{
+                const items = response.data;
+                const salesLegendData = [];
+                const salesSeriesData = [];
+                for(let index in items){
+                    axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId+'/'+this.$store.state.selectedBranchId)
+                    .then(response=>{
+                        if(response.data.length > 0){
+                            salesLegendData.push(response.data[0].name);
+                            salesSeriesData.push({
+                                name: response.data[0].name,
+                                value: response.data[0].quantity
+                            });
+                        }
+                    });
+                }
+                vueInstance.salesPieChartOptions.legend.data = salesLegendData;
+                vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
+            });
+            axios.get('http://localhost:4000/chartreport/'+this.$store.state.selectedBranchId)
+            .then(response=>{
+                const salesLegendData = [];
+                const salesSeriesData = this.getMonthAndYear();
+                salesSeriesData.forEach(item=>{
+                    salesLegendData.push(item.name);
+                });
+                if(response.data.length > 0){
+                    const colors = ['blue','red','green'];
+                    for(let index in response.data){
+                        const object = salesSeriesData.find(obj => {
+                            return obj.name == (response.data[index].month + '-20' + response.data[index].year)
+                        });
+                        if(object!=undefined){
+                            object.value =  response.data[index].totalSale;                   
+                            object.itemStyle = {color: colors[index%3]} ;
+                        }
+                    }
+                    vueInstance.salesBarChartOptions.xAxis.data = salesLegendData;
+                    vueInstance.salesBarChartOptions.series[0].data = salesSeriesData;
+                }
+            });
+        }
     },
     data: () => ({
         salesBarChartOptions: { 
@@ -248,7 +294,7 @@ import '@/plugins/echarts'
                 }
             ]
         }
-    }),
+    })
 }
 </script>
 

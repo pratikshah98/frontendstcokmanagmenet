@@ -225,6 +225,16 @@ export default {
             }
         },
         search(){
+            if(this.itemBind.length==0 && this.branchBind.length==0){
+                Swal.fire({
+                   type: 'error',
+                   title: 'Invalid!',
+                   text: 'It seems you forgot to set a filter field',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })      
+              return;
+            }
             if(this.mode=="sale"){
                 if(this.itemBind.length>0 && this.branchBind.length>0)
                 {

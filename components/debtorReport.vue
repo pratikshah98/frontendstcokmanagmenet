@@ -131,7 +131,9 @@ export default {
                 });
         },
         searchbydate(){
-            
+            if(this.selectedCustomer!=null){
+                this.selectedCustomer=null
+            }
              this.val=true;
                 axios.get('http://localhost:4000/creditorwithlastpaydate/')
                     .then(response => {
@@ -140,7 +142,19 @@ export default {
                     });
         },
         search(){
-            if(this.selectedCustomer!=null){
+            console.log(this.selectedCustomer);
+            if(this.selectedCustomer==null || this.selectedCustomer==""){
+                 Swal.fire({
+                   type: 'error',
+                   title: 'Invalid!',
+                   text: 'It seems you forgot to set the filter field',
+                   confirmButtonColor:'#4839eb',
+                   confirmButtonText: 'Ok'  
+              })      
+              return;
+            }
+            else
+            {
                  this.val=true;
                  axios.get('http://localhost:4000/creditorwithlastpaydate/'+this.selectedCustomer)
                     .then(response => {
