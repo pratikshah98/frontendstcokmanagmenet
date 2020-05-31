@@ -319,7 +319,7 @@ export default {
             }else
             {
                 if(this.mode=='sale')
-            {
+                 {
                 axios.post('http://localhost:4000/Sale/',{
                     // saleId: idTimeStamp,
                     salesDate: this.selectedDate,
