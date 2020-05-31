@@ -95,6 +95,17 @@ import '@/plugins/echarts'
 
  export default {
     layout:"dashboard",
+    computed:{
+        getBranch(){
+            return this.$store.state.selectedBranchId;
+        }
+    },
+    watch:{
+        getBranch:function(val){
+            // let a=val;
+            this.getDetails();
+        }    
+     },
     methods:{
         getMonthAndYear(){
             let i=12;
@@ -122,9 +133,8 @@ import '@/plugins/echarts'
                 i = i - 1;
             }
             return arrayOfObj;
-        }
-    },
-    created:function(){
+        },
+        getDetails(){
         if(this.$store.state.selectedBranchId==100){
             const vueInstance = this;
             axios.get('http://localhost:4000/item')
@@ -171,27 +181,55 @@ import '@/plugins/echarts'
             });
         }
         else{
-            const vueInstance = this;
-            axios.get('http://localhost:4000/item')
-            .then(response=>{
-                const items = response.data;
-                const salesLegendData = [];
-                const salesSeriesData = [];
-                for(let index in items){
-                    axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId+'/'+this.$store.state.selectedBranchId)
+                                const vueInstance = this;
+            if(this.$store.state.selectedBranchId==""){
+                axios.get("http://localhost:4000/user/"+this.$store.state.user)
+                .then(myres=>{
+                    axios.get('http://localhost:4000/item')
                     .then(response=>{
-                        if(response.data.length > 0){
-                            salesLegendData.push(response.data[0].name);
-                            salesSeriesData.push({
-                                name: response.data[0].name,
-                                value: response.data[0].quantity
+                        const items = response.data;
+                        const salesLegendData = [];
+                        const salesSeriesData = [];
+                        for(let index in items){
+                            axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId+'/'+myres.data[0].fkBranchId)
+                            .then(response=>{
+                                if(response.data.length > 0){
+                                    salesLegendData.push(response.data[0].name);
+                                    salesSeriesData.push({
+                                        name: response.data[0].name,
+                                        value: response.data[0].quantity
+                                    });
+                                }
                             });
                         }
+                        vueInstance.salesPieChartOptions.legend.data = salesLegendData;
+                        vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
                     });
-                }
-                vueInstance.salesPieChartOptions.legend.data = salesLegendData;
-                vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
-            });
+                });
+            }
+            
+            else{
+                axios.get('http://localhost:4000/item')
+                    .then(response=>{
+                        const items = response.data;
+                        const salesLegendData = [];
+                        const salesSeriesData = [];
+                        for(let index in items){
+                            axios.get('http://localhost:4000/salereportbymonth/'+items[index].itemId+'/'+this.$store.state.selectedBranchId)
+                            .then(response=>{
+                                if(response.data.length > 0){
+                                    salesLegendData.push(response.data[0].name);
+                                    salesSeriesData.push({
+                                        name: response.data[0].name,
+                                        value: response.data[0].quantity
+                                    });
+                                }
+                            });
+                        }
+                        vueInstance.salesPieChartOptions.legend.data = salesLegendData;
+                        vueInstance.salesPieChartOptions.series[0].data = salesSeriesData;
+                    });
+            }
             axios.get('http://localhost:4000/chartreport/'+this.$store.state.selectedBranchId)
             .then(response=>{
                 const salesLegendData = [];
@@ -215,6 +253,7 @@ import '@/plugins/echarts'
                 }
             });
         }
+    }
     },
     data: () => ({
         salesBarChartOptions: { 
@@ -295,7 +334,7 @@ import '@/plugins/echarts'
             ]
         }
     })
-}
+ }
 </script>
 
 <style scoped>
