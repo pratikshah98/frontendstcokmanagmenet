@@ -328,38 +328,36 @@ export default {
     },
     submitDetails() {
       // const idTimeStamp = this.getTimeStamp;
-       for (let i = 0; i < this.insertItemObjects.length; i++)
-       {
-            if (
-            this.insertItemObjects[i].fkItemId == "" ||
-            this.insertItemObjects[i].fkItemId == [] ||
-            this.insertItemObjects[i].fkItemId == 0 ||
-            this.insertItemObjects[i].fkItemId == null ||
-            this.insertItemObjects[i].fkItemId == undefined) 
-            {
-                        Swal.fire({
-                            type: "error",
-                            title: "No Item selected !",
-                            text: "It seems like you have not selected an item.",
-                            confirmButtonColor: "#4839eb",
-                            confirmButtonText: "Ok"
-                        });
-                        return;
-           }
-            if (this.insertItemObjects[i].quantity < 1) {
-            Swal.fire({
-                type: "error",
-                title: "Invalid Quantity !",
-                text:
-                "It seems one of the item has quantity less than 1. Item cannot have quantity less than 1.",
-                confirmButtonColor: "#4839eb",
-                confirmButtonText: "Ok"
-            });
-            return;
-            }
+      for (let i = 0; i < this.insertItemObjects.length; i++) {
+        if (
+          this.insertItemObjects[i].fkItemId == "" ||
+          this.insertItemObjects[i].fkItemId == [] ||
+          this.insertItemObjects[i].fkItemId == 0 ||
+          this.insertItemObjects[i].fkItemId == null ||
+          this.insertItemObjects[i].fkItemId == undefined
+        ) {
+          Swal.fire({
+            type: "error",
+            title: "No Item selected !",
+            text: "It seems like you have not selected an item.",
+            confirmButtonColor: "#4839eb",
+            confirmButtonText: "Ok"
+          });
+          return;
+        }
+        if (this.insertItemObjects[i].quantity < 1) {
+          Swal.fire({
+            type: "error",
+            title: "Invalid Quantity !",
+            text:
+              "It seems one of the item has quantity less than 1. Item cannot have quantity less than 1.",
+            confirmButtonColor: "#4839eb",
+            confirmButtonText: "Ok"
+          });
+          return;
+        }
       }
-      if (this.selectedCustomerOrSupplier == 0 || this.selectedBranch == 0) 
-      {
+      if (this.selectedCustomerOrSupplier == 0 || this.selectedBranch == 0) {
         Swal.fire({
           type: "error",
           title: "Invalid!",
@@ -390,7 +388,7 @@ export default {
             fkBranchId: this.selectedBranch
           })
           .then(response => {
-            // console.log(response.data);
+            console.log(response.data);
             if (response.status == 200) {
               for (let index in this.insertItemObjects) {
                 axios
@@ -405,6 +403,7 @@ export default {
                     // console.log(response);
                     if (response.status == 200) {
                       this.itemsInserted++;
+                      console.log(response);
                       if (this.itemsInserted == this.totalItems) {
                         Swal.fire({
                           type: "success",
@@ -475,6 +474,22 @@ export default {
     },
     updateDetails() {
       for (let i = 0; i < this.insertItemObjects.length; i++) {
+        if (
+          this.insertItemObjects[i].fkItemId == "" ||
+          this.insertItemObjects[i].fkItemId == [] ||
+          this.insertItemObjects[i].fkItemId == 0 ||
+          this.insertItemObjects[i].fkItemId == null ||
+          this.insertItemObjects[i].fkItemId == undefined
+        ) {
+          Swal.fire({
+            type: "error",
+            title: "No Item selected !",
+            text: "It seems like you have not selected an item.",
+            confirmButtonColor: "#4839eb",
+            confirmButtonText: "Ok"
+          });
+          return;
+        }
         if (this.insertItemObjects[i].quantity < 1) {
           Swal.fire({
             type: "error",
@@ -487,7 +502,27 @@ export default {
           return;
         }
       }
+      if (this.selectedCustomerOrSupplier == 0 || this.selectedBranch == 0) {
+        Swal.fire({
+          type: "error",
+          title: "Invalid!",
+          text: "It seems you forgot to select a field",
+          confirmButtonColor: "#4839eb",
+          confirmButtonText: "Ok"
+        });
+        return;
+      }
       if (this.mode == "sale") {
+        if (this.selectedSaleType == 0) {
+          Swal.fire({
+            type: "error",
+            title: "Invalid!",
+            text: "It seems you forgot to select Sale type",
+            confirmButtonColor: "#4839eb",
+            confirmButtonText: "Ok"
+          });
+          return;
+        }
         axios
           .delete("http://localhost:4000/saleDetail/" + this.id)
           .then(response => {
@@ -499,7 +534,8 @@ export default {
                     fkSaleId: this.id,
                     fkItemId: this.insertItemObjects[index].fkItemId,
                     saleQuantity: this.insertItemObjects[index].quantity,
-                    creditRate: 0
+                    creditRate: 0,
+                    branchId: this.selectedBranch
                   })
                   .then(response => {
                     // console.log(response);
@@ -552,7 +588,8 @@ export default {
                   .post("http://localhost:4000/purchaseDetail/", {
                     fkPurchaseId: this.id,
                     fkItemId: this.insertItemObjects[index].fkItemId,
-                    purchaseQuantity: this.insertItemObjects[index].quantity
+                    purchaseQuantity: this.insertItemObjects[index].quantity,
+                    branchId: this.selectedBranch
                   })
                   .then(response => {
                     // console.log(response);
