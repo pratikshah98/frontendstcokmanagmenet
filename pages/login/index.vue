@@ -72,7 +72,7 @@
                           </div>
 
                           <input
-                            type="button"
+                            type="submit"
                             class="btn btn-primary float-right btn-inline"
                             @click="login()"
                             value="Login"

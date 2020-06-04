@@ -386,7 +386,7 @@ watch: {
                                                         maxDate:itemRecords[j].maxDate
                                                     });
                                             }
-                                            //console.log(stockUsage);
+                                            console.log(stockUsage);
                                             if(j==itemRecords.length){
                                                 resolve3(stockUsage);
                                             }
