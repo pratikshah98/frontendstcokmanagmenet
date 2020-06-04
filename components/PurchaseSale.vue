@@ -51,17 +51,18 @@
                         </div>
                       </div>
 
-                      <div v-if="mode=='purchase'" class="col-md-0"></div>
+                      <!-- <div v-if="mode=='purchase'" class="col-md-0"></div>
                       <div v-else class="col-md-2">
                         <div class="form-group">
                           <label>Sale Type*</label>
                           <select2
                             :options="saleTypeList"
+                            readonly
                             v-model="selectedSaleType"
                             classes="form-control col-md-12"
                           ></select2>
                         </div>
-                      </div>
+                      </div>-->
 
                       <div v-if="$store.state.role!='operator'" class="col-md-3">
                         <div class="form-group">
@@ -234,7 +235,7 @@ export default {
 
       selectedCustomerOrSupplier: 0,
       selectedBranch: 0,
-      selectedSaleType: 0,
+      selectedSaleType: "0040a784-6b5d-11ea-a8c8-ace2d3e54b8b",
       defaultBranch: "",
       totalItems: 1,
       itemsInserted: 0,
@@ -396,8 +397,8 @@ export default {
                     fkSaleId: response.data,
                     fkItemId: this.insertItemObjects[index].fkItemId,
                     saleQuantity: this.insertItemObjects[index].quantity,
-                    creditRate: 0,
-                    branchId: this.selectedBranch
+                    creditRate: 0
+                    // branchId: this.selectedBranch
                   })
                   .then(response => {
                     // console.log(response);
@@ -534,8 +535,7 @@ export default {
                     fkSaleId: this.id,
                     fkItemId: this.insertItemObjects[index].fkItemId,
                     saleQuantity: this.insertItemObjects[index].quantity,
-                    creditRate: 0,
-                    branchId: this.selectedBranch
+                    creditRate: 0
                   })
                   .then(response => {
                     // console.log(response);
