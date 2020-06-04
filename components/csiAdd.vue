@@ -220,7 +220,7 @@
 import axios from 'axios'
 import select2 from '../components/select2Component'
 import vuelidate from '../plugins/vuelidate'
-import {required,minLength,maxLength,alpha,numeric,email,alphaNum} from 'vuelidate/lib/validators'
+import {required,minLength,maxLength,alpha,numeric,email,alphaNum,decimal} from 'vuelidate/lib/validators'
 import { helpers } from 'vuelidate/lib/validators'
 
 export default {
@@ -306,7 +306,7 @@ export default {
      },
      price:{
          required,
-         numeric
+         decimal
      }
     },
     beforeCreate(){
@@ -446,6 +446,9 @@ export default {
                     });
                 }
                 else if(this.mode=='branch'){
+                    if(this.nameValid == false){
+                        return;
+                    }
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         branchName:this.name,
                         branchAddress:this.address,
@@ -511,6 +514,19 @@ export default {
                 }
                 else{
                     console.log("Inside Item");
+                    if(this.nameValid == false){
+                        return;
+                    }
+                     if(this.selectedDefaultSupplier == 0){
+                        Swal.fire({
+                            type: "error",
+                            title: "Invalid!",
+                            text: "It seems you forgot to select a supplier",
+                            confirmButtonColor: "#4839eb",
+                            confirmButtonText: "Ok"
+                            });
+                            return;
+                    }
                     axios.post('http://localhost:4000/'+this.mode+"/",{
                         name:this.name,
                         gsm:this.gsm,

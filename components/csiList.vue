@@ -194,7 +194,6 @@ export default {
     created(){
         this.getDetails();
         this.getDetails();
-
     },
     mounted(){
         
@@ -276,6 +275,7 @@ export default {
                                             confirmButtonText: 'Ok'  
                                             });
                                             this.getDetails();
+                                            location.reload();
                             }
                             else{
                                 Swal.DismissReason.backdrop,
@@ -314,6 +314,7 @@ export default {
                                             confirmButtonText: 'Ok'  
                                             });
                                             this.getDetails();
+                                            
                             }
                             else{
                                 Swal.DismissReason.backdrop,

@@ -298,14 +298,12 @@ export default {
                         this.fetchedObjects = this.reportObject.filter(object=>{    
                             for(let items of this.itemBind){
                                 if(object.itemId == items){
-                                    return true;
-                                }
-                            }
-
                             for(let branch of this.branchBind){
                                 if(object.fkBranchId == branch){
                                     return true;
                                 }
+                                }
+                            }
                             }
                         });
                     });

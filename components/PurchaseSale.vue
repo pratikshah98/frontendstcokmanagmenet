@@ -115,7 +115,7 @@
                           <label></label>
                           <button
                             v-if="totalItems!=1"
-                            style="float:right;"
+                            style="float:right; margin-top:0px;"
                             class="form-control btn btn-danger"
                             type="button"
                             @click="removeItem(item-1)"
