@@ -419,7 +419,7 @@ export default {
     },
     price: {
       required,
-      numeric
+      decimal
     }
   },
   beforeCreate() {},
@@ -544,6 +544,9 @@ export default {
                 }
               });
           } else if (this.mode == "branch") {
+              if(this.nameValid == false){
+                        return;
+                    }
             axios
               .post("http://localhost:4000/" + this.mode + "/", {
                 branchName: this.name,
@@ -612,6 +615,9 @@ export default {
               });
           } else {
             console.log("Inside Item");
+            if(this.nameValid == false){
+                        return;
+                    }
             axios
               .post("http://localhost:4000/" + this.mode + "/", {
                 name: this.name,
