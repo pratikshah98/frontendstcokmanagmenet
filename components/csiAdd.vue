@@ -155,13 +155,22 @@
                               Email
                               <span class="mandatory">*</span>
                             </label>
-                            <input
+                            <input v-if="mode!='supplier'"
                               type="text"
                               class="form-control"
                               :disabled="id!=null"
                               v-model.lazy="$v.email.$model"
                               :class="{'is-invalid':$v.email.$error}"
                             />
+                            <input v-else
+                              type="text"
+                              class="form-control"
+                              :disabled="id!=null"
+                              v-model="$v.email.$model"
+                              @input="checkEmail()"
+                              :class="{'is-invalid':$v.email.$error}"
+                            />
+                          <div class="error" v-if="emailValid==false">Supplier Email Already Exist</div>
                             <div class="invalid-feedback">
                               <div class="error" v-if="!$v.email.required">Email is required</div>
                               <div class="error" v-if="!$v.email.email">Invalid Email</div>
@@ -389,7 +398,8 @@ export default {
       role: "",
       allRole: [],
       isVisible: "",
-      nameValid: true
+      nameValid: true,
+      emailValid: true
     };
   },
   validations: {
@@ -522,6 +532,9 @@ export default {
                 }
               });
           } else if (this.mode == "supplier") {
+              if(this.emailValid == false){
+                  return;
+              }
             axios
               .post("http://localhost:4000/" + this.mode + "/", {
                 supplierEmailId: this.email,
@@ -851,6 +864,23 @@ export default {
     goBack() {
       this.$router.back();
     },
+    checkEmail(){
+        if (this.mode == "supplier"){
+            axios
+          .get("http://localhost:4000/" + this.mode + "/email/" + this.email)
+          .then(res => {
+              if (res.data.length > 0) {
+              this.emailValid = false;
+              console.log(this.emailValid);
+            } else {
+              this.emailValid = true;
+              console.log(this.emailValid);
+
+            }
+          });
+        
+        }
+    },  
     checkName() {
       if (this.mode == "item" || this.mode == "branch") {
         // console.log("Inside CheckNAme= "+val);
