@@ -217,7 +217,7 @@ watch: {
               })
         }
         else if(this.stock <= 0){
-            console.log(this.stock);
+            // console.log(this.stock);
             Swal.fire({
                    type: 'error',
                    title: 'Invalid quantity!',
@@ -372,12 +372,14 @@ watch: {
                                                 }
                                             }
                                             //console.log(itemSizeName);
-                                            //console.log(itemRecords);
+                                            // console.log(itemRecords);
                                         if(fileRead!=-1){
                                                     
                                                 let stockUsage=[];
                                                 let j;
                                             for(j=0;j<itemRecords.length;j++){
+                                                // console.log(itemRecords[j].size);
+                                                // console.log(itemId[itemSize.indexOf(itemRecords[j].size)]);
                                                     stockUsage.push({
                                                         fkItemId:itemId[itemSize.indexOf(itemRecords[j].size)],
                                                         fkBranchId:this.selectedBranch,
@@ -386,7 +388,7 @@ watch: {
                                                         maxDate:itemRecords[j].maxDate
                                                     });
                                             }
-                                            console.log(stockUsage);
+                                            // console.log(stockUsage);
                                             if(j==itemRecords.length){
                                                 resolve3(stockUsage);
                                             }
@@ -421,6 +423,7 @@ watch: {
                                                             lastUpdatedDate:stockUsage2[k].maxDate
                                                         })
                                                         )
+                                                        // console.log("Item Id= "+stockUsage2[k].fkItemId);
                                                     }
                                                     Promise.all(mypromise2).then(r=>{
                                                             let isErr=0;

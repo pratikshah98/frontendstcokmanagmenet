@@ -397,8 +397,7 @@ export default {
                     fkSaleId: response.data,
                     fkItemId: this.insertItemObjects[index].fkItemId,
                     saleQuantity: this.insertItemObjects[index].quantity,
-                    creditRate: 0,
-                    branchId: this.selectedBranch
+                    creditRate: 0
                     // branchId: this.selectedBranch
                   })
                   .then(response => {
@@ -536,8 +535,7 @@ export default {
                     fkSaleId: this.id,
                     fkItemId: this.insertItemObjects[index].fkItemId,
                     saleQuantity: this.insertItemObjects[index].quantity,
-                    creditRate: 0,
-                    branchId: this.selectedBranch
+                    creditRate: 0
                   })
                   .then(response => {
                     // console.log(response);
