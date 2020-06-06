@@ -22,7 +22,7 @@
                     <p class="px-2">Welcome back, please login to your account.</p>
                     <div class="card-content">
                       <div class="card-body pt-1">
-                        <form>
+                        <form @submit.prevent="login()">
                           <fieldset
                             class="form-label-group form-group position-relative has-icon-left"
                           >
@@ -74,7 +74,6 @@
                           <input
                             type="submit"
                             class="btn btn-primary float-right btn-inline"
-                            @click="login()"
                             value="Login"
                           />
                         </form>
