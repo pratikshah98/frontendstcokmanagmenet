@@ -7,7 +7,7 @@
             <table class="table table-striped dataex-html5-selectors dataTable">    
                 <thead>
                     <tr>
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Sr.No</th>
                         <th v-if="mode=='sale'">Customer Name</th>
                         <th v-else>Supplier Name</th>
@@ -21,8 +21,8 @@
                 </thead>
                 <tbody> 
                     <tr v-for="(object,index) in fetchedObjects" :key="index">
-                        <td v-if="mode=='sale'"><input type="checkbox" v-model="selectedItems" :value="object.saleId"></td>
-                        <td v-else><input type="checkbox" v-model="selectedItems" :value="object.purchaseId"></td>
+                        <!-- <td v-if="mode=='sale'"><input type="checkbox" v-model="selectedItems" :value="object.saleId"></td> -->
+                        <!-- <td v-else><input type="checkbox" v-model="selectedItems" :value="object.purchaseId"></td> -->
                         <td>{{ index + 1 }}</td>
                         <td v-if="mode=='sale'">{{ object.customerName }}</td>
                         <td v-else> {{ object.supplierName }} </td>
