@@ -245,7 +245,7 @@ export default {
                             for(let items of this.itemBind){
                                 if(object.itemId == items){
                                      for(let branch of this.branchBind){
-                                if(object.fkBranchId == branch){
+                                if(object.branchId == branch){
                                     return true;
                                 }
                                 }
@@ -273,7 +273,7 @@ export default {
                         this.reportObject = response.data;
                         this.fetchedObjects = this.reportObject.filter(object=>{   
                             for(let branch of this.branchBind){
-                                if(object.fkBranchId == branch){
+                                if(object.branchId == branch){
                                     return true;
                                 }
                             }
@@ -299,7 +299,7 @@ export default {
                             for(let items of this.itemBind){
                                 if(object.itemId == items){
                             for(let branch of this.branchBind){
-                                if(object.fkBranchId == branch){
+                                if(object.branchId == branch){
                                     return true;
                                 }
                                 }
@@ -328,10 +328,10 @@ export default {
                         .then(response => {
                             this.reportObject = response.data;
                             this.fetchedObjects = this.reportObject.filter(object=>{   
-                                console.log(object.fkBranchId); 
+                                console.log(object.branchId); 
                                 for(let branch of this.branchBind){
                                     console.log(branch);
-                                    if(object.fkBranchId == branch){
+                                    if(object.branchId == branch){
                                         return true;
                                     }
                                 }
