@@ -106,14 +106,22 @@
                         <div class="card-body">
                           <div class="row">
                             <div class="col-md-12">
-                              <h4>&#x20B9; Outstanding Amount on Date : &#x20B9;&nbsp; {{ lastTransaction.amountDue | round }}/-</h4>
+                              <h4>
+                                &#x20B9; Outstanding Amount on Date : &#x20B9;&nbsp;
+                                <span
+                                  v-if="lastTransaction.amountDue>=0"
+                                >{{ lastTransaction.amountDue | round }}/-</span>
+                                <span
+                                  v-else
+                                >{{ Math.abs(lastTransaction.amountDue | round) }}/- (Paid in Advance)</span>
+                              </h4>
                               <h4>
                                 <i class="feather icon-calendar"></i>
                                 Last Payment Date : {{ lastTransaction.transactionDate | filterDateFormat }}
                               </h4>
-                              <div>
+                              <!-- <div>
                                 <span class="mandatory">*</span>Note: Advance payment is quoted as negative amount
-                              </div>
+                              </div>-->
                             </div>
                           </div>
                         </div>
