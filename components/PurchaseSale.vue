@@ -653,8 +653,8 @@ export default {
       // udpate mode
       this.getDetails();
   },
-  beforeMount() {
-    if (this.$store.state.role == "operator") {
+  beforeUpdate(){
+        if (this.$store.state.role == "operator") {
       axios
         .get(
           "http://localhost:4000/branch/" + this.$store.state.selectedBranchId
@@ -666,6 +666,8 @@ export default {
           }
         });
     }
+  },
+  beforeMount() {
     if (this.$props.mode == "purchase") {
       axios.get("http://localhost:4000/supplier").then(response => {
         const options = [{ id: 0, text: "Select Supplier" }];

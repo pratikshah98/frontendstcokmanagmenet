@@ -26,7 +26,7 @@
                                         </div>
                                         <form class="steps-validation wizard-circle" @submit.prevent="addUsage()" v-if="addMan==true && addRep==false"> 
                                         <div class="row form-group" style="margin-top:10px;" >
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" v-if="$store.state.role!='operator'">
                                                         <div class="form-group">
                                                             <label> Branch*</label>
                                                             <select2
@@ -36,6 +36,12 @@
                                                             ></select2>
                                                         </div>
                                                     </div>
+                                                    <div v-else class="col-md-4">
+                                                            <div class="form-group">
+                                                            <label>Branch*</label>
+                                                            <input type="text" class="form-control" disabled :value="defaultBranch" />
+                                                            </div>
+                                                        </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label> Item*</label>
@@ -63,7 +69,7 @@
                                         </div>
                                     </form>        
                                     <div class="row form-group" style="margin-top:10px;" v-if="addMan==false && addRep==true">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-4" v-if="$store.state.role!='operator'">
                                                             <div class="form-group">
                                                                 <label> Branch*</label>
                                                                 <select2
@@ -73,9 +79,15 @@
                                                                 ></select2>
                                                             </div>
                                                         </div>
+                                                        <div v-else class="col-md-4">
+                                                            <div class="form-group">
+                                                            <label>Branch*</label>
+                                                            <input type="text" class="form-control" disabled :value="defaultBranch" />
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-8"></div>
                                         </div>
-                                                <div v-if="selectedBranch!='' && selectedBranch!=0 && addMan==false" class="row">
+                                                <div v-if="selectedBranch!='' && selectedBranch!=0 && addMan==false && addRep==true" class="row">
                                                     <div class="col-md-12" @drop="_drop" @dragenter="_suppress" @dragover="_suppress" data-sortable-id="form-dropzone-1" style="cursor:pointer" @click="$refs.fileInput.click()">
                                             
                                                                 <div class="panel-body text-inverse" >
@@ -131,7 +143,8 @@ data(){
         itemList:[],
         selectedBranch:"",
         selectedItem:"",
-        stock:0
+        stock:0,
+        defaultBranch:""
     }
 },
 watch: {
@@ -144,6 +157,20 @@ watch: {
       if(this.addRep==true){
             this.getDetails2();
         }
+    }
+},
+beforeUpdate(){
+if (this.$store.state.role == "operator") {
+      axios
+        .get(
+          "http://localhost:4000/branch/" + this.$store.state.selectedBranchId
+        )
+        .then(response => {
+          if (response) {
+            this.defaultBranch = response.data[0].branchName;
+            this.selectedBranch = this.$store.state.selectedBranchId;
+          }
+        });
     }
 },
     methods:{
