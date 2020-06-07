@@ -219,16 +219,16 @@
                 <li class=" nav-item">
                     <nuxt-link to="/stock" data-i18n="Purchase"><i class="feather icon-shopping-cart"></i>Stock</nuxt-link>
                 </li>
-                <li class=" navigation-header">
+                <li class=" navigation-header" v-if="$store.state.role!='operator'">
                     <span>Report Modules</span>
                 </li>
-                <li class=" nav-item">
+                <li class=" nav-item" v-if="$store.state.role!='operator'">
                     <nuxt-link to="/purchaseReport" data-i18n="Purchase Report"><i class="feather icon-file-text"></i>Purchase Report</nuxt-link>
                 </li>
-                <li class=" nav-item">
+                <li class=" nav-item" v-if="$store.state.role!='operator'">
                     <nuxt-link to="/saleReport" data-i18n="Sales Report"><i class="feather icon-file-text"></i>Sale Report</nuxt-link>
                 </li>
-                <li class=" nav-item">
+                <li class=" nav-item" v-if="$store.state.role!='operator'">
                     <nuxt-link to="/debtorReport" data-i18n="Debtor Report"><i class="feather icon-file-text"></i>Debtor Report</nuxt-link>
                 </li>
 
