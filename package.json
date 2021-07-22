@@ -33,7 +33,7 @@
     "vue-select2": "^0.2.6",
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
